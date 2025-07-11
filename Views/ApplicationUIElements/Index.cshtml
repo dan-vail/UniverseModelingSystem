@@ -1,0 +1,433 @@
+﻿@model IEnumerable<UniverseObjects.Models.ApplicationUIElement>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_UniverseObjectRendererLayout.cshtml";
+}
+
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<link href="~/DataTables/datatables.css" rel="stylesheet" />
+<script src="~/DataTables/datatables.js"></script>
+
+<link href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.min.js"></script>
+
+<link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+
+<style>
+    .themedUIBackDrop {
+        background-image: radial-gradient(at 47% 33%, rgba(255, 255, 255, 0), transparent 59%), radial-gradient(at 82% 65%, rgba(0, 0, 0, .5), transparent 55%);
+    }
+</style>
+<div id="tableOperationsContainer"
+     style="
+            position: absolute;
+            z-Index: 999999;
+            top: 0px;
+            left: 101vw;
+            width: 40vw;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            text-align: center;
+            visibility: hidden;
+            opacity:0;">
+</div>
+
+<div id="contentContainer"
+     class="themedUIHighlight themedUIBackground whiteShdow blackBevel"
+     style="top: 6vh; font-size: clamp(16px, 1vmax, 22px); overflow: auto;">
+
+    <h2>Index</h2>
+
+
+    <table id="ApplicationUIElements" class="table themedUI themedUIBackground" style="background-color: rgba(8, 8, 8, .9);">
+        <thead class="themedUIHighlight themedUIBackground themedUIBackDrop">
+            <tr>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UIElementHTMLType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationUseType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationPageURL)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UIElementContainer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UIElementGroupID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UIElementOrderInGroup)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UIElementValue)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UIElementInnerHTML)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UIElementClassList)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UIElementCSSText)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UIElementJavascript)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UIElementFunctionCall)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UIElementFunctionCallEventTrigger)
+                </th>
+            </tr>
+        </thead>
+
+        <tbody class="themedUI themedUIBackground">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <div id="editor-@Html.DisplayFor(modelItem => item.UIElementID)">
+                            <a href="#"
+                               onclick="renderTableEditor({
+    tableEditorContainerID: 'editor-@Html.DisplayFor(modelItem => item.UIElementID)',
+                                    primaryKeyValue: @Html.DisplayFor(modelItem => item.UIElementID), 
+                        tableName: 'ApplicationUIElements'})">
+                                EDIT
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UIElementHTMLType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUseType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationPageURL)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UIElementContainer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UIElementGroupID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UIElementOrderInGroup)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UIElementValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UIElementInnerHTML)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UIElementClassList)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UIElementCSSText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UIElementJavascript)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UIElementFunctionCall)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UIElementFunctionCallEventTrigger)
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+</div>
+
+
+
+<script>
+    new DataTable("#ApplicationUIElements", {
+        responsive: {
+            details: true
+        }
+    });
+
+
+
+    function createNewDataTable({
+        tableID
+    }) {
+        var newTableID = "#" + tableID;
+        new DataTable(newTableID, {
+                responsive: {
+                   details: true
+              }
+
+        });
+    }
+
+    //createNewDataTable({ tableID: 'ApplicationUIElements' });
+
+    function processXHTTPResponse(response) {
+        alert('processXHTTPResponse fired');
+        alert(response.responseText);
+    }
+
+    function ajaxServerConversations({
+        conversationType,
+        resourceURL,
+        primaryKeyValue,
+        async,
+        dataForServer,
+        tableEditorContainerID
+    }) {
+
+        if (resourceURL == undefined) {
+            return false;
+        }
+
+        if (conversationType == 'post') {
+            if (dataForServer == undefined) {
+                return false;
+            }
+        }
+
+        if (conversationType == undefined) {
+            conversationType = 'get';
+        }
+
+        if (async == undefined) {
+            async = true;
+        }
+
+        switch (conversationType) {
+            case 'get':
+
+                var tableEditorContainer =
+                    document.getElementById(tableEditorContainerID);
+
+                var xhttp = new XMLHttpRequest();
+                //addListeners({
+                //    type: 'xhttp',
+                //    object: xhttp,
+                //    conversationType: conversationType,
+                //    resourceURL: resourceURL,
+                //    async: true,
+                //    //dataForServer: dataForServer,
+                //    responseContainer: tableEditorContainerID,
+                //    event: Event,
+                //});
+
+                xhttp.onreadystatechange = function () {
+                    if (xhttp.readyState == XMLHttpRequest.DONE) {
+                        var tableEditorContainer =
+                            document.getElementById("1");
+
+                        tableEditorContainer.innerHTML =
+                            xhttp.responseText;
+                    }
+                }
+
+                xhttp.open("get", resourceURL, true);
+                xhttp.send();
+                window.ajaxObject = xhttp;
+                break;
+
+            case 'post':
+                var xhttp = new XMLHttpRequest();
+                xhttp.open(
+                    conversationType,
+                    resourceURL,
+                );
+                break;
+
+            default:
+                return false;
+        }
+    }
+
+    function xhttpEventHandler({
+        event,
+        object,
+        conversationType,
+        resourceURL,
+        async,
+        dataForServer,
+        responseContainer,
+        listenerType,
+        response,
+        responseText
+    }) {
+
+        switch (listenerType) {
+
+            case 'load':
+                alert("load complete");
+                break;
+
+            case 'loadstart':
+                alert("loadstart complete");
+                break;
+
+            case 'progress':
+
+            case 'loadend':
+                console.log(object);
+
+                var responseContainer =
+                    document.getElementById(responseContainer);
+
+                responseContainer.innerHTML =
+                    "RESPONSE: <br /><br />" + 
+                responseText;
+                
+                break;
+
+            case 'onload':
+                alert("onload complete");
+                break;
+
+            case 'error':
+                alert("error");
+                break;
+
+            case 'abort':
+        }
+    }
+
+    function renderTableEditor({
+        tableEditorContainerID,
+        primaryKeyValue,
+        tableName
+    }) {
+
+        var tableEditorContainer =
+            document.getElementById(tableEditorContainerID);
+
+        responseContainer = document.createElement("div");
+        responseContainer.setAttribute("id", "responseContainer" + primaryKeyValue);
+        tableEditorContainer.append(responseContainer);
+        responseContainer.style.zIndex = '99';
+        responseContainer.style.width = '100%';
+        responseContainer.style.height = '100%';
+
+        var responseContainer =
+            document.getElementById("responseContainer" + primaryKeyValue);
+
+        tableEditorContainer.innerHTML += "HI!!!!!";
+        responseContainer.innerHTML = "SHIT!!!!!";
+
+
+        //var newResponseContainerID = tableName + primaryKeyValue;
+        //responseContainer.style.position = "absolute";
+        //responseContainer.style.top = "0px";
+        //responseContainer.style.left = "0px";
+        //responseContainer.style.width = "50%";
+        //responseContainer.style.height = "50%";
+
+
+
+        return false;
+
+        var URL =
+            "/ApplicationUIElements/Edit?id=" + primaryKeyValue;
+
+
+        ajaxServerConversations({
+            conversationType: 'get',
+            resourceURL: URL,
+            async: true,
+            responseContainer: tableEditorContainerID
+        });
+    }
+        //ajaxRenderDIV({
+        //    divToPopulate: tableEditorContainerID,
+        //    pageToRenderURL: URL
+        //});
+
+        //ajaxRenderDIV({
+        //    divToPopulate: tableEditorContainerID,
+        //    pageToRenderURL: '/StoredProceduresResults/Index?tableName=applicationuielements'
+        //});
+
+
+    //    tableEditorContainer.style.width =
+    //        "50%";
+    //    tableEditorContainer.style.height =
+    //        "50%";
+    //    tableEditorContainer.style.zIndex =
+    //        "999999";
+    //    tableEditorContainer.style.backgroundColor =
+    //        'rgba(0, 255, 255, .99)';
+    //    tableEditorContainer.style.color =
+    //        '#00ff00';
+    //}
+
+    //function createEditorContainer({
+    //    tablePrimaryKeyValue
+    //}) {
+
+    //    var editorContainer =
+    //        document.createElwmwnt('tableEditorMainContainer');
+
+    //    editorContainer.classList.add("themedUIHighlight");
+    //    editorContainer.classList.add("themedUIBackground");
+    //    editorContainer.classList.add("themedUIBackdrop");
+
+    //    editorContainer.style.transition = '3s';
+    //    editorContainer.style.top = '0px';
+    //    editorContainer.style.left = '60vw';
+    //    editorContainer.style.zIndex = "999999";
+
+    //    editorContainer.style.overflow = "auto";
+
+    //    editorContainer.style.opacity = "1";
+    //    editorContainer.style.visibility = "visible";
+
+    //    //ajaxRenderDIV({
+    //    //    divToPopulate: tablePrimaryKeyValue,
+    //    //    pageToRenderURL: '/StoredProceduresResults/Index?tableName=ApplicationUIElements'
+    //    //});
+
+    //    editorContainer.addEventListener("submit", function (event) {
+    //        editorContainer.style.transition = '5s';
+    //        editorContainer.style.opacity = '0';
+    //        editorContainer.style.visibility = 'hidden';
+    //        editorContainer.style.width = '0px';
+    //        editorContainer.style.height = '0px';
+
+    //    });
+
+    //}
+
+    //function generateRowEditorContainer({
+    //    rowEditorContainerID,
+    //    tableName,
+    //    tablePrimaryKeyColumn,
+    //    tablePrimaryKeyValue }) {
+
+    //    var rowEditorContainer =
+    //        document.getElementById("rowEditorContainerID")
+
+    //    if (rowEditorContainer == undefined) {
+    //        rowEditorContainer =
+    //            document.createElement('div');
+    //        rowEditorContainer.setAttribute("id", "rowEditorContainerIDX");
+    //        document.body.append(rowEditorContainer);
+    //    }
+
+    //    var rowEditorContainerID = 1
+    //    var rowEditorContainer = 1
+    //    document.createElement("div");
+    //    rowEditorContainer.setAttribute("id", rowEditorContainerID);
+    //    rowEditorContainer.classList.add("rowEditorContainer");
+    //}
+
+</script>
+

@@ -1,0 +1,357 @@
+﻿
+
+@{
+    ViewBag.Title = "UNIVERSE OBJECT MODELING";
+    Layout = null;
+}
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<!-- AJAX -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js">
+</script>
+
+<link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+<script src="~/Scripts/vailware.master.library.beta.js"></script>
+
+<style>
+
+    #generalObjectTabMenu {
+        position: absolute;
+        top: 2vh;
+        left: 0px;
+        width: 100%;
+        margin: 5px 5px 5px 5px;
+        box-shadow: rgba(255, 255, 255, .7) 20px 20px inset;
+        display: grid;
+        text-align: center;
+        background-color: rgba(0, 0, 0, .8);
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .tabMenuItem {
+        font-size: clamp(12px, .9vmax, 18px);
+        color: #dddddd;
+    }
+
+        .tabMenuItem a {
+            font-size: clamp(12px, .9vmax, 32px);
+            color: #dddddd;
+        }
+
+            .tabMenuItem a:hover {
+                color: #ffffff;
+                background-color: rgba(0, 255, 255, .9);
+            }
+
+    .tabPage {
+        position: absolute;
+        top: 15vh;
+        left: 5vw;
+        width: 90vw;
+        height: 90vh;
+        visibility: hidden;
+        opacity: 0;
+        font-size: clamp(12px, 1vh, 18px);
+        color: #00ffff;
+        text-align: left;
+        width: 100%;
+        overflow: auto;
+    }
+
+    .tabMenuTitle {
+        font-size: clamp(12px, 1.1vmax, 36px);
+        color: #ffffff;
+        text-align: left;
+        text-shadow: .1vmin .1vmin #000000;
+    }
+
+    .tabPageTitle {
+        font-size: clamp(12px, 1.3vmax, 46px);
+        color: #ffffff;
+        text-align: left;
+        text-shadow: .1vmin .1vmin #000000;
+    }
+
+    .frequencyIntegerContainer {
+        width: 1vmax;
+        font-size: clamp(12px, 1vmax, 46px);
+        background-color: rgba(88,0,0,.8);
+        color: #ff0000;
+    }
+
+    .generalObjectLabel {
+        font-size: clamp(14px, 1.1vmax, 38px);
+        text-shadow: 3px 3px 3px #000000;
+        color: #ffffff;
+    }
+
+</style>
+
+<style>
+    body {
+        background-color: #000000;
+        overflow: hidden;
+    }
+
+    a {
+        font-size: clamp(10px, .9vh, 14px);
+        color: #ff5e00;
+    }
+        a:hover {
+            color: #00ff00;
+        }
+</style>
+
+<body style="background: #000000; overflow: hidden;">
+
+    <div id="title"
+         style="
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                width: 100%;
+                display: flex;
+                flex-direction: column ;
+                text-align: right;
+                margin: 5px 5px 5px 5px;
+                z-index: 999;">
+
+        <div style="position: absolute; width: 100%; left: 0px; top: 0px;">
+            <label style="
+                        font-size: clamp(22px, 2vmax, 36px);
+                        color: #ff5e00;
+                        font-weight: 700;"
+                   class="glowingOrange">
+                UNIVERSE OBJECT MODELING
+            </label>
+            <br />
+            <label style="
+                        font-size: clamp(18px, 1.7vmax, 32px);
+                        color: #00ffff;
+                        font-weight: 500;">
+                <i>FROM DAN E. VAIL III</i>
+            </label>
+        </div>
+
+    </div>
+
+
+    <div id="generalObjectContent"
+         style="
+            visibility: visible;
+            width: 100%;
+            position: absolute;
+            top: 60px;
+            left: 0px;
+            background-color: transparent;
+            color: #00ffff;">
+
+        <div id="generalObjectTabMenu"
+             style="
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    min-height: 3px;"
+             class="themedUI themedUIBackground">
+
+
+            <button class="tabMenuItem blackBevel themedUI themedUIBackground buttons"
+                    onclick="showtabPage({ tabPageID: 'tabPageHome' })">
+                HOME
+            </button>
+
+            <button class="tabMenuItem blackBevel themedUI themedUIBackground buttons"
+                    onclick="showtabPage({ tabPageID: 'tabPageUniverseObjectsIndex' })">
+                UNIVERSE OBJECTS
+            </button>
+
+            <button class="tabMenuItem blackBevel themedUI themedUIBackground buttons"
+                    onclick="showtabPage({ tabPageID: 'tabPageUniverseObjectsCreate' })">
+                CREATE
+            </button>
+
+            <button class="tabMenuItem blackBevel themedUI themedUIBackground buttons"
+                    onclick="showtabPage({ tabPageID: 'tabPageCelestialSpheres' })">
+                PLANETS
+            </button>
+
+            <button class="tabMenuItem blackBevel themedUI themedUIBackground buttons"
+                    onclick="showtabPage({ tabPageID: 'tabPageStars' })">
+                STARS
+            </button>
+
+            <button class="tabMenuItem blackBevel themedUI themedUIBackground buttons"
+                    onclick="showtabPage({ tabPageID: 'tabPageContact' })">
+                CONTACT
+            </button>
+        </div>
+
+
+
+        <div id="tabPageHome"
+             class="tabPage"
+             style="visibility: hidden;">
+            <div style="position: absolute;
+                   width: 100%;
+                   left: 0px;
+                   top: 0px;">
+                <label class="tabPageTitle themedUIHighlight">
+                    UNIVERSE OBJECT MODELING HOME PAGE.
+                </label>
+            </div>
+        </div>
+
+        <div id="tabPageUniverseObjectsIndex"
+             class="tabPage"
+             style="visibility: visible;">
+            <div style="
+                        position: absolute;
+                        width: 100vw;
+                        height: 80vh;
+                        left: 0px;
+                        top: 0px;
+                        display: flex;
+                        flex-direction: column;">
+
+                <div id="universeObjectsIndexAsyncContainer" style="
+                            display: flex;
+                            flex-wrap: wrap;
+                            width: 100%;
+                            height: auto;
+                            max-height: 70vh;">
+
+                </div>
+
+            </div>
+        </div>
+
+        <div id="tabPageUniverseObjectsCreate"
+             class="tabPage"
+             style="visibility: visible;">
+            <div style="
+                        position: absolute;
+                        width: 100vw;
+                        height: 80vh;
+                        left: 0px;
+                        top: 0px;
+                        display: flex;
+                        flex-direction: column;">
+
+                <div id="universeObjectsCreateAsyncContainer" style="
+                            display: flex;
+                            flex-wrap: wrap;
+                            width: 100%;
+                            height: auto;
+                            max-height: 70vh;">
+                </div>
+
+            </div>
+        </div>
+
+        <div id="tabPageCelestialSpheres"
+             class="tabPage"
+             style="visibility: visible;">
+            <div style="
+                        position: absolute;
+                        width: 100vw;
+                        height: 80vh;
+                        left: 0px;
+                        top: 0px;
+                        display: flex;
+                        flex-direction: column;">
+                <div id="celestialSpheresAsyncContainer" style="
+                            display: flex;
+                            flex-wrap: wrap;
+                            width: 100%;
+                            height: auto;
+                            max-height: 70vh;">
+                </div>
+            </div>
+        </div>
+
+
+
+    <div id="tabPageContact"
+         class="tabPage"
+         style="visibility: visible;">
+        <div style="
+                        position: absolute;
+                        width: 100vw;
+                        height: 80vh;
+                        left: 0px;
+                        top: 0px;
+                        display: flex;
+                        flex-direction: column;">
+
+            <div id="contactAsyncContainer" style="
+                            display: flex;
+                            flex-wrap: wrap;
+                            width: 100%;
+                            height: auto;
+                            max-height: 70vh;">
+
+            </div>
+    </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+
+    function showtabPage({
+        tabPageID
+    }) {
+
+        var tabPages = document.querySelectorAll('.tabPage');
+        tabPages.forEach(tabPage => {
+            tabPage.style.transition = '2s';
+            tabPage.style.visibility = 'hidden';
+            tabPage.style.transform = 'rotateY(180deg)';
+            tabPage.style.opacity = '0';
+
+        });
+
+        var tabPage =
+            document.getElementById(tabPageID);
+
+        tabPage.style.transition = ".5s";
+        tabPage.style.visibility = "visible";
+        tabPage.style.transform = "rotateY(0deg)";
+        tabPage.style.opacity = "1";
+
+        switch (tabPageID) {
+            case 'starsAsyncContainer':
+                var starsAsyncContainer =
+                    document.getElementById('starsAsyncContainer');
+                starsAsyncContainer.innerText = '';
+
+                ajaxRenderDIV({
+                    divToPopulate: 'starsAsyncContainer',
+                    pageToRenderURL: '/Home/SunTest'
+                });
+                break;
+        }
+    }
+
+    ajaxRenderDIV({
+        divToPopulate: 'universeObjectsCreateAsyncContainer',
+        pageToRenderURL: '/UniverseObjects/Create'
+    });
+
+    ajaxRenderDIV({
+        divToPopulate: 'universeObjectsIndexAsyncContainer',
+        pageToRenderURL: '/UniverseObjects/Index'
+    });
+
+    ajaxRenderDIV({
+        divToPopulate: 'planetsAsyncContainer',
+        pageToRenderURL: '/CelestialSpheres/CelestialSpheresTable'
+    });
+
+    ajaxRenderDIV({
+        divToPopulate: 'contactAsyncContainer',
+        pageToRenderURL: '/Home/Contact'
+    });
+
+</script>

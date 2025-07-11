@@ -1,0 +1,41 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSE OBJECTS</title>
+    <script src="~/Scripts/vailware.master.library.beta.js"></script>
+    <link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+
+    <script src="~/DataTables/datatables.js"></script>
+    <link href="~/DataTables/datatables.css" rel="stylesheet" />
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body style="background: #000000;">
+    <style>
+        #webGL {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+    </style>
+
+    <div id="webGL">
+
+    </div>
+
+    <div id="videoControl">
+
+    </div>
+
+    @RenderBody()
+
+</body>
+</html>

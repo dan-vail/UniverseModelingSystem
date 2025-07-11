@@ -1,0 +1,1042 @@
+﻿@{
+    Layout = null;
+}
+<script>
+
+</script>
+
+<link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+
+<style>
+    .universeObjectRendererControlContainer {
+        position: absolute;
+        top: 5vh;
+        font-size: clamp(14px, 1.1vmax, 30px);
+        font-family: audiowide;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        visibility: hidden;
+        overflow: hidden;
+    }
+
+    .universeObjectRendererControl {
+    }
+
+    .universeObjectRendererLabel {
+    }
+
+    .controlsLabel {
+        font-family: audiowide;
+        font-size: clamp(10px, 1vmax, 18px);
+        color: #ffffff;
+    }
+
+
+    #universeObjectTabMenu {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        margin: 0px 0px 0px 0px;
+        box-shadow: rgba(255, 255, 255, .7) 10px 10px inset;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        text-align: center;
+        background-color: rgba(0, 0, 0, .8);
+    }
+
+    .universeObjectTabMenuItem {
+        width: 100%;
+    }
+
+        .universeObjectTabMenuItem a {
+            font-size: clamp(12px, 1vmax, 18px);
+            color: #dddddd;
+        }
+
+            .universeObjectTabMenuItem a:hover {
+                color: #ffffff;
+                background-color: rgba(0, 255, 255, .9);
+            }
+
+    .universeObjectTabPage {
+        visibility: hidden;
+        font-size: clamp(12px, 1vmax, 18px);
+        position: absolute;
+        left: 0px;
+        top: 5vh;
+        opacity: 0;
+        color: #00ffff;
+        text-align: left;
+        height: 60vh;
+        width: 100%;
+        overflow: auto;
+        background: rgba(0, 0, 0, .5);
+    }
+
+    .tabMenuTitle {
+        font-size: clamp(12px, 1vmax, 18px);
+        color: #ffffff;
+        text-align: left;
+        text-shadow: .1vmin .1vmin #000000;
+    }
+
+    .universeObjectTabPageTitle {
+        font-size: clamp(12px, 1.1vmax, 20px);
+        color: #ffffff;
+        text-align: left;
+        text-shadow: .1vmin .1vmin #000000;
+    }
+
+    .universeObjectLabel {
+        font-size: clamp(12px, 1vmax, 18px);
+        text-shadow: 1px 1px 1px #000000;
+        color: #ffffff;
+    }
+
+    .whiteGlow {
+        bottom: 0px;
+        transform-style: preserve-3d;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        box-shadow: 9px 8px 43px 19px rgba(255,255,255,0.7);
+        -webkit-box-shadow: 9px 8px 43px 19px rgba(255,255,255,0.7);
+        -moz-box-shadow: 9px 8px 43px 19px rgba(255,255,255,0.7);
+        z-index: 102;
+        color: #ff0000;
+    }
+</style>
+
+<body style="background: #000000;">
+
+    <div id="universeObjectContent"
+         style="visibility: visible;
+                width: 100%;
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                background: #000000;
+                color: #00ffff;
+                overflow: hidden;">
+
+        <div id="universeObjectTabMenu"
+             style="position: absolute;
+                    top: 0px;
+
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;"
+             class="themedUI themedUIBackground">
+
+            <button class="universeObjectTabMenuItem
+                           blackBevel
+                           themedUI
+                           themedUIBackground
+                           buttons"
+                    onclick="showUniverseObjectRendererControlContainer({containerId: 'universeObjectVectors'})">
+                VECTORS
+            </button>
+
+            <button class="universeObjectTabMenuItem
+                           blackBevel
+                           themedUI
+                           themedUIBackground
+                           buttons"
+                    onclick="showUniverseObjectRendererControlContainer({containerId: 'universeObjectStarSettings'})">
+                STARS
+            </button>
+
+            <button class="universeObjectTabMenuItem
+                           blackBevel
+                           themedUI
+                           themedUIBackground
+                           buttons"
+                    onclick="showUniverseObjectRendererControlContainer({containerId: 'universeObjectAnimation'})">
+                ANIMATION
+            </button>
+
+            <button class="universeObjectTabMenuItem
+                           blackBevel
+                           themedUI
+                           themedUIBackground
+                           buttons"
+                    onclick="showUniverseObjectRendererControlContainer({containerId: 'universeObjectMaterials'})">
+                MATERIALS
+            </button>
+
+            <button class="universeObjectTabMenuItem
+                           blackBevel
+                           themedUI
+                           themedUIBackground
+                           buttons"
+                    onclick="showUniverseObjectRendererControlContainer({containerId: 'universeObjectData'})">
+                DATA
+            </button>
+
+            <button class="universeObjectTabMenuItem blackBevel themedUI themedUIBackground buttons"
+                    onclick="zoomRenderer({ zoomType: 'normal' })">
+                <span style="font-size: clamp(24px, 2vmax, 34px); color: #ff0000; text-shadow: 1px 1px #ffffff">☐</span>
+            </button>
+            <button class="universeObjectTabMenuItem blackBevel themedUI themedUIBackground buttons"
+                    onclick="zoomRenderer({ zoomType: 'full' })">
+                <span style="font-size: clamp(24px, 2vmax, 34px); color: #ff0000; text-shadow: 1px 1px #ffffff">🔍</span>
+            </button>
+            <button class="universeObjectTabMenuItem blackBevel themedUI themedUIBackground buttons"
+                    onclick="document.getElementById('renderer').remove()">
+                <span style="font-size: clamp(24px, 2vmax, 34px); color: #ff0000; text-shadow: 1px 1px #ffffff">X</span>
+            </button>
+        </div>
+
+        <div id="universeObjectVectors"
+             class="universeObjectRendererControlContainer">
+            <div style="position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        left: 0px;
+                        top: 0px;
+                        display: flex;
+                        flex-direction: column;">
+
+                <label class="universeObjectTabPageTitle themedUIHighlight">
+                    VECTORS
+                </label>
+                <div id="vectorsMenuItemList"
+                     class="themedUIHighlight
+                            fadeable
+                            collapseable">
+
+                    <div style="
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 50%;">
+
+                        <div style="
+            position: absolute;
+            top: 0px;
+            width: 15vw;
+            left: 1vw;
+            text-align: left;">
+
+                            <div id="cameraMenuItemList">
+                                <label class="themedUI 
+                                              settingsLabels">
+                                CAMERA FOV</label>
+                                <br />
+                                <input id="cameraFOV" 
+                                       class="themedUI 
+                                              themedUIBackground 
+                                              standardRange
+                                              whiteGlow" 
+                                       type="range" 
+                                       min="42" 
+                                       max="164" 
+                                       step="1" 
+                                       value="64" />
+                                <br />
+                                <br />
+                                <input type="checkbox" id="lockToCamera" />
+                                <label class="themedUI settingsLabel">LOCK</label>
+                            </div>
+                        </div>
+
+
+                        <div style="
+           position: absolute;
+           top: 0px;
+           width: 20vw;
+           left: 15vw;
+           text-align: left;">
+                            <div id="displacementVectors">
+
+                                <label class="themedUI settingsLabel">
+                                    VECTOR AMPLIFICATION FACTOR
+                                </label><br />
+                                <input id="vectorAmplificationFactor" 
+                                       class="themedUI 
+                                              themedUIBackground 
+                                              standardRange 
+                                              themedUIBackground" 
+                                       type="range" 
+                                       min="-10" 
+                                       max="10" 
+                                       step="1" 
+                                       value="1" />
+                                <br />
+                                <br />
+                                <label class="themedUI settingsLabel">
+                                    DISPLACEMENT SCALE
+                                </label>
+                                <br />
+                                <label id="displacementScaleLabel"
+                                       style="color: #ffffff;
+                                              text-align: right;
+                                              width: 100%;">
+                                </label>
+                                <br />
+                                <br />
+                                <input id="displacementScale"
+                                       class="themedUI 
+                                              themedUIBackground 
+                                              standardRange
+                                              whiteGlow"
+                                       type="range" 
+                                       min="-100" 
+                                       max="100" 
+                                       step="1" 
+                                       value="1" />
+                                <br />
+                                <br />
+                                <label class="themedUI 
+                                              settingsLabel">
+                                    ATMOSPHERE DISPLACEMENT SCALE
+                                </label>
+                                <label id="atmosphereDisplacementScaleLabel"
+                                       style="color: #ffffff;
+                                              text-align: right;
+                                              width: 100%;">
+                                </label>
+                                <br />
+                                <br />
+                                <input id="atmosphereDisplacementScale"
+                                       class="themedUI 
+                                              themedUIBackground 
+                                              standardRange"
+                                       type="range" 
+                                       min="-100" 
+                                       max="100"
+                                       step="1" 
+                                       value="1" />
+                                <br />
+                                <label class="themedUI settingsLabels">
+                                    ATMOSPHERE OPACITY SCALE
+                                </label>
+                                <br />
+                                <br />
+                                <input id="atmosphereOpacityScale" 
+                                       class="themedUI 
+                                              themedUIBackground 
+                                              standardRange
+                                              themedUIBackground" 
+                                       type="range" 
+                                       min="0" 
+                                       max="1" 
+                                       step=".01" 
+                                       value=".9" />
+                                <br />
+                            </div>
+                        </div>
+
+                        <div style="position: absolute;
+                                    top: 0px;
+                                    width: 15vw;
+                                    left: 40vw;">
+                            <div id="atmosphericVectors"
+                                 class="themedUIbackground"
+                                 style="width: 20vw;">
+
+                                <div id="atmosphericDirectionContainer"
+                                     style="top: 30vh;
+                                            left: 1vw;
+                                            width: 25vw;
+                                            position: absolute;">
+
+                                    <div id="audioatmosphericDirection" class="">
+                                        <label id="atmosphericDirectionXValue" class="controlsLabel"
+                                               style="transform: rotate(0deg);
+                                                      transform-origin: 0% 50%;
+                                                      position: absolute; 
+                                                      left: 0px; 
+                                                      top: 0px;">
+                                            ΔX:
+                                        </label>
+                                        <input id="atmosphericDirectionX"
+                                               class="vector3Range 
+                                                      themedUIBackground 
+                                                      whiteShadow"
+                                               type="range" 
+                                               min="-1" 
+                                               max="1" 
+                                               step=".01" 
+                                               value="0"
+                                               style="
+                            width: 15vmax;
+                            transform: rotate(0deg);
+                            transform-origin: 50% 50%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;">
+
+                                        <label id="atmosphericDirectionYValue"
+                                               class="controlsLabel"
+                                               style="
+                            transform: rotate(-90deg);
+                            transform-origin: 50% 100%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;">
+                                            ΔY:
+                                        </label>
+                                        <input id="atmosphericDirectionY"
+                                               class="vector3Range themedUIBackground whiteShadow"
+                                               type="range" min="-1" max="1" step=".01" value="0"
+                                               style="
+                            width: 15vmax;
+                            transform: rotate(-90deg);
+                            transform-origin: 50% 50%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;" />
+
+                                        <label id="atmosphericDirectionZValue" class="controlsLabel"
+                                               style="
+                            transform: rotate(-45deg);
+                            transform-origin: 0% 100%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;">
+
+                                            ΔZ:
+                                        </label>
+                                        <input id="atmosphericDirectionZ"
+                                               class="vector3Range themedUIBackground whiteShadow"
+                                               type="range" min="-1" max="1" step=".01" value="0"
+                                               style="
+                            width: 15vmax;
+                            transform: rotate(-45deg);
+                            transform-origin: 50% 50%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px; " />
+                                    </div>
+                                    <label class="themedUI controlsLabel"
+                                           style="position: absolute; bottom: 0px; color: #00ffff">
+                                        Atmospheric Direction:
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="
+            position: absolute;
+            top: 0px;
+            width: 30vw;
+            left: 50vw;">
+                            <div id="spheroidsVectors">
+
+
+                                <label class="themedUI settingsLabels">SPHEROID ROTATION VELOCITY</label><br />
+                                <input id="spheroidRotationVelocity" 
+                                       class="themedUI 
+                                              themedUIBackground 
+                                              standardRange 
+                                              themedUIBackground" 
+                                       type="range" 
+                                       min="-100" 
+                                       max="100" 
+                                       step=".1" 
+                                       value="25" />
+                                <br />
+
+                                <label class="themedUI settingsLabels">SPHEROID ATMOSPHERE ROTATION VELOCITY</label><br />
+                                <input id="spheroidAtmosphereRotationVelocity" 
+                                       class="themedUI 
+                                              themedUIBackground 
+                                              standardRange
+                                              themedUIBackground" 
+                                       type="range" 
+                                       min="-100" 
+                                       max="100" 
+                                       step=".1" 
+                                       value="35" />
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div id="universeObjectStarSettings"
+             class="universeObjectRendererControlContainer">
+            <div style="position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        left: 0px;
+                        top: 0px;
+                        display: flex;
+                        flex-direction: column;">
+
+                <div>
+                <label class="universeObjectTabPageTitle themedUIHighlight">
+                    STAR SETTINGS
+                </label>
+                    </div>
+                <div id="settingsMenu" 
+                     style="display: flex;
+                            flex-direction: column;
+                            flex-wrap: wrap;">
+                    <div id="sunBaseSettings">
+                        <div style="display: flex; 
+                                    flex-direction: column; 
+                                    flex-wrap: wrap;">
+                            <div>
+                                <label class="menuTitleItem">ENVIRONMENT</label>
+                            </div>
+
+                            <div>
+                                <label class="menuTitleSubItem">ε</label>
+                                <input id="ambientLightIntensity" 
+                                       class="themedUI 
+                                              themedUIBackground 
+                                              whiteGlow 
+                                              rangeSelector" 
+                                       type="range" 
+                                       min="0" 
+                                       max="2" 
+                                       step=".01" 
+                                       value="0" />
+                            </div>
+
+                            <div>
+                                <label class="menuTitleSubItem">ε</label>
+                                <input id="solarLightIntensity" 
+                                       class="themedUI 
+                                              themedUIBackground 
+                                              whiteGlow 
+                                              rangeSelector" 
+                                       type="range" 
+                                       min="0" 
+                                       max="2" 
+                                       step=".01" 
+                                       value="1" />
+                            </div>
+
+                            <div>
+                                <label class="menuTitleItem">ORBITALS</label>
+                            </div>
+
+                            <div>
+                                <input type="checkbox" id="orbitSun" />
+                                <label class="menuTitleSubItem">LOCK</label>
+                            </div>
+
+                            <div>
+                                <label class="menuTitleSubItem">Δz</label>
+                                <input id="orbitDistance" 
+                                       class="themedUI 
+                                              themedUIBackground 
+                                              whiteGlow 
+                                              rangeSelector" 
+                                       type="range" 
+                                       min="1" 
+                                       max="5000" 
+                                       step="10" 
+                                       value="1000" />
+                            </div>
+                            <div>
+                                <label class="menuTitleSubItem">
+                                Orbital Velocity
+                                </label>
+                                <input id="orbitVelocity" 
+                                       class="themedUI 
+                                              themedUIBackground 
+                                              whiteGlow 
+                                              rangeSelector" 
+                                       type="range" 
+                                       min=".001" 
+                                       max=".100" 
+                                       step=".001" 
+                                       value=".005" />
+                            </div>
+
+                            <div>
+                                <label class="menuTitle">
+                                BASE SUN
+                                </label>
+                            </div>
+
+                            <div>
+                                <label class="menuTitleSubItem">
+                                COLOR
+                                </label>
+                                <input id="baseSunEmissive"
+                                       class="rangeSelector"
+                                       type="color" />
+                            </div>
+
+
+                            <div>
+                                <label class="menuTitleSubItem">
+                                INTENSITY
+                                </label>
+                                <input id="baseSunEmissiveIntensity"
+                                       class="rangeSelector"
+                                       type="range" min=".1" max="3" step=".01" value="1" />
+                            </div>
+
+                            <div>
+                                <label class="menuTitleSubItem">DISPLACEMENT FACTOR</label>
+                                <input id="baseSunDisplacementFactor"
+                                       class="rangeSelector"
+                                       type="range" min="-99" max="99" step="1" value="1" />
+                            </div>
+
+
+                            <div>
+                                <label class="menuTitleSubItem">SCALE</label>
+                                <input id="baseSunScale"
+                                       class="rangeSelector"
+                                       type="range" min="-3" max="3" step=".01" value="1" />
+                            </div>
+
+                            <div>
+                                <label class="menuTitleSubItem">OPACITY</label>
+                                <input id="baseSunOpacity"
+                                       class="rangeSelector"
+                                       type="range" min="0" max="1" step=".01" value=".5" />
+                            </div>
+
+                            <div>
+                                <label class="menuTitleSubItem">TRANSMISSION</label>
+                                <input id="baseSunTransmission"
+                                       class="rangeSelector"
+                                       type="range" min="0" max="1" step=".01" value=".5" />
+                            </div>
+
+                            <div>
+                                <label class="menuTitleSubItem">ROUGHNESS</label>
+                                <input id="baseSunRoughness"
+                                       class="rangeSelector"
+                                       type="range" min="0" max="1" step=".01" value=".5" />
+                            </div>
+
+                            <div>
+                                <label class="menuTitleSubItem">IOR</label>
+                                <input id="baseSunIOR"
+                                       class="rangeSelector"
+                                       type="range" min="0" max="4" step=".01" value="1.6" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="sunSurfaceSettings">
+                        <div>
+                            <label class="menuTitle">SUN SURFACE </label>
+                        </div>
+
+                        <div>
+                            <input type="checkbox" id="useRepeats" />
+                            <label class="menuTitleSubItem"
+                                   style="bottom: 0px; right: 0px;">
+                                Sun Sphere Repeat
+                            </label>
+                        </div>
+                        <div class="menuTitleSubItem" id="textureRepeatU"
+                             style="bottom: 0px; left: 0px;">
+                            <input id="repeatU" class="rangeSelector" type="range" min=".01" max="2" step=".01" value=".01" />
+                        </div>
+                        <div class="menuTitleSubItem" id="textureRepeatV"
+                             style="bottom: 0px; left: 0px;">
+                            <input id="repeatV" class="rangeSelector" type="range" min=".01" max="2" step=".01" value=".01" />
+                        </div>
+
+                        <div>
+                            <label class="menuTitleSubItem">COLOR</label>
+                            <input id="baseSunEmissive"
+                                   class="rangeSelector"
+                                   type="color" />
+                        </div>
+
+                        <div>
+                            <label class="menuTitleSubItem">DEPTH WRITE</label>
+                            <input id="sunSurfaceDepthWrite"
+                                   class="rangeSelector"
+                                   type="checkbox" />
+                        </div>
+
+                        <label class="menuTitleSubItem">DEPTH TEST</label>
+                        <input id="sunSurfaceDepthTest"
+                               class="rangeSelector"
+                               type="checkbox" />
+                    </div>
+
+                    <div>
+                        <label class="menuTitleSubItem">EMISSIVE INTENSITY</label>
+                        <input id="sunSurfaceEmissiveIntensity"
+                               class="rangeSelector"
+                               type="range" min="0" max="3" step=".01" value=".5" />
+                    </div>
+
+                    <label class="menuTitleSubItem">SCALE</label>
+                    <input id="sunSurfaceScale"
+                           class="rangeSelector"
+                           type="range" min="-3" max="3" step=".01" value="1" />
+
+                    <div>
+                        <label class="menuTitleSubItem">DISPLACEMENT FACTOR</label>
+                        <input id="sunSurfaceDisplacementFactor"
+                               class="rangeSelector"
+                               type="range" min="-99" max="99" step="1" value="1" />
+
+                    </div>
+
+                    <div>
+                        <label class="menuTitleSubItem">OPACITY</label>
+                        <input id="sunSurfaceOpacity"
+                               class="rangeSelector"
+                               type="range" min="0" max="1" step=".01" value=".5" />
+
+
+                        <div>
+                            <label class="menuTitleSubItem">TRANSMISSION</label>
+                            <input id="sunSurfaceTransmission"
+                                   class="rangeSelector"
+                                   type="range" min="0" max="1" step=".01" value=".5" />
+                        </div>
+
+                        <div>
+                            <label class="menuTitleSubItem">ROUGHNESS</label>
+                            <input id="sunSurfaceRoughness"
+                                   class="rangeSelector"
+                                   type="range" min="0" max="1" step=".01" value=".5" />
+                        </div>
+
+                        <div>
+                            <label class="menuTitleSubItem">METALNESS</label>
+                            <input id="sunSurfaceMetalness"
+                                   class="rangeSelector"
+                                   type="range" min="0" max="1" step=".01" value=".5" />
+                        </div>
+
+                        <div>
+                            <label class="menuTitleSubItem">IOR</label>
+                            <input id="sunSurfaceIor"
+                                   class="rangeSelector"
+                                   type="range" min="0" max="3.4" step=".01" value="1.6" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="universeObjectData"
+             class="universeObjectRendererControlContainer">
+            <div style="position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        left: 0px;
+                        top: 0px;
+                        display: flex;
+                        flex-direction: column;">
+
+                <label class="universeObjectTabPageTitle themedUIHighlight">
+                    DATA
+                </label>
+                <div id="vectorsMenuItemList"
+                     class="universeObjectRendererControlContainer
+            themedUIHighlight
+            fadeable
+            collapseable">
+
+                </div>
+            </div>
+        </div>
+
+        <div id="universeObjectMaterials"
+             class="universeObjectRendererControlContainer">
+            <div style="position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        left: 0px;
+                        top: 0px;
+                        display: flex;
+                        flex-direction: column;">
+
+                <label class="universeObjectTabPageTitle themedUIHighlight">
+                    MATERIALS
+                </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="HUD"
+             class="themedUIHighlight 
+                    closeable 
+                    fadeable"
+             style="position: absolute;
+                    bottom: 0px;
+                    width: 15vw;
+                    right: 0px;
+                    text-align: right;
+                    visibility: visible;
+                    opacity: 1;
+                    font-size: clamp(14px, 1vmax, 32px);
+                    z-index: 99;">
+
+            <label class="themedUI themedUIBackground settingsLabels">
+                SPHERE:
+            </label>
+            <br />
+            <label class="themedUI themedUIBackground settingsLabels">
+                Rotation X:
+            </label>
+            <br />
+            <label id="sphereRotationX"
+                   class="themedUI themedUIBackground settingsLabels"
+                   style="text-align: right;">
+                0
+            </label>
+            <br />
+            <label class="themedUI themedUIBackground settingsLabels">
+                Rotation Y:
+            </label>
+            <br />
+            <label id="sphereRotationY"
+                   class="themedUI themedUIBackground settingsLabels"
+                   style="text-align: right;">
+                0
+            </label>
+            <br />
+            <label class="themedUI themedUIBackground settingsLabels">
+                Rotation Z:
+            </label>
+            <br />
+            <label id="sphereRotationZ"
+                   class="themedUI themedUIBackground settingsLabels"
+                   style="text-align: right;">
+                0
+            </label>
+            <br />
+            <br />
+
+            <label class="themedUI themedUIBackground settingsLabels">
+                ATMOSPHERE:
+            </label>
+            <br />
+            <label class="themedUI themedUIBackground settingsLabels">
+                Rotation X:
+            </label>
+            <br />
+            <label id="sphereAtmosphereRotationX"
+                   class="themedUI themedUIBackground settingsLabels"
+                   style="text-align: right;">
+                0
+            </label>
+            <br />
+
+            <label class="themedUI themedUIBackground settingsLabels">
+                Rotation Y:
+            </label>
+            <br />
+            <label id="sphereAtmosphereRotationY"
+                   class="themedUI themedUIBackground settingsLabels"
+                   style="text-align: right;">
+                0
+            </label>
+            <br />
+
+            <label class="themedUI themedUIBackground settingsLabels">
+                Rotation Z:
+            </label>
+            <br />
+            <label id="sphereAtmosphereRotationZ"
+                   class="themedUI themedUIBackground settingsLabels"
+                   style="text-align: right;">
+                0
+            </label>
+            <br />
+            <br />
+
+            <label class="themedUI themedUIBackground settingsLabels">
+                OBSERVER:
+            </label>
+            <br />
+            <label class="themedUI themedUIBackground settingsLabels">
+                Position X:
+            </label>
+            <br />
+            <label id="cameraPositionX"
+                   class="themedUI themedUIBackground settingsLabels"
+                   style="text-align: right;">
+                0
+            </label>
+            <br />
+
+            <label class="themedUI themedUIBackground settingsLabels">
+                Position Y:
+            </label>
+            <br />
+            <label id="cameraPositionY"
+                   class="themedUI themedUIBackground settingsLabels"
+                   style="text-align: right;">
+                0
+            </label>
+            <br />
+            <label class="themedUI themedUIBackground settingsLabels">
+                Position Z:
+            </label>
+            <br />
+            <label id="cameraPositionZ"
+                   class="themedUI themedUIBackground settingsLabels"
+                   style="text-align: right;">
+                0
+            </label>
+        </div>
+    </div>
+    <script>
+
+
+        function showUniverseObjectRendererControlContainer({
+            containerId
+        }) {
+            hideAllUniverseObjectRendererControlContainers();
+            var controlContainer = document.getElementById(containerId);
+            if (controlContainer == undefined) {
+                return false;
+            }
+            controlContainer.style.transition = "3s";
+            controlContainer.style.opacity = "1";
+            controlContainer.style.visibility = "visible";
+            controlContainer.style.transform = "rotateX(0deg)";
+        }
+
+        function hideUniverseObjectRendererControlContainer({
+            containerId
+        }) {
+            var controlContainer = document.getElementById(containerId);
+            if (controlContainer == undefined) {
+                return false;
+            }
+            controlContainer.style.transition = "3s";
+            controlContainer.style.opacity = "0";
+            controlContainer.style.visibility = "hidden";
+            controlContainer.style.transform = "rotateX(180deg)";
+        }
+
+        function toggleUniverseObjectRendererControlContainer({
+            containerId
+        }) {
+            var controlContainer = document.getElementById(containerId);
+            if (controlContainer == undefined) {
+                return false;
+            }
+
+            if (controlContainer.style.visibility == "visible") {
+                hideUniverseObjectRendererControlContainer({ containerId: containerId });
+                return "hidden";
+            }
+
+            if (controlContainer.style.visibility == "hidden") {
+                showUniverseObjectRendererControlContainer({ containerId: containerId });
+                return "visible";
+            }
+        }
+
+        function hideAllUniverseObjectRendererControlContainers() {
+            var universeObjectRendererControlContainers =
+                document.querySelectorAll(".universeObjectRendererControlContainer").forEach(element => {
+                    element.style.transition = "3s";
+                    element.style.visibility = "hidden";
+                    element.style.opacity = "0";
+                });
+        }
+
+        function addUniverseObjectControlsListeners({
+            options
+        }) {
+            document.getElementById('cameraFOV')
+                .addEventListener('input', function () {
+                    changeCameraFOV(this.value);
+                });
+
+            document.getElementById('ambientLightIntensity')
+                .addEventListener('input', function () {
+                    ambientLight.intensity = this.value;
+
+                }, false);
+
+            document.getElementById('solarLightIntensity')
+                .addEventListener('input', function () {
+                    solarLight.intensity = this.value;
+                });
+
+            document.getElementById('displacementScale')
+                .addEventListener('input', function () {
+
+                    vectorAmplificationFactor =
+                        document.getElementById("vectorAmplificationFactor").value;
+
+                    var totalDisplacementScale =
+                        this.value * vectorAmplificationFactor;
+
+                    universeObject.material.displacementScale =
+                        totalDisplacementScale;
+                });
+
+            document.getElementById('atmosphereDisplacementScale')
+                .addEventListener('input', function () {
+
+                    vectorAmplificationFactor =
+                        document.getElementById("vectorAmplificationFactor").value;
+
+                    var totalDisplacementScale =
+                        this.value * vectorAmplificationFactor;
+
+                    universeObject.UniverseObjectAtmosphereMaterial.displacementScale =
+                        totalDisplacementScale;
+
+                    universeObject.UniverseObjectAtmosphereGeometry
+                        .computeVertexNormals();
+                });
+
+
+            document.getElementById('atmosphereOpacityScale')
+                .addEventListener('input', function () {
+                    universeObject.UniverseObjectAtmosphereMaterial.opacity =
+                        this.value;
+                });
+
+            let spheroidRotationVelocityHandle = document.getElementById('spheroidRotationVelocity');
+            spheroidRotationVelocityHandle.addEventListener('input', function () {
+                vectorAmplificationFactor = document.getElementById("vectorAmplificationFactor").value;
+                window.spheroidRotationVelocity =
+                    spheroidRotationVelocityHandle.value * vectorAmplificationFactor;
+            }, false);
+
+            let spheroidAtmosphereRotationVelocityHandle = document.getElementById('spheroidAtmosphereRotationVelocity');
+            spheroidAtmosphereRotationVelocityHandle.addEventListener('input', function () {
+                vectorAmplificationFactor = document.getElementById("vectorAmplificationFactor").value;
+                window.spheroidAtmosphereRotationVelocity =
+                    spheroidAtmosphereRotationVelocityHandle.value * vectorAmplificationFactor;
+            }, false);
+
+            document.getElementById("sunRepeatV").addEventListener('input', function (event) {
+                videoSphereTexture.repeat.set(
+                    document.getElementById("sunRepeatV").value,
+                    document.getElementById("sunRepeatV").value);
+
+            });
+
+            document.getElementById("sunRepeatU").addEventListener('input', function (event) {
+                videoSphereTexture.repeat.set(
+                    document.getElementById("sunRepeatU").value,
+                    document.getElementById("sunRepeatU").value);
+
+            });
+
+            addListeners({ type: 'range' })
+            setAllControlsStyles();
+        }
+
+    </script>
+</body>

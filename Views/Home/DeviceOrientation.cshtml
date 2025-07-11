@@ -1,0 +1,742 @@
+﻿@{
+    ViewBag.Title = "DeviceOrientation";
+    Layout = null;
+}
+
+<script src="/Scripts/vailware.master.library.beta.js">
+</script>
+
+<style>
+    body {
+        font-size: clamp(18px, 1vmax, 22px);
+        color: #000022;
+        background-color: rgba(8, 8, 8, .9);
+    }
+
+    #pageContent {
+        font-size: clamp(18px, 1vmax, 30px);
+        color: #000022;
+        position: absolute;
+        top: 8vh;
+        left: 0px;
+        background-color: rgba(16, 16, 16, .7);
+        color: #00ffff;
+    }
+
+    .sensorDescription {
+        font-size: clamp(12px, 1vmax, 16px);
+        color: #ff0000;
+    }
+
+    .sensorDataValues {
+        font-size: clamp(12px, 1vmax, 16px);
+        color: #ffffff;
+    }
+
+    .title {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        font-family: audiowide;
+        color: #ff6a00;
+        text-shadow: 1px 1px #000000;
+        z-index: 99;
+    }
+
+    #motionEventDataContainer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .accelerationDataTable{
+        top: 0px;
+        left: 0px;
+        font-family: audiowide;
+        color: #00ffff;
+        font-size: clamp(12px, .7vmax, 19px);
+    }
+
+    .orientationDataTable {
+        top: 0px;
+        left: 0px;
+        font-family: audiowide;
+        color: #00ffff;
+        font-size: clamp(12px, .7vmax, 19px);
+    }
+
+</style>
+
+<body>
+
+    <div id="title" class="title">
+        PATRICIA'S
+        VR TOOLS
+    </div>
+
+    <div id="motionEventDataContainer">
+        <div id="orientationDataContainer"></div>
+        <div id="accelerationDataContainer"></div>
+    </div>
+</body>
+
+<script>
+    const pi = 3.141592654;
+
+    var orientationAlpha;
+    var orientationBeta;
+    var orientationGamma;
+
+    var accelerationAlpha;
+    var accelerationBeta;
+    var accelerationGamma;
+
+    var accelerationIncludingGravityAlpha;
+    var accelerationIncludingGravityBeta;
+    var accelerationIncludingGravityGamma;
+
+    var maxAlphaRotationRate;
+    var maxBetaRotationRate;
+    var maxGammaRotationRate;
+
+    var maxOrientationAlpha = 0;
+    var maxOrientationBeta = 0;
+    var maxOrientationGamma = 0;
+
+    var maxAccelerationAlpha = 0;
+    var maxAccelerationBeta = 0;
+    var maxAccelerationGamma = 0;
+
+    var maxAccelerationIncludingGravityAlpha = 0;
+    var maxAccelerationIncludingGravityBeta = 0;
+    var maxAccelerationIncludingGravityGamma = 0;
+
+    var maxAlphaRotationRate = 0;
+    var maxBetaRotationRate = 0;
+    var maxGammaRotationRate = 0;
+
+    function degToRad(value) {
+        var radians = (value * (pi / 180));
+        return radians;
+    };
+
+
+    function localAdjustVideoObjectOrientation({
+        event,
+        videoObjectId,
+        useEuler,
+        useQuaternion,
+        useBaseLine,
+        useSensitivity,
+        resetObjectRotation,
+        object,
+        arbitraryMultiplier,
+        fractionalPrecision,
+        useRound,
+        rotationBetaSensitivity,
+        rotationAlphaSensitivity,
+        rotationGammaSensitivity,
+        rotationBetaBaseLine,
+        rotationAlphaBaseLine,
+        rotationGammaBaseLine
+    }) {
+
+        if (videoObjectId == undefined) {
+            return null;
+        }
+
+        if (event == undefined) {
+            return false;
+        }
+
+        var beta = event.beta;
+        var alpha = event.alpha;
+        var gamma = event.gamma;
+
+        var radiansBeta = degToRad(beta);
+        var radiansAlpha = degToRad(alpha) * -1;
+        var radiansGamma = degToRad(gamma);
+
+        var videoObject =
+            window.videoObjects[window.videoObjects.findIndex
+                (o => o.name ==
+                    videoObjectId)];
+
+        if (videoObject == undefined) {
+            videoObject =
+                window.scene.children[window.scene.children
+                    .findIndex(o => o.name == videoObjectId)];
+        }
+
+        if (videoObject == undefined) {
+            return false;
+        }
+
+        if (useRound == undefined) {
+            useRound = false;
+        };
+
+        if (arbitraryMultiplier == undefined) {
+            arbitraryMultiplier = 1;
+        }
+
+            radiansBeta =
+                (radiansBeta * arbitraryMultiplier);
+
+            radiansAlpha =
+                (radiansAlpha * arbitraryMultiplier);
+
+            radiansGamma =
+                (radiansGamma * arbitraryMultiplier);
+
+        if (useSensitivity == undefined) {
+            useSensitivity == false;
+        }
+
+
+        if (useSensitivity == true) {
+            if (rotationAlphaSensitivity == undefined) {
+                rotationAlphaSensitivity = 1;
+            }
+            if (rotationBetaSensitivity == undefined) {
+                rotationBetaSensitivity = 1;
+            }
+            if (rotationGammaSensitivity == undefined) {
+                rotationGammaSensitivity = 1;
+            }
+
+            radiansBeta =
+                (radiansBeta * rotationBetaSensitivity);
+
+            radiansAlpha =
+                (radiansAlpha * rotationAlphaSensitivity);
+
+            radiansGamma =
+                (radiansGamma * rotationGammaSensitivity);
+        }
+
+        if (resetObjectRotation != undefined) {
+            if (resetObjectRotation == true) {
+                videoObject.rotation.x = 0;
+                videoObject.rotation.y = 0;
+                videoObject.rotation.z = 0;
+            }
+        }
+
+        var currentObjectRotationX = videoObject.rotation.x;
+        var currentObjectRotationY = videoObject.rotation.y;
+        var currentObjectRotationZ = videoObject.rotation.z;
+
+        var currentObjectQuaternion =
+            new THREE.Quaternion({
+                x: videoObject.quaternion.x,
+                y: videoObject.quaternion.y,
+                z: videoObject.quaternion.z,
+                w: videoObject.quaternion.w
+            });
+
+        if (useBaseLine == true) {
+            if (baseLineBeta != undefined) {
+                baseLineBeta = degToRad(baseLineBeta);
+            } else {
+                baseLineBeta = degToRad(0);
+            }
+
+            if (baseLineAlpha != undefined) {
+                baseLineAlpha = degToRad(baseLineAlpha);
+            } else {
+                baseLineAlpha = degToRad(0);
+            }
+
+            if (baseLineGamma != undefined) {
+                baseLineGamma = degToRad(baseLineGamma);
+            } else {
+                baseLineGamma = degToRad(0);
+            }
+
+            radiansBeta += baseLineBeta;
+            radiansAlpha += baseLineAlpha;
+            radiansGamma += baseLineGamma;
+        }
+
+        if (useEuler == true) {
+            var rotationEuler =
+                new THREE.Euler(
+                    radiansBeta,
+                    radiansAlpha,
+                    radiansGamma);
+
+            videoObject.rotation.setFromEuler(rotationEuler);
+            return true;
+        };
+
+        if (useQuaternion == true) {
+            var rotationEuler =
+                new THREE.Euler(
+                    radiansBeta,
+                    radiansAlpha,
+                    radiansGamma);
+
+            var rotationQuaternion =
+                new THREE.Quaternion().setFromEuler(
+                    radiansBeta,
+                    radiansAlpha,
+                    radiansGamma);
+
+            videoObject.rotation.setFromQuaternion(rotationQuaternion);
+            return true;
+        };
+
+        if (useRound == true) {
+            videoObject.rotation.x = radiansBeta;
+            //videoObject.rotation.z = radiansGamma;
+            videoObject.rotation.y = radiansAlpha;
+            return true;
+        } else {
+            if (fractionalPrecision != undefined) {
+                videoObject.rotation.x = radiansBeta.toFixed(fractionalPrecision);
+                //videoObject.rotation.z = radiansGamma.toFixed(fractionalPrecision);
+                videoObject.rotation.y = radiansAlpha.toFixed(fractionalPrecision);
+                return true;
+            }
+        }
+        return true;
+    }
+    function addVRDeviceEventHandlers() {
+        var useVRDevice =
+            document.getElementById("useVRDevice");
+
+        if (useVRDevice != undefined) {
+            if (useVRDevice.checked == true) {
+
+                localAdjustVideoObjectOrientation({
+                    event: event,
+                    useEuler: false,
+                    useQuaternion: false,
+                    useBaseLine: true,
+                    useSensitivity: false,
+                    resetObjectRotation: false,
+                    object: null,
+                    arbitraryMultiplier: 2,
+                    fractionalPrecision: undefined,
+                    useRound: true
+                });
+
+            }
+        }
+        return true;
+    }
+
+    window.addEventListener("deviceorientation", function (event) {
+
+        if (Math.abs(event.alpha) > Math.abs(maxOrientationAlpha)) {
+            maxOrientationAlpha = event.alpha;
+        }
+
+        if (Math.abs(event.beta) > Math.abs(maxOrientationBeta)) {
+            maxOrientationBeta = event.beta;
+        }
+
+        if (Math.abs(event.gamma) > Math.abs(maxOrientationGamma)) {
+            maxOrientationGamma = event.gamma;
+        }
+
+        var orientationDataContainer =
+            document.getElementById('orientationDataContainer');
+        orientationDataContainer.innerText = '';
+
+        var table = document.createElement('table');
+        table.setAttribute('id', 'orientationDataTable');
+        table.classList.add('orientationDataTable');
+
+        orientationDataContainer.append(table);
+        var tr = document.createElement('tr');
+        table.append(tr);
+
+        var td = document.createElement('td');
+        td.innerHTML = "orientation DATA";
+        tr.append(td);
+
+        var td = document.createElement('td');
+        tr.append(td);
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "ALPHA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            td.innerHTML = event.alpha;
+            tr.append(td);
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "MAX ALPHA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+                td.innerHTML = maxOrientationAlpha;
+            tr.append(td);
+
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "BETA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            td.innerHTML = event.beta;
+            tr.append(td);
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "MAX BETA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+                td.innerHTML = maxOrientationBeta;
+            tr.append(td);
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "GAMMA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            td.innerHTML = event.gamma;
+            tr.append(td);
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "MAX GAMMA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+                td.innerHTML = maxOrientationGamma;
+            tr.append(td);
+
+
+        //if (event == undefined) {
+        //    return false;
+        //}
+
+        //if (event.alpha == undefined) {
+        //    return false;
+        //}
+
+        //if (event.beta == undefined) {
+        //    return false;
+        //}
+
+        //if (event.gamma == undefined) {
+        //    return false;
+        //}
+
+
+
+    });
+
+    window.addEventListener("devicemotion", function (event) {
+
+        var accelerationDataContainer =
+            document.getElementById('accelerationDataContainer');
+        accelerationDataContainer.innerText = '';
+
+        var table = document.createElement('table');
+        table.setAttribute('id', 'accelerationDataTable');
+        table.classList.add('accelerationDataTable');
+
+        accelerationDataContainer.append(table);
+        var tr = document.createElement('tr');
+        table.append(tr);
+
+        var td = document.createElement('td');
+        td.innerHTML = "ACCELERATION DATA";
+        tr.append(td);
+
+        var td = document.createElement('td');
+        tr.append(td);
+
+        if (event.acceleration.x != undefined) {
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "ALPHA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            td.innerHTML = event.acceleration.x;
+            tr.append(td);
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "MAX ALPHA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            if (Math.abs(event.acceleration.x) >
+                Math.abs(maxAccelerationAlpha)) {
+                maxAccelerationAlpha = event.acceleration.x;
+                td.innerHTML = maxAccelerationAlpha;
+            }
+            tr.append(td);
+
+        }
+
+        if (event.acceleration.y != undefined) {
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "BETA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            td.innerHTML = event.acceleration.y;
+            tr.append(td);
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "MAX BETA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            if (Math.abs(event.acceleration.y) >
+                Math.abs(maxAccelerationBeta)) {
+                maxAccelerationBeta = event.acceleration.y;
+                td.innerHTML = maxAccelerationBeta;
+            }
+            tr.append(td);
+
+        }
+
+        if (event.acceleration.z != undefined) {
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "GAMMA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            td.innerHTML = event.acceleration.z;
+            tr.append(td);
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "MAX GAMMA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            if (Math.abs(event.acceleration.z) >
+                Math.abs(maxAcceleratioGamma)) {
+                maxAccelerationGamma = event.acceleration.z;
+                td.innerHTML = maxAccelerationGamma;
+            }
+            tr.append(td);
+
+        }
+
+        var tr = document.createElement('tr');
+        table.append(tr);
+
+        var td = document.createElement('td');
+        td.innerHTML = "ACCELERATION WITH GRAVITY DATA";
+        tr.append(td);
+
+        var td = document.createElement('td');
+        tr.append(td);
+
+
+        if (event.accelerationIncludingGravity.x != undefined) {
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "ALPHA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            td.innerHTML = event.accelerationIncludingGravity.x;
+            tr.append(td);
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "MAX ALPHA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            if (Math.abs(event.accelerationIncludingGravity.x) >
+                Math.abs(maxaccelerationIncludingGravityAlpha)) {
+                maxaccelerationIncludingGravityAlpha = event.accelerationIncludingGravity.x;
+                td.innerHTML = maxaccelerationIncludingGravityAlpha;
+            }
+            tr.append(td);
+
+        }
+
+        if (event.accelerationIncludingGravity.y != undefined) {
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "BETA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            td.innerHTML = event.accelerationIncludingGravity.y;
+            tr.append(td);
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "MAX BETA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            if (Math.abs(event.accelerationIncludingGravity.y) >
+                Math.abs(maxaccelerationIncludingGravityBeta)) {
+                maxaccelerationIncludingGravityBeta = event.accelerationIncludingGravity.y;
+                td.innerHTML = maxaccelerationIncludingGravityBeta;
+            }
+            tr.append(td);
+
+        }
+
+        if (event.accelerationIncludingGravity.z != undefined) {
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "GAMMA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            td.innerHTML = event.accelerationIncludingGravity.z;
+            tr.append(td);
+
+            var tr = document.createElement('tr');
+            table.append(tr);
+
+            var td = document.createElement('td');
+            td.innerHTML = "MAX GAMMA:";
+            tr.append(td);
+
+            var td = document.createElement('td');
+            if (Math.abs(event.accelerationIncludingGravity.z) >
+                Math.abs(maxAcceleratioGamma)) {
+                maxaccelerationIncludingGravityGamma = event.accelerationIncludingGravity.z;
+                td.innerHTML = maxaccelerationIncludingGravityGamma;
+            }
+            tr.append(td);
+
+        }
+    });
+    
+
+        //if (event.accelerationIncludingGravity.x != undefined) {
+        //    if (Math.abs(event.accelerationIncludingGravity.x) >
+        //        Math.abs(maxAccelerationIncludingGravityAlpha)) {
+        //        maxAccelerationIncludingGravityAlpha =
+        //            event.accelerationIncludingGravity.x;
+        //        document.getElementById("accelerationIncludingGravityXValue")
+        //            .innerHTML = event.accelerationIncludingGravity.x +
+        //            " / " + maxAccelerationIncludingGravityAlpha;
+        //    }
+        //}
+
+        //if (event.accelerationIncludingGravity.y != undefined) {
+        //    if (Math.abs(event.accelerationIncludingGravity.y) >
+        //        Math.abs(maxAccelerationIncludingGravityBeta)) {
+        //        maxAccelerationIncludingGravityBeta =
+        //            event.accelerationIncludingGravity.y;
+        //        document.getElementById("accelerationIncludingGravityYValue")
+        //            .innerHTML = event.accelerationIncludingGravity.y +
+        //            " / " + maxAccelerationIncludingGravityBeta;
+        //    }
+        //}
+
+        //if (event.accelerationIncludingGravity.z != undefined) {
+        //    if (Math.abs(event.accelerationIncludingGravity.z) >
+        //        Math.abs(maxAccelerationIncludingGravityGamma)) {
+        //        maxAccelerationIncludingGravityGamma =
+        //            event.accelerationIncludingGravity.z;
+        //        document.getElementById("accelerationIncludingGravityZValue")
+        //            .innerHTML = event.accelerationIncludingGravity.z +
+        //            " / " + maxAccelerationIncludingGravityGamma;
+        //    }
+        //}
+
+        //document.getElementById("rotationAlphaValue").innerHTML = event.rotationRate.alpha;
+
+        //document.getElementById("rotationBetaValue").innerHTML = event.rotationRate.beta;
+
+        //document.getElementById("rotationGammaValue").innerHTML = event.rotationRate.gamma;
+
+    //<div id="deviceOrientationData"
+    //    style="display: flex;
+    //                    flex-direction: column;">
+    //    <div>
+    //        <label class="sensorDescription themedUIHighlight">
+    //            ORIENTATION
+    //        </label>
+    //    </div>
+    //    <div id="orientationAlphaValue"
+    //        class="sensorDataValues themedUI">
+    //        0.00
+    //    </div>
+    //    <div id="orientationBetaValue"
+    //        class="sensorDataValues themedUI">
+    //        0.00
+    //    </div>
+    //    <div id="orientationGammaValue"
+    //        class="sensorDataValues themedUI">
+    //        0.00
+    //    </div>
+    //</div>
+
+    //document.getElementById("orientationAlphaValue").innerHTML =
+    //    "ALPHA: " + event.alpha + "<br>" +
+    //    "<span style='color: #ff0000'>" +
+    //    "MAX ALPHA: " + maxOrientationAlpha +
+    //    "</span>";
+
+    //document.getElementById("orientationBetaValue").innerHTML =
+    //    "BETA: " + event.beta + "<br>" +
+    //    "<span style='color: #ff0000'>" +
+    //    "MAX BETA: " + maxOrientationBeta +
+    //    "</span>";
+
+
+    //document.getElementById("orientationGammaValue").innerHTML =
+    //    "GAMMA: " + event.gamma + "<br>" +
+    //    "<span style='color: #ff0000'>" +
+    //    "MAX GAMMA: " + maxOrientationGamma +
+    //    "</span>";
+
+
+
+
+</script>

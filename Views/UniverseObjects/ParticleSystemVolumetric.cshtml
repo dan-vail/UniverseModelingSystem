@@ -1,0 +1,228 @@
+﻿@{Layout = null;}
+
+<script src="~/threejs/three.js.oldbuild/three.min.js"></script>
+<script src="~/threejs/three.js.oldbuild/OrbitControls.js"></script>
+<script src="~/threejs/three.js.oldbuild/tween.js"></script>
+@*<script src="~/Scripts/vailware.webgl.library.js"></script>*@
+<script src="~/Scripts/vailware.universeModeling.library.js"></script>
+
+<body style="overflow: hidden; margin: 0px 0px 0px 0px;">
+
+    <script>
+
+        //ATMOSPHERIC MODELING SYSTEM
+
+        //RAIN - WEATHER FUCKING RAINING
+        //SNOW - WEATHER SNOW DATA
+        //SLEET - THAT SHIT THAT COATS THE ROADS IN ARKANSAS
+        //SMOKE- NASA WILD FIRE DATA
+
+        //HEAT - WHATEVER PARTICLES LOOK LIKE IN ALGODONES
+        //IN THE SUMMER
+
+
+        var particle;
+        var particles = [];
+
+        var particleGeometry;
+        var particleMaterial;
+
+        function createParticleMaterial({
+            materialType 
+        }) {
+            var particleMaterial =
+                new THREE.MeshPhysicalMaterial({
+                color: 0xFFFFFF,
+                transparent: true,
+                opacity: .5,
+                transmission: .5,
+                roughness: .1,
+                ior: 1.6
+                });
+            return particleMaterial;
+        }
+
+
+        function createParticleMeshes({
+            particleCount
+        }) {
+            if (particleCount == undefined) {
+                particleCount = 10000;
+            }
+
+            var positions = new Float32Array();
+            for (let particleIndex = 0; particleIndex < particleCount; particleIndex++) {
+                var particle = createParticle();
+
+            }
+        }
+
+        function createParticle() {
+            var particle =
+                new THREE.Mesh (createParticleGeometry(),
+                                createParticleMaterial());
+            particles.push(particle);
+            particle.position = createRandomVector3();
+            scene.add(particle);
+        }
+
+        function createRandomVector3({
+            boundingGeometryType,
+            scale
+
+        }){
+            switch (boundingGeometryType) {
+
+                case "sphere":
+                    break;
+
+                case "box":
+                    vectorValues = [];
+
+                    for (let vectorCount = 0; vectorCount < 3; vectorCount++) {
+                        var randomSign = Math.random();
+                        if (randomSign < .5) {
+                            var factor = -1 * scale;
+                        } else {
+                            var factor = scale;
+                        }
+                        var vectorValue =
+                            Math.random * factor;
+                        vectorValues.push(vectorValue)
+                    };
+
+                    var randomVector3 = new THREE.Vector3(vectorValues[0],
+                       vectorValues[1],
+                       vectorValues[2])
+
+                    return randomVector3;
+            }
+            
+        }
+
+        function createParticleSystem({
+            particleSystemType
+        }) {
+            if (particleSystemType == undefined) {
+                return false;
+            }
+
+            switch (particleSystemType) {
+                case "meshFiller":
+                    break;
+
+                case "rain":
+                    createParticleMeshes({
+                        particleCount: 10000
+                    });
+                    break;
+
+                case "snow":
+                    break;
+
+                case "fire":
+                    break;
+
+                case "smoke":
+                    break;
+
+                case "sleet":
+                    break;
+            }
+        }
+
+        function createRenderer({
+            universeObject,
+            containerId
+        }) {
+            var container = document.getElementById(containerId);
+            if (container == undefined) {
+                var container =
+                    document.createElement('div');
+                container.setAttribute('Id', "universeRenderer");
+                container.style.width = "100%";
+                container.style.height = "100%";
+                document.body.append(container);
+            }
+            container =
+                document.getElementById("universeRenderer");
+
+            var webGL = document.createElement('div');
+            webGL.setAttribute('Id', "webGL");
+            webGL.style.position = "absolute";
+            webGL.style.top = "0px;";
+            webGL.style.left = "0px;";
+            webGL.style.width = "100%";
+            webGL.style.height = "100%";
+            container.append(webGL);
+
+            initializeScene({ sceneName: "universeRenderer" });
+            setupCamera({ cameraName: undefined });
+
+            window.rendererElementId = "webGL";
+
+            setupRenderer({
+                rendererElementId: "webGL",
+                rendererId: "universeRenderer"
+            });
+
+            setupControls({
+                cameraName: "universeRenderer",
+                rendererName: "universeRenderer"
+            });
+        }
+
+        function createAmbientLight() {
+            ambientLight = new THREE.AmbientLight();
+            ambientLight.intensity = 1;
+            scene.add(ambientLight);
+            ambientLight.name = "defaultAmbientLight";
+            window.ambientLight = ambientLight;
+        }
+
+        function animateUniverse(time) {
+            requestAnimationFrame(animateUniverse);
+            TWEEN.update(time);
+
+            //camera.position.x =
+            //    imaginaryObject.position.x +
+            //    (orbitDistance * Math.sin(cameraOrbitTime) + 0);
+
+            //camera.position.z =
+            //    imaginaryObject.position.z +
+            //    (orbitDistance * Math.cos(cameraOrbitTime) + 0);
+
+            //cameraOrbitTime += orbitalVelocity;
+
+            controls.update();
+            window.renderer.render(window.scene, window.camera);
+        }
+  
+        function render() {
+            animateUniverse(performance.now());
+        }
+
+        document.body.onresize = function () {
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            window.renderer.setSize(width, height);
+            window.camera.aspect = width / height;
+            window.camera.updateProjectionMatrix();
+        }
+
+        createRenderer({
+            universeObject: window.universeObject
+        });
+
+        createAmbientLight();
+
+        createParticleSystem({
+            particleSystemType: "rain"
+        });
+
+        document.body.onresize();
+        render();
+
+    </script>
+
+    </body>

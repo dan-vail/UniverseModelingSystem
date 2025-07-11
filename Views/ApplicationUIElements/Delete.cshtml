@@ -1,0 +1,129 @@
+﻿@model UniverseObjects.Models.ApplicationUIElement
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutPhone.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>ApplicationUIElement</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementHTMLType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementHTMLType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUseType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUseType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationPageURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationPageURL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementContainer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementContainer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementGroupID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementGroupID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementOrderInGroup)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementOrderInGroup)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementValue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementValue)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementInnerHTML)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementInnerHTML)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementClassList)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementClassList)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementCSSText)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementCSSText)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementJavascript)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementJavascript)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementFunctionCall)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementFunctionCall)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementFunctionCallEventTrigger)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementFunctionCallEventTrigger)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

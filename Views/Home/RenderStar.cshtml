@@ -1,0 +1,571 @@
+﻿
+
+@{
+    ViewBag.Title = "Render Star";
+    Layout = null;
+}
+
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+
+<script src="~/threejs/build/three.js"></script>
+<script src="~/threejs/build/tween.js"></script>
+<script src="~/threejs/build/OrbitControls.js"></script>
+<script src="~/threejs/build/TTFLoader.js"></script>
+<script src="~/threejs/build/GLTFLoader.js"></script>
+<script src="~/threejs/build/DeviceOrientationControls.js"></script>
+
+<link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+<script src="~/Scripts/vailware.master.library.beta.js"></script>
+
+
+<style>
+    #webGL {
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+    }
+
+    #settingsMenu {
+        position: absolute;
+        right: 1px;
+        top: 8vh;
+        transition: all 5s;
+        width: 20vw;
+        z-index: 99;
+    }
+
+    #settingsToggler {
+        position: absolute;
+        top: 2px;
+        right: 68px;
+        z-index: 99999;
+    }
+
+    .menuTitleItem {
+        color: #ff0000;
+        background-color: rgba(200, 0, 0, .16);
+        font-size: clamp(12px, 1.4vh, 72px);
+    }
+
+    .menuTitleSubItem {
+        color: rgba(0, 255, 0, .9);
+        font-size: clamp(11px, 1.2vh, 64px);
+    }
+</style>
+
+
+<div id="webGL">
+
+</div>
+
+<div id="settingsMenu" style="display: inline-block;">
+    <div id="sunSurfaceSettings">
+        <div>
+            <label class="menuTitle">SUN SURFACE </label>
+        </div>
+
+        <div>
+            <div>
+                <label class="menuTitleSubItem">COLOR</label>
+                <input id="baseSunEmissive"
+                       class="rangeSelector"
+                       type="color" />
+            </div>
+
+            <div>
+                <label class="menuTitleSubItem">EMISSIVE INTENSITY</label>
+                <input id="sunSurfaceEmissiveIntensity"
+                       class="rangeSelector"
+                       type="range" min="0" max="3" step=".01" value=".5" />
+            </div>
+
+            <label class="menuTitleSubItem">SCALE</label>
+            <input id="sunSurfaceScale"
+                   class="rangeSelector"
+                   type="range" min="-3" max="3" step=".01" value="1" />
+
+            <div>
+                <label class="menuTitleSubItem">DISPLACEMENT FACTOR</label>
+                <input id="sunSurfaceDisplacementFactor"
+                       class="rangeSelector"
+                       type="range" min="-99" max="99" step="1" value="1" />
+
+            </div>
+
+            <div>
+                <label class="menuTitleSubItem">OPACITY</label>
+                <input id="sunSurfaceOpacity"
+                       class="rangeSelector"
+                       type="range" min="0" max="1" step=".01" value=".5" />
+
+
+                <div>
+                    <label class="menuTitleSubItem">TRANSMISSION</label>
+                    <input id="sunSurfaceTransmission"
+                           class="rangeSelector"
+                           type="range" min="0" max="1" step=".01" value=".5" />
+                </div>
+
+                <div>
+                    <label class="menuTitleSubItem">ROUGHNESS</label>
+                    <input id="sunSurfaceRoughness"
+                           class="rangeSelector"
+                           type="range" min="0" max="1" step=".01" value=".5" />
+                </div>
+
+                <div>
+                    <label class="menuTitleSubItem">IOR</label>
+                    <input id="sunSurfaceIor"
+                           class="rangeSelector"
+                           type="range" min="0" max="3.4" step=".01" value="1.6" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="videoControl">
+
+</div>
+
+
+<script src="/threejs/build/three.js"></script>
+<script src="/threejs/build/tween.js"></script>
+<script src="/threejs/build/OrbitControls.js"></script>
+<script src="/threejs/build/opentype.js"></script>
+
+<script>
+    function addListeners() {
+
+        var sunSurfaceDisplacementFactor =
+            document.getElementById('sunSurfaceDisplacementFactor');
+        sunSurfaceDisplacementFactor.addEventListener('input', function () {
+            sunSurface.material.displacementScale = this.value;
+        });
+
+
+        var sunSurfaceScale = document.getElementById('sunSurfaceScale');
+        sunSurfaceScale.addEventListener('input', function () {
+            sunSurface.scale.set(this.value, this.value, this.value);
+        });
+
+        var sunSurfaceEmissiveIntensity = document.getElementById('sunSurfaceEmissiveIntensity');
+        sunSurfaceEmissiveIntensity.addEventListener('input', function () {
+            sunSurface.material.emissiveIntensity = this.value;
+
+        });
+
+        var sunSurfaceIor = document.getElementById('sunSurfaceIor');
+        sunSurfaceIor.addEventListener('input', function () {
+            sunSurface.material.ior = this.value;
+        });
+
+
+        var sunSurfaceOpacity = document.getElementById('sunSurfaceOpacity');
+        sunSurfaceOpacity.addEventListener('input', function () {
+            sunSurface.material.opacity = this.value;
+        });
+    }
+    addListeners();
+</script>
+
+<script>
+    var sunSurface,
+        baseSun,
+        videoSphereTexture;
+
+    initializeScene();
+    scene = window.scene;
+
+    scene.background =
+        loadEnvironment("/images/Universe/starmap_8k.png");
+
+    window.renderDIV = "webGL";
+    setupRenderer("webGL");
+    var renderer = window.renderer;
+
+    setupCamera();
+    var camera = window.camera;
+
+    setupControls();
+    var controls = window.controls;
+
+    function renderVideoSphere() {
+        var videoControl = document.getElementById("videoControl");
+
+        videoControl.style.top = "100px";
+        videoControl.style.zIndex = "99";
+
+        videoSpherePlayer = document.createElement('video');
+        videoControl.appendChild(videoSpherePlayer);
+        videoSpherePlayer.id = "videoSpherePlayer";
+        //videoSpherePlayer.src = "/videos/sun4K.mp4";
+        videoSpherePlayer.muted = true;
+        videoSpherePlayer.loop = true;
+        videoSpherePlayer.controls = true;
+
+        videoSphereSource = document.createElement('source');
+        videoSphereSource.id = "videoSphereSource";
+        videoSphereSource.setAttribute('src', '/videos/theSun2X1.mp4');
+        videoSphereSource.setAttribute('type', 'video/mp4');
+        videoSpherePlayer.appendChild(videoSphereSource);
+
+        videoSpherePlayer.load();
+        videoSpherePlayer.play();
+
+        videoSpherePlayer.width = 200;
+        videoSpherePlayer.height = 200;
+
+        videoSphereTexture = new THREE.VideoTexture(videoSpherePlayer);
+        videoSphereTexture.format = THREE.RGBAFormat;
+
+        var sunSurfaceGeometry =
+            new THREE.SphereBufferGeometry(
+                100,
+                1024,
+                1024);
+
+        var shittyGeometry =
+            new THREE.SphereBufferGeometry(100, 512, 512);
+
+        var sunSurfaceMaterial =
+            new THREE.MeshStandardMaterial({
+                map: videoSphereTexture,
+                displacementMap: videoSphereTexture,
+                displacementScale: 5,
+                transparent: true,
+                transmission: 0,
+                opacity: .99,
+                roughness: .01,
+                emissive: 0xFFFFFF,
+                emissiveIntensity: .1,
+                //    emissiveMap: videoSphereTexture
+            });
+
+        sunSurfaceMaterial.side = THREE.FrontSide;
+
+        sunSurface =
+            new THREE.Mesh(sunSurfaceGeometry, sunSurfaceMaterial);
+
+        sunSurface.position.x = 0;
+        sunSurface.position.y = 0;
+        sunSurface.position.z = 0;
+        scene.add(sunSurface);
+
+    }
+    renderVideoSphere();
+
+    function createLighting() {
+        ambientLight = new THREE.AmbientLight();
+        ambientLight.intensity = 1;
+        scene.add(ambientLight);
+    }
+    createLighting();
+
+    function calculateCameraFOV() {
+
+        var orientation = 'unknown';
+
+        var aspectRatio =
+            window.innerWidth / window.innerHeight;
+
+        if (window.innerWidth > window.innerHeight) {
+            orientation = 'horizontal';
+            camera.fov = 45 * aspectRatio;
+        }
+
+        if (window.innerWidth < window.innerHeight) {
+            orientation = 'vertical'
+            camera.fov = 72 * aspectRatio;
+
+        }
+    }
+
+    changeCameraFOV(calculateCameraFOV());
+    camera.position.x = 0;
+    camera.position.y = 0;
+    camera.position.z = 300;
+
+    camera.rotation.x = 0;
+    camera.rotation.y = 0;
+    camera.rotation.z = 0;
+
+    var sunSpinIncrement = -.1;
+    var cameraOrbitTime = .01;
+    var orbitalVelocity = .025;
+
+    function animate(time) {
+        requestAnimationFrame(animate);
+        TWEEN.update(time);
+
+        //    camera.position.x = theSun.position.x + (orbitDistance * Math.sin(cameraOrbitTime) + 0);
+        //    camera.position.z = theSun.position.z + (orbitDistance * Math.cos(cameraOrbitTime) + 0);
+        //    cameraOrbitTime += orbitalVelocity;
+        //}
+
+        controls.update();
+        renderer.render(scene, camera);
+    }
+
+    function render() {
+        animate(performance.now());
+    }
+
+    document.body.onresize = function () {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+
+    }
+
+    document.body.onresize();
+    render();
+
+    var videoSpherePlayerHandle = document.getElementById("videoSpherePlayer");
+    //videoSpherePlayerHandle.load();
+    videoSpherePlayerHandle.play();
+    videoSpherePlayerHandle.playbackRate = .5;
+
+</script>
+
+@*<table>
+        <tr>
+            <td>
+                <label class="menuTitleItem">ANIMATION</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" id="animateScene" checked />
+                <label class="menuTitleSubItem">ANIMATE</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="menuTitleSubItem">ySpin</label>
+                <input id="ySpin" class="rangeSelector" type="range" min="-45" max="45" step=".01" value="0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="menuTitleItem">ORBITALS</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" id="orbitLock" />
+                <label class="menuTitleSubItem">LOCK</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="menuTitleSubItem">Δz</label>
+                <input id="orbitDistance" class="rangeSelector" type="range" min="1" max="5000" step="10" value="1000" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="menuTitleSubItem">Orbital Velocity</label>
+                <input id="orbitalVelocity" class="rangeSelector" type="range" min=".01" max=".09" step=".01" value=".05" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="menuTitleItem">LIGHTING:</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="menuTitleSubItem">ε</label>
+                <input id="ambientLightIntensity" class="rangeSelector" type="range" min="0" max="1.5" step=".01" value="0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="menuTitleSubItem">ε</label>
+                <input id="solarLightIntensity" class="rangeSelector" type="range" min="0" max="1.5" step=".01" value="1" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="menuTitleSubItem">T</label>
+                <input id="opacity" class="rangeSelector" type="range" min="0" max="1" step=".01" value=".1" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            <label class="menuTitleItem">SUN:</label>
+                        </td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td>
+                            <label class="menuTitleSubItem">ScaleSun</label><br />
+                            <input id="videoSunScale" class="rangeSelector" type="range" min=".25" max="4" step=".01" value="1" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="menuTitleSubItem">Opacity</label><br />
+                            <input id="theSunOpacity" class="rangeSelector" type="range" min=".01" max="1" step=".01" value=".5" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="videoPositionControls" style="height: 18vh;">
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="useRepeats" />
+                                <label class="menuTitleSubItem"
+                                       style="bottom: 0px; right: 0px;">
+                                    Sun Sphere Repeat
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menuTitleSubItem" id="textureRepeatU"
+                                     style="bottom: 0px; left: 0px;">
+                                    <input id="repeatU" class="rangeSelector" type="range" min=".25" max="2.5" step=".01" value=".01" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menuTitleSubItem" id="textureRepeatU"
+                                     style="bottom: 0px; left: 0px;">
+                                    <input id="offsetU" class="rangeSelector" type="range" min=".25" max="2.5" step=".01" value=".01" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menuTitleSubItem" id="textureRepeatV"
+                                     style="bottom: 0px; left: 0px;">
+                                    <input id="repeatV" class="rangeSelector" type="range" min=".25" max="2.5" step=".01" value=".01" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menuTitleSubItem" id="textureRepeatU"
+                                     style="bottom: 0px; left: 0px;">
+                                    <input id="offsetV" class="rangeSelector" type="range" min=".25" max="2.5" step=".01" value=".01" />
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="videoPositionControls" style="height: 18vh;">
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="useTwoDSunRepeats" />
+                                <label class="menuTitleSubItem"
+                                       style="bottom: 0px; right: 0px;">
+                                    Sun Ring Repeat
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menuTitleSubItem" id="textureRepeatU"
+                                     style="bottom: 0px; left: 0px;">
+                                    <input id="twoDSunTextureRepeatU" class="rangeSelector" type="range" min=".25" max="2.5" step=".01" value=".01" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menuTitleSubItem" id="textureRepeatU"
+                                     style="bottom: 0px; left: 0px;">
+                                    <input id="twoDSunTextureRepeatV" class="rangeSelector" type="range" min=".25" max="2.5" step=".01" value=".01" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menuTitleSubItem" id="textureRepeatV"
+                                     style="bottom: 0px; left: 0px;">
+                                    <input id="twoDSunTextureOffsetU" class="rangeSelector" type="range" min=".25" max="2.5" step=".01" value=".01" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menuTitleSubItem" id="textureRepeatU"
+                                     style="bottom: 0px; left: 0px;">
+                                    <input id="twoDSunTextureOffsetU" class="rangeSelector" type="range" min=".25" max="2.5" step=".01" value=".01" />
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="sphereRotation" style="position: absolute; height: 16vh;">
+                    <table>
+                        <tr>
+                            <td>
+                                <label class="menuTitleItem">AUDIO</label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <label class="menuTitleSubItem">ϱ</label>
+                                <input id="videoVolume" class="rangeSelector" type="range" min=".01" max=".99" step=".01" value=".25" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <label class="menuTitleSubItem"
+                                       style="position: absolute; bottom: 0px; right: 0px;">
+                                    XYZ
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menuTitleSubItem" id="twoDVideoScaleArea"
+                                     style="position: absolute; bottom: 0px; left: 0px;">
+                                    <input id="twoDSunScale" class="rangeSelector" type="range" min=".25" max="2" step=".01" value="1" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menuTitleSubItem" id="yAxisRotationControlArea"
+                                     style="position: absolute; bottom: 0px; left: 0px; transform-origin: 0px 0px; transform: rotate(-90deg);">
+                                    <input id="twoSunRotationY" class="rangeSelector" type="range" min="-180" max="180" step="1" value="1" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menuTitleSubItem" id="zAxisRotationControl"
+                                     style="position: absolute; bottom: 0px; left: 0px; transform-origin: 0px 0px; transform: rotate(-45deg);">
+                                    <input id="twoDSunDeltaZ" class="rangeSelector" type="range" min="-100" max="100" step="1" value="1" />
+                                </div>
+                    </table>
+                </div>
+            </td>
+        </tr>
+
+    </table>*@

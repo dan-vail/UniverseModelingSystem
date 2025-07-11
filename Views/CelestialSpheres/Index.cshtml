@@ -1,0 +1,466 @@
+﻿@model IEnumerable<UniverseObjects.Models.CelestialSphere>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.XCoord)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.YCoord)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ZCoord)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TCoord)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.YSpin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Radius)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Mass)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QuaternionVectorX)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QuaternionVectorY)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QuaternionVectorZ)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QuaternionVectorW)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryXSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryYSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaterialType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaterialColor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EnvironmentMap)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reflectivity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Blending)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Specular)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaterialCombine)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TextureMapPath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VideoTexturePath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UseVideoTexture)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NormalsMapPath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BumpMapPath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BumpScale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DisplacementMapPath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DisplacementScale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Transparent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Opacity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AlphaTest)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DepthTest)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shininess)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CastShadow)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RecieveShadow)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BlendingMode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ParentID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ParentType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DistanceFromParent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RenderParent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrbitalPlane)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrbitalEccentricity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrbitalSemiMajorAxis)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrbitalInclination)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrbitalOmegaLongitude)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrbitalArgumentOfPeriapsis)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrbitalTrueAnomoly)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImagePath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WikipediaArticle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InsertionDateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IconPath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VideoPath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.environmentTexturePath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsAtmosphere)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HasAtmosphere)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereGeometryXSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereGeometryYSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereTexturePath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereDisplacementTexturePath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereDisplacementScale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereBumpTexturePath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereBumpScale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereRadius)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereQuaternionVectorX)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereQuaternionVectorY)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereQuaternionVectorZ)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereQuaternionVectorW)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereOpacity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AtmosphereVelolcity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LowResolutionTextureMapPath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Enabled)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.XCoord)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.YCoord)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ZCoord)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TCoord)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.YSpin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Radius)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mass)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QuaternionVectorX)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QuaternionVectorY)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QuaternionVectorZ)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QuaternionVectorW)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryXSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryYSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaterialType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaterialColor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EnvironmentMap)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Reflectivity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Blending)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Specular)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaterialCombine)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TextureMapPath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VideoTexturePath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UseVideoTexture)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NormalsMapPath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BumpMapPath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BumpScale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DisplacementMapPath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DisplacementScale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Transparent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Opacity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AlphaTest)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DepthTest)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Shininess)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CastShadow)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RecieveShadow)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BlendingMode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ParentID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ParentType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DistanceFromParent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RenderParent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrbitalPlane)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrbitalEccentricity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrbitalSemiMajorAxis)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrbitalInclination)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrbitalOmegaLongitude)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrbitalArgumentOfPeriapsis)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrbitalTrueAnomoly)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ImagePath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WikipediaArticle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InsertionDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IconPath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VideoPath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.environmentTexturePath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsAtmosphere)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HasAtmosphere)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereGeometryXSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereGeometryYSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereTexturePath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereDisplacementTexturePath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereDisplacementScale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereBumpTexturePath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereBumpScale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereRadius)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereQuaternionVectorX)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereQuaternionVectorY)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereQuaternionVectorZ)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereQuaternionVectorW)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereOpacity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AtmosphereVelolcity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LowResolutionTextureMapPath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Enabled)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

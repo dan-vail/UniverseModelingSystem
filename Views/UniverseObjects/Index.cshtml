@@ -1,0 +1,291 @@
+﻿@model IEnumerable<UniverseObjects.Models.UniverseObject>
+
+@{
+    ViewBag.Title = "UNIVERSE OBJECTS INDEX";
+    //Layout = "~/Views/Shared/_UniverseObjectRendererLayout.cshtml";
+    Layout = null;
+
+}
+
+<style>
+    .universeObjectsDataContainer {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        font-size: clamp(12px, .9vmax, 16px);
+        background: transparent;
+    }
+
+</style>
+<div id="universeObjectsIndexContainer"
+     class="universeObjectsDataContainer themedUI">
+  
+
+    <table class="themedUI themedUIHighlight">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverserObjectPositionVectorX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectPositionVectorY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectPositionVectorZ)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectQuaternionVectorX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectQuaternionVectorY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectQuaternionVectorZ)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectQuaternionVectorW)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectIsSpheroid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectIsPlasma)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectHasEventHorizon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectParentID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectOrbitalEccentricity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectAregumentOfPeriapsis)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectOrbitalTrueAnomoly)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectOrbitalOmegaLongitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectOrbitalSemiMajorAxis)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectOrbitalInclination)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectMass)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectEquirectangularTextureMapPath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectParentDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectEquirectangularVectorDisplacementMapPath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectUseEquirectangularVectorDisplacementMap)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectUseEquirectangularTextureMap)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectUseEquirectangularVideoTextureMap)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectWireframeColor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectHasAtmosphere)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectEquirectangularVideoTexturePath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectAtmosphereEquirectangularVectorDisplacementMap)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectUseAtmosphereEquirectangularTextureMap)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectAtmosphereEquirectangularTextureMapPath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectGLBObjectID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectInitialTemporalArgument)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectRendererMaterialID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectGeometryID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectTypeID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectRecordBorn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectUniverseContainerID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectRecordCreatedByUserID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnierseObjectRecordModified)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniverseObjectRecordModifiedByUserID)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverserObjectPositionVectorX)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectPositionVectorY)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectPositionVectorZ)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectQuaternionVectorX)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectQuaternionVectorY)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectQuaternionVectorZ)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectQuaternionVectorW)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectIsSpheroid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectIsPlasma)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectHasEventHorizon)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectParentID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectOrbitalEccentricity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectAregumentOfPeriapsis)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectOrbitalTrueAnomoly)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectOrbitalOmegaLongitude)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectOrbitalSemiMajorAxis)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectOrbitalInclination)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectMass)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectEquirectangularTextureMapPath)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectParentDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectEquirectangularVectorDisplacementMapPath)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectUseEquirectangularVectorDisplacementMap)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectUseEquirectangularTextureMap)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectUseEquirectangularVideoTextureMap)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectWireframeColor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectHasAtmosphere)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectEquirectangularVideoTexturePath)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectAtmosphereEquirectangularVectorDisplacementMap)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectUseAtmosphereEquirectangularTextureMap)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectAtmosphereEquirectangularTextureMapPath)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectGLBObjectID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectInitialTemporalArgument)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectRendererMaterialID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectGeometryID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectTypeID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectRecordBorn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectUniverseContainerID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectRecordCreatedByUserID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnierseObjectRecordModified)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniverseObjectRecordModifiedByUserID)
+                </td>
+                <td>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

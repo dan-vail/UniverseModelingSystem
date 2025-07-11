@@ -1,0 +1,380 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSE OBJECTS</title>
+    <script src="~/Scripts/vailware.master.library.beta.js"></script>
+    <link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+
+    <script src="~/DataTables/datatables.js"></script>
+    <link href="~/DataTables/datatables.css" rel="stylesheet" />
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body style="background: #000000;">
+    <style>
+        #webGL {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+    </style>
+    <div id="webGLContainer"
+         style="position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                background: transparent;">
+
+        <div id="webGL">
+
+        </div>
+
+        <div id="videoControl">
+
+        </div>
+    </div>
+
+    <style>
+        #navbar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: clamp(50px, 10vh, 100px);
+            font-size: clamp(12px, 16vw, 72px);
+            background: rgb(0, 0, 0);
+            color: rgb(0, 255, 255);
+            overflow: hidden;
+            box-shadow: rgba(255, 255, 255, .75) 10px 15px;
+            z-index: 99;
+        }
+
+        .navBarLinks {
+            font-size: clamp(10px, 3vw, 20px);
+        }
+
+            .navBarLinks a {
+            }
+
+                .navBarLinks a:hover {
+                    color: rgb(0, 255, 0);
+                }
+
+        #navBarAnchors {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            width: 50%;
+            text-align: right;
+            display: inline-block;
+            flex-wrap: nowrap;
+        }
+
+        #applicationName {
+            z-index: 999;
+            width: 50%;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            font-size: clamp(12px, 10vw, 42px);
+            flex-wrap: nowrap;
+            text-shadow: #ffffff 1px 1px;
+        }
+        
+    </style>
+
+    <div id="navbar">
+        <div>
+            <label id="applicationName">UNIVERSE&nbsp;OBJECTS</label>
+        </div>
+        <div id="navBarAnchors">
+            <div>
+                <a href="javascript://fetchIndex()"
+                   class="navBarLinks">INDEX</a>
+            </div>
+            <div>
+                <a href="javascript://fetchCreateObject()"
+                   class="navBarLinks">NEW OBJECT</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="layoutControls">
+        <input type="range" id="cameraFOV" 
+               style="width: 100%";
+               min="32";
+               max="160";
+               value="64"/>
+
+        <script>
+            var cameraFOV = document.getElementById('cameraFOV');
+            cameraFOV.addEventListener('input', function () {
+                window.camera.FOV = this.value;
+            });
+        </script>
+
+    </div>
+
+    <div class="container body-content"
+         style="position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                background: transparent;
+                overflow: hidden;">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <script src="~/threejs/three.js.oldbuild/three.min.js"></script>
+    <script src="~/threejs/three.js.oldbuild/tween.js"></script>
+    <script src="~/threejs/three.js.oldbuild/OrbitControls.js"></script>
+
+    <script>
+        var camera,
+            scene,
+            css3DScene,
+            controls,
+            ambientLight,
+            webGLRenderer,
+            css3DRenderer,
+            currentFocusObject,
+            tweenStatus = false,
+            spaceStation,
+            sphereLoadComplete = false,
+            theSun,
+            videoSpherePlayer,
+            videoSphereTexture,
+            twoDSun,
+            twoDSunTexture,
+            videoSunWithFlaresPlayer;
+
+        window.universeObjects = [];
+
+        function loadEnvironment(equirectangular) {
+            try {
+                var loader = new THREE.TextureLoader();
+                var equirectangularTexture = loader.load(equirectangular);
+                equirectangularTexture.mapping = THREE.EquirectangularReflectionMapping;
+                return equirectangularTexture;
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+
+        scene = new THREE.Scene();
+        scene.background = loadEnvironment("/images/Universe/starmap_8k.png");
+
+        function renderVideoSphere() {
+            var videoControl = document.getElementById("videoControl");
+
+            videoControl.style.top = "100px";
+            videoControl.style.zIndex = "99";
+
+            videoSpherePlayer = document.createElement('video');
+            videoControl.appendChild(videoSpherePlayer);
+            videoSpherePlayer.id = "videoSpherePlayer";
+            //videoSpherePlayer.src = "/videos/sun4K.mp4";
+            videoSpherePlayer.muted = true;
+            videoSpherePlayer.loop = true;
+            videoSpherePlayer.controls = true;
+
+            videoSphereSource = document.createElement('source');
+            videoSphereSource.id = "videoSphereSource";
+            videoSphereSource.setAttribute('src', '/videos/theSun2X1.mp4');
+            videoSphereSource.setAttribute('type', 'video/mp4');
+            videoSpherePlayer.appendChild(videoSphereSource);
+
+            videoSpherePlayer.load();
+            videoSpherePlayer.play();
+
+            videoSpherePlayer.width = 200;
+            videoSpherePlayer.height = 200;
+
+            videoSphereTexture = new THREE.VideoTexture(videoSpherePlayer);
+            videoSphereTexture.format = THREE.RGBAFormat;
+            //videoSphereTexture.transparent = true;
+
+            var geometry = new THREE.SphereGeometry(
+                696340,
+                640,
+                640);
+
+            var shittyGeometry = new THREE.SphereGeometry(696300, 256, 256);
+
+            var material = new THREE.MeshPhongMaterial({
+                map: videoSphereTexture,
+                displacementMap: videoSphereTexture,
+                displacementScale: 5,
+                transparent: false,
+                transmission: .1,
+                opacity: .8,
+                roughness: .1,
+                emissive: 1,
+                emissiveMap: videoSphereTexture,
+                flatShading: true
+            });
+
+            var theSunBaseMaterial = new THREE.MeshPhysicalMaterial({
+                map: videoSphereTexture,
+                displacementMap: videoSphereTexture,
+                displacementScale: -10,
+                transparent: true,
+                transmission: .7,
+                opacity: .4,
+                roughness: .8,
+                emissive: 1,
+                emissiveMap: videoSphereTexture
+            })
+
+            material.side = THREE.DoubleSide;
+            theSunBaseMaterial.side = THREE.DoubleSide;
+            theSun = new THREE.Mesh(geometry, material);
+
+            theSun.name = 'Sun';
+            theSun.position.x = 0;
+            theSun.position.y = 0;
+            theSun.position.z = 0;
+            scene.add(theSun);
+
+            theSunBase = new THREE.Mesh(shittyGeometry, theSunBaseMaterial);
+            theSunBase.position.x = 0;
+            theSunBase.position.y = 0;
+            theSunBase.position.z = 0;
+            scene.add(theSunBase);
+
+            window.universeObjects.push(theSun);
+
+        }
+        //renderVideoSphere();
+
+
+        function createLighting() {
+            try {
+                ambientLight = new THREE.AmbientLight();
+                ambientLight.intensity = 1;
+                scene.add(ambientLight);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+        createLighting();
+
+        webGLRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        webGLRenderer.setPixelRatio(window.devicePixelRatio);
+        webGLRenderer.setSize(window.innerWidth, window.innerHeight);
+        webGLRenderer.shadowMap.enabled = true;
+        webGLRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        webGLRenderer.setClearColor(0x000000);
+        document.querySelector('#webGL').appendChild(webGLRenderer.domElement);
+        camera = new THREE.PerspectiveCamera(
+            62, window.innerWidth / window.innerHeight, 1, 500000
+        );
+
+        camera.position.x = 0;
+        camera.position.y = 0;
+        camera.position.z = 696340 * 2.3;
+
+        camera.rotation.x = 0;
+        camera.rotation.y = 0;
+        camera.rotation.z = 0;
+
+        controls = new THREE.OrbitControls(camera, webGLRenderer.domElement);
+        controls.enableDamping = true;
+        controls.damping = .25;
+
+        function degreesToRadians(degrees) {
+            var radians = (degrees * (3.141592654 / 180));
+            return radians;
+        }
+
+        var sunSpinIncrement = -.1;
+        var cameraOrbitTime = .01;
+        var orbitalVelocity = .0025;
+
+        if (window.universeObjects != undefined) {
+            var theSun = window.universeObjects[
+                window.universeObjects
+                    .findIndex(o => o.name == 'Sun')];
+
+            var theSunMesh = window.scene.children[
+                window.scene.children
+                    .findIndex(o => o.name == 'Sun')]
+        }
+
+        if (theSunMesh == undefined) {
+            var theSunPosition =
+                new THREE.Vector3(
+                    0,
+                    0,
+                    0);
+        } else {
+            var theSunPosition =
+                new THREE.Vector3(
+                    theSunMesh.position.x,
+                    theSunMesh.position.y,
+                    theSunMesh.position.z);
+        }
+        
+
+        var orbitDistance = 696340 * 3.141592654;
+
+        function animate(time) {
+            requestAnimationFrame(animate);
+            TWEEN.update(time);
+
+            camera.position.x =
+                theSunPosition.x +
+                (orbitDistance * Math.sin(cameraOrbitTime) + 0);
+
+            camera.position.z =
+                theSunPosition.z +
+                (orbitDistance * Math.cos(cameraOrbitTime) + 0);
+
+
+            cameraOrbitTime += orbitalVelocity;
+
+            controls.update();
+            webGLRenderer.render(scene, camera);
+
+        }
+
+        function render() {
+            animate(performance.now());
+        }
+
+        document.body.onresize = function () {
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            webGLRenderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        }
+
+        document.body.onresize();
+
+        render();
+
+        var videoSpherePlayer =
+            document.getElementById("videoSpherePlayer");
+
+        videoSpherePlayer.style.visibility = 'hidden';
+        videoSpherePlayer.play();
+        videoSpherePlayer.playbackRate = 1;
+
+    </script>
+
+</body>
+</html>

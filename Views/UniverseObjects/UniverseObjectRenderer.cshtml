@@ -1,0 +1,208 @@
+﻿@model UniverseObjects.Models.UniverseObject
+
+@*@{ Layout = null; }*@
+@{ Layout = "/Views/UniverseObjects/_UniverseObjectLayout.cshtml"; }
+@*<script src="~/threejs/three.js.oldbuild/three.min.js"></script>
+<script src="~/threejs/three.js.oldbuild/OrbitControls.js"></script>
+<script src="~/threejs/three.js.oldbuild/tween.js"></script>*@
+
+@*<script src="~/Scripts/vailware.universeModeling.library.js"></script>*@
+@{
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    serializer.MaxJsonLength = Int32.MaxValue;
+    var jsonModel = serializer.Serialize(Model);
+}
+
+<script>
+    window.scene;
+    window.controls;
+    window.renderer;
+    window.rendererElementId;
+
+    window.universeObject = @Html.Raw(jsonModel);
+
+    var orbitCameraTime = .72;
+    var GLBObjectOrbitTime = .72;
+</script>
+
+
+<body class="themedUI themedUIBackground">
+
+<div id="webGL" 
+     style="position: absolute;  
+            top: 0px;
+            left: 0px;
+            height: 50%; 
+            width: 50%;
+            background: #00ff00;">
+</div>
+
+    <div id="dbMenuBar">
+
+    </div>
+
+</body>
+
+<script>
+
+    function createRenderer({
+        universeObject,
+        containerId
+    }) {
+        var container = document.getElementById(containerId);
+        if (container == undefined) {
+            return false;
+        }
+
+        initializeScene({ sceneName: "universeObjectRenderScene" });
+
+        window.scene.background = loadEnvironment({
+            equirectangularTextureFile: "/images/Universe/starmap_8k.png"
+        });
+
+        setupCamera();
+
+        window.rendererElementId = "#webGL";
+        setupRenderer({
+            rendererElementId: "#webGL"
+        });
+
+        setupControls();
+
+    }
+
+
+    function renderPlanet({
+        universeObject
+    }) {
+        // load the geometry and the textures
+        var loader = new THREE.TextureLoader();
+
+        var geometry = new THREE.SphereBufferGeometry(
+            universeObject.universeObjectRadius,
+            1024,
+            1024);
+
+        material = new THREE.MeshPhysicalMaterial({
+            map: loader.load(universeObject.UniverseObjectEquirectangularTextureMapPath)
+        });
+
+        var universeObjectMesh =
+            new THREE.Mesh(geometry, material);
+        window.universeObjectMesh = universeObjectMesh;
+
+        window.universeObjectMesh.position.x =
+            universeObject.universeObjectPositionVectorX;
+
+        window.universeObjectMesh.position.y =
+            universeObject.universeObjectPositionVectorY;
+
+        window.universeObjectMesh.position.z =
+            universeObject.universeObjectPositionVectorZ;
+
+        window.universeObjectMesh.name =
+            universeObject.UniverseObjectName;
+
+        window.universeObjectMesh.Id =
+            universeObject.UniverseObjectId;
+
+        window.scene.add(window.universeObjectMesh);
+
+        window.camera.position.x = 0;
+        window.camera.position.y = 0;
+        window.camera.position.z =
+            window.universeObjectMesh.position.z -
+            (universeObject.universeObjectPositionVectorZ *
+                universeObject.universeObjectRadius * 2.4);
+
+
+        //    if (universeObject.universeObject.HasAtmosphere) {
+
+        //        var atmosphereGeometry =
+        //            new THREE.SphereGeometry(
+        //                universeObject.universeObject.AtmosphereRadius,
+        //                universeObject.universeObject.GeometryXSegments,
+        //                universeObject.universeObject.GeometryYSegments);
+
+        //        atmosphereMaterial =
+        //            new THREE.MeshPhysicalMaterial({
+        //                map: loader.load(universeObject.universeObject.AtmosphereTexturePath),
+        //                displacementMap: loader.load(universeObject.universeObject.AtmosphereTexturePath),
+        //                transparent: true,
+        //                opacity: .99,
+        //                normalsMap: loader.load(universeObject.universeObject.AtmosphereTexturePath),
+        //                bumpMap: loader.load(universeObject.universeObject.AtmosphereTexturePath),
+        //                side: THREE.DoubleSide,
+        //            });
+
+        //        if (universeObject.universeObject.AtmosphereDisplacementMapPath == null) {
+        //        } else {
+        //            atmosphereMaterial.displacementMap =
+        //                loader.load(universeObject.universeObject.AtmosphereDisplacementMapPath);
+
+        //            //atmosphereMaterial.displacementScale = 99;
+
+        //            //    atmosphereMaterial.displacementScale =
+        //            //        universeObject.universeObject.AtmosphereDisplacementScale;
+        //        }
+
+        //        sphereAtmosphere = new THREE.Mesh(
+        //            atmosphereGeometry, atmosphereMaterial);
+
+        //        sphereAtmosphere.position.x = sphere.XCoord;
+        //        sphereAtmosphere.position.y = sphere.YCoord;
+        //        sphereAtmosphere.position.z = sphere.ZCoord;
+
+        //        sphereAtmosphere.Name =
+        //            universeObject.universeObject.Name + "Atmosphere";
+
+        //        sphereAtmosphere.recieveShadow = false;
+
+        //        scene.add(sphereAtmosphere);
+
+        //        var renderedSphereAtmosphere =
+        //            window.scene.children[
+        //            window.scene.children.findIndex
+        //                (o => o.Name == sphereAtmosphere.Name)];
+
+        //        window.spheres.push(renderedSphereAtmosphere);
+
+        //    }
+    }
+
+
+    function animate(time) {
+        requestAnimationFrame(animate);
+        TWEEN.update(time);
+
+        window.controls.update();
+        window.renderer.render(window.scene, window.camera);
+
+    }
+
+    function render() {
+        animate(performance.now());
+    }
+
+    document.body.onresize = function () {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        window.renderer.setSize(width, height);
+        window.camera.aspect = width / height;
+        window.camera.updateProjectionMatrix();
+
+    }
+
+    createRenderer({
+        universeObject: window.universeObject,
+        containerId: 'webGL'
+    });
+
+    renderPlanet({
+        universeObject: window.universeObject
+    });
+
+    document.body.onresize();
+    render();
+
+</script>

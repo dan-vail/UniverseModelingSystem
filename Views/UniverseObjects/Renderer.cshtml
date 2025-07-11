@@ -1,0 +1,355 @@
+﻿@model UniverseObjects.Models.UniverseObject
+
+@{
+    ViewBag.Title = "Renderer";
+    Layout = "~/Views/Shared/_UniverseObjectRendererLayout.cshtml";
+}
+
+<h2>Renderer</h2>
+
+<div>
+    <h4>UniverseObject</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverserObjectPositionVectorX)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverserObjectPositionVectorX)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectPositionVectorY)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectPositionVectorY)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectPositionVectorZ)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectPositionVectorZ)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectQuaternionVectorX)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectQuaternionVectorX)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectQuaternionVectorY)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectQuaternionVectorY)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectQuaternionVectorZ)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectQuaternionVectorZ)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectQuaternionVectorW)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectQuaternionVectorW)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectIsSpheroid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectIsSpheroid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectIsPlasma)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectIsPlasma)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectHasEventHorizon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectHasEventHorizon)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectParentID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectParentID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectOrbitalEccentricity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectOrbitalEccentricity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectAregumentOfPeriapsis)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectAregumentOfPeriapsis)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectOrbitalTrueAnomoly)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectOrbitalTrueAnomoly)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectOrbitalOmegaLongitude)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectOrbitalOmegaLongitude)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectOrbitalSemiMajorAxis)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectOrbitalSemiMajorAxis)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectOrbitalInclination)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectOrbitalInclination)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectMass)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectMass)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectEquirectangularTextureMapPath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectEquirectangularTextureMapPath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectParentDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectParentDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectEquirectangularVectorDisplacementMapPath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectEquirectangularVectorDisplacementMapPath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectUseEquirectangularVectorDisplacementMap)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectUseEquirectangularVectorDisplacementMap)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectUseEquirectangularTextureMap)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectUseEquirectangularTextureMap)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectUseEquirectangularVideoTextureMap)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectUseEquirectangularVideoTextureMap)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectWireframeColor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectWireframeColor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectHasAtmosphere)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectHasAtmosphere)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectEquirectangularVideoTexturePath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectEquirectangularVideoTexturePath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectAtmosphereEquirectangularVectorDisplacementMap)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectAtmosphereEquirectangularVectorDisplacementMap)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectUseAtmosphereEquirectangularTextureMap)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectUseAtmosphereEquirectangularTextureMap)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectAtmosphereEquirectangularTextureMapPath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectAtmosphereEquirectangularTextureMapPath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectGLBObjectID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectGLBObjectID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectInitialTemporalArgument)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectInitialTemporalArgument)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectRendererMaterialID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectRendererMaterialID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectGeometryID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectGeometryID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectTypeID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectTypeID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectRecordBorn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectRecordBorn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectUniverseContainerID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectUniverseContainerID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectRecordCreatedByUserID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectRecordCreatedByUserID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UnierseObjectRecordModified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UnierseObjectRecordModified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectRecordModifiedByUserID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectRecordModifiedByUserID)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.UniverseObjectID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

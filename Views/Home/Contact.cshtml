@@ -1,0 +1,741 @@
+﻿@{ ViewBag.Title = "Contact";
+}
+
+@{
+    //Layout = "/Views/Shared/_LayoutBeta.cshtml";
+    Layout = null;
+}
+
+@*@{
+        var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        serializer.MaxJsonLength = Int32.MaxValue;
+        var jsonModel = serializer.Serialize(Model);
+    }*@
+
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+
+<!-- VAILWARE LIBRARIES-->
+<script src="/Scripts/vailware.master.library.beta.js"></script>
+<script src="~/Scripts/swiper-bundle.js"></script>
+<link href="~/Content/swiper-bundle.css" rel="stylesheet" />
+<link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+
+<style>
+    @@font-face {
+        font-family: audiowide;
+        src: url('/fonts/audiowide.ttf');
+    }
+
+
+    body {
+        transition: all 1s;
+        background-color: transparent;
+        color: #ffffff;
+        font-size: clamp(10px, .7vmax, 26px);
+        -webkit-user-select: none;
+    }
+
+    .swiper-container {
+        transition: all 2s;
+        position: absolute;
+        top: 5%;
+        height: 80%;
+        width: 100%;
+        overflow: hidden;
+        background-color: transparent;
+        text-align: center;
+        pointer-events: all;
+    }
+
+    .swiper-wrapper {
+    }
+
+    .swiper-slide {
+        font-family: Audiowide;
+        top: 10%;
+        width: 40%;
+        height: 70%;
+        overflow: hidden;
+        text-align: center;
+        border: 5px 5px 5px inset;
+        -webkit-box-reflect: below 0 linear-gradient(transparent, transparent, rgba(0, 0, 0, 0.5));
+    }
+
+    /*        .swiper-slide:hover {
+                font-family: Audiowide;
+                width: 45vw;
+                height: 70vh;
+                overflow: visible;
+                text-align: center;
+                -webkit-box-reflect: below 0 linear-gradient(transparent, transparent, rgba(0, 0, 0, 0.3));
+            }
+    */
+    .swiper-pagination-bullet {
+    }
+
+    .swiper-pagination-bullet-active {
+    }
+</style>
+
+<style>
+        .shine {
+            width: 100%;
+            background-color: #337bb2;
+            /*        background-image: url('/images/blank.png');
+    */ background-repeat: no-repeat;
+            border-radius: 1px;
+            overflow: hidden;
+        }
+
+            .shine:after {
+                content: "";
+                position: absolute;
+                top: -50%;
+                left: -60%;
+                width: 20%;
+                height: 200%;
+                opacity: 0;
+                transform: rotate(30deg);
+                background: rgba(255, 255, 255, 0.13);
+                background: linear-gradient( to right, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.13) 77%, rgba(255, 255, 255, 0.5) 92%, rgba(255, 255, 255, 0.0) 100% );
+            }
+
+            /* Hover state - trigger effect */
+            .shine:hover:after {
+                opacity: 1;
+                left: 130%;
+                transition-property: left, top, opacity;
+                transition-duration: 0.7s, 0.7s, 0.15s;
+                transition-timing-function: ease;
+            }
+
+            /* Active state */
+            .shine:active:after {
+                opacity: 0;
+            }
+</style>
+
+<style>
+
+
+/*    .card {
+        transition: .5s;
+        background-color: rgba(16, 16, 16, .9);
+        width: 40vw;
+        height: 60vh;
+        line-height: normal;
+        text-align: center;
+        color: #ffffff;
+        text-shadow: 1px 1px #ffffff;
+        font-size: clamp(8px, 1vmax, 28px);
+        margin: 10px 10px 10px 10px;
+        overflow: hidden;
+    }
+*/
+  /*      .card:hover {
+            transition: 1.0s;
+            background-color: rgba(255, 255, 255 .9);
+            width: 100%;
+            top: 15%;
+            height: 85%;
+            line-height: normal;
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 1px 1px #ca7200;
+            font-size: clamp(20px, 1.2vmax, 28px);
+            margin: 50px 10px 10px 10px;
+            overflow: hidden;
+        }
+*/
+    @*.card-header {
+        transition: 1s;
+        color: #000000;
+        font-size: clamp(16px, 1.6vmax, 38px);
+        font-weight: 600;
+    }
+
+        .card-header:hover {
+            transition: 1s;
+            color: #ffffff;
+            font-size: clamp(24px, 3vmax, 50px);
+            font-weight: 300;
+        }
+
+
+    .card-subtitle {
+        transition: 1s;
+        color: #00ff00;
+        font-size: clamp(11px, 1.25vmax, 30px);
+        font-weight: 400;
+    }
+
+        .card-subtitle:hover {
+            transition: 1.5s;
+            color: #00ffff;
+            font-size: clamp(12px, 1.3vmax, 32px);
+            font-weight: 400;
+        }
+
+
+    .card-text {
+        transition: 1s;
+        color: #ffffff;
+        text-align: center;
+        line-height: normal;
+        font-size: clamp(10px, .9vmax, 26px);
+    }
+
+        .card-text:hover {
+            transition: 1.5s;
+            color: #00ddff;
+            text-align: center;
+            line-height: normal;
+            font-size: clamp(10px, 1.1vmax, 30px);
+        }
+
+
+    .card-highlight {
+        font-size: clamp(7px, .9vmax, 20px);
+    }
+
+    .card-details {
+    }
+
+
+    .tasks {
+        transition: 1s;
+        color: #ff6500;
+        text-shadow: 1px 1px #000000;
+        font-size: clamp(10px, 1vmax, 28px);
+    }
+
+        .tasks:hover {
+            transition: 1.5s;
+            color: #000000;
+            text-shadow: 2px 2px #ffffff;
+            font-size: clamp(10px, 1.1vmax, 30px);
+        }
+</style>*@
+
+    .slide-card {
+        top: 25%;
+        width: 100%;
+        height: 100%;
+        transform: perspective(800px) rotateY(0deg) rotateX(0deg);
+        filter: blur(.25);
+        opacity: 0.9;
+        transition: 1.5s ease all;
+        backdrop-filter: blur(25px) saturate(93%);
+        -webkit-backdrop-filter: blur(25px) saturate(93%);
+        background-color: rgba(0, 0, 0, .9);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.125);
+    }
+
+        .slide-card:hover {
+            transform: perspective(800px) rotateY(-15deg) translateY(-50px) rotateX(10deg);
+            transform-origin: center;
+            filter: blur(0);
+            opacity: 1;
+            backdrop-filter: blur(25px) saturate(13%);
+            -webkit-backdrop-filter: blur(25px) saturate(13%);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            -webkit-box-reflect: below 0 linear-gradient(transparent, transparent, rgba(0, 0, 0, 0.3));
+            overflow: hidden;
+            height: 100%;
+            top: 20%;
+            vertical-align: middle;
+            margin-top: 100px;
+        }
+
+        .slide-card a::after hover {
+            font-size: clamp(12px, 1.6vmax, 48px);
+            color: #ffffff;
+        }
+
+
+    .pageTitle {
+        position: absolute;
+        top: 0px;
+        font-size: 1.3vmax;
+        color: #00ffff;
+        font-family: Audiowide;
+        text-shadow: 3px 3px #000000;
+    }
+
+    .slide-card-header {
+        color: #00FFFF;
+        text-shadow: 1px 1px #ffffff;
+        font-size: clamp(16px, .9vmax, 26px);
+    }
+
+    .contactLinks {
+        color: #00FFFF;
+    }
+
+    .contactLinks:hover {
+        color: #00ff00;
+        text-shadow: 1px 1px #ffffff;
+        font-size: clamp(16px, .9vmax, 26px);
+    }
+
+</style>
+
+<div id="miniContact"
+     style="position: absolute;
+            background: transparent;
+            bottom: 0px;
+            left: 0px;
+            color: white;
+            font-family: audiowide;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            z-index: 9;"
+            class="themedUIHighlight">
+
+    <div>
+        <div>
+            <button id="showResume"
+                    style="display: flex; flex-wrap: nowrap;"
+                    class="buttons themedUIHighlight">
+                DAN&nbsp;E.&nbsp;VAIL&nbsp;III
+            </button>
+        </div>
+
+        <div class="themedUI">
+            SOFTWARE ENGINEER IN ALGODONES
+        </div>
+
+        <div>
+            <label class="themedUIHighlight">
+                ALGODONES BC MX<br />
+            </label>
+        </div>
+
+        <div>
+            <a href="tel: +15205962892" class="contactLinks themedUIHighlight">
+                USA PHONE: +1 520 596 2892
+            </a>
+        </div>
+        <div>
+            <a href="tel: +526865908895" class="contactLinks themedUIHighlight">
+                MX PHONE: + 52 686 590 8895
+            </a>
+        </div>
+
+        <div class="themedUIHighlight">
+            <label>
+                <strong>EMAIL:</strong>
+            </label>
+            <a href="mailto:dan@universeobjects.com" class="contactLinks">dan@universeobjects.com</a><br />
+        </div>
+    </div>
+</div>
+
+
+<div id="experienceWrapper"
+     style="visibility: visible;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;">
+
+    <!-- Slider main container -->
+    <div class="swiper-container" id="swiper-container">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            <div class="swiper-slide zoom">
+                <div class="shine slide-card whiteShadow" style="background-size: 100%;
+                background-image: url('/images/dan.png'); background-repeat: no-repeat;">
+
+                    <div class="card-header">
+                        <div class="card-header " id="itemDetails">
+                            ME
+                            <div class="card-subtitle">
+                                SOFTWARE ENGINEER
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-text themedUI themedUIBackground   ">
+                        TEAM: SEARCHING FOR WHERE I WOULD BE OF USE.<br />
+                        LOCATION: ALGODONES, BAJA CALIFORNIA MEXICO<br />
+                        <i>
+                            <span class="themedUIHighlight">
+                                I CREATE SOFTWARE. <br />
+                                I CAN DO OTHER STUFF TOO.
+                            </span>
+                        </i>
+                        <br />
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide zoom">
+                <div class="whiteShadow blackBevel shine">
+
+                    <div class="card-header">
+                        <div class="card-header " id="itemDetails"
+                             onclick="modifyCardElements({
+                                                condition: 'mouseover',
+                                                factor: 2,
+                                                className: 'card',
+                                                actionType: 'scale',
+                                                divToActOn: ''})">
+                            EXPERIAN
+                            <div class="card-subtitle">
+                                SENIOR SOFTWARE ENGINEER
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-text themedUI themedUIBackground  themedUIHighlight ">
+                        TEAM: ANTI-MONEY LAUNDERING<br />
+                        SUPERVISOR: DAVE SESSIONS<br />
+                        VERIFICATION PHONE: 1 714 830 7000<br />
+                        LOCATION: MIAMI, FLORIDA, UNITED STATES
+                        <br /><br />
+                        AUTHORED MULTI-THREADED ASP.NET WEB APPLICATION FOR
+                        <i>
+                            <span class="highlight themedUIHighlight">U.S. DEPARTMENT OF THE TREASURY OFFICE OF FOREIGN ASSET CONTROL BANKING COMPLIANCE.</span>
+                            BANK COMPLIANCE OFFICERS COULD LOAD A VARIETY OF TRANSACTION FILES, EXCLUSION LISTS, AND SEARCHABLE TRANSACTION LISTS
+                            INCLUDING SWIFT FILES, OFAC KNOWN TERRORISTS, MONEY LAUNDERERS AND HUMAN TRAFFICKERS.
+                        </i>
+                        <br />
+                        <ul class="tasks">
+                            <li>
+                                DESIGNED SQL OBJECTS (STORED PROCEDURES, TRIGGERS, TABLES, CONSTRAINTS, UDF's, ETC...)
+                            </li>
+                            <li>
+                                DESIGNED, AUTHORED, AND IMPLEMENTED SQL CONFIG AND INSTALL SOFTWARE
+                                FOR DEPLOYMENT AT OVER 100 SOUTH AMERICAN FINANCIAL INSTITUTIONS.
+                            </li>
+                            <li>
+                                AUTHORED c# MIDDLE TIER .NET OBJECTS
+                            </li>
+                            <li>
+                                AUTHORED ASP.NET WEB UI/UX OBJECTS.
+                            </li>
+                            <li>
+                                MANAGED SQL INSTALL/CONFIG AND OBJECTS.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide zoom">
+                <div class="whiteShadow blackBevel shine">
+
+                    <div class="card-header">
+                        <div class="card-header " id="itemDetails">
+                            GEOSCAPE (CLARITAS)
+                            <div class="card-subtitle">
+                                SENIOR GIS SPECIALIST
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-text themedUI themedUIBackground ">
+                        TEAM: GEOGRAPHIC INFORMATION SYSTEMS<br />
+                        SUPERVISOR: CESAR MELGOZA<br />
+                        VERIFICATION PHONE: +1 888-981-0040<br />
+                        LOCATION: MIAMI, FLORIDA, UNITED STATES
+                        <br /><br />
+                        <i>
+                            PROVIDING VARIOUS GIS RELATED SOLUTIONS WITH WEB BASED TOOLS INCLUDING ASP, c#, and SQL.
+                        </i>
+                        <br />
+                        <ul class="tasks">
+                            <li>
+                                AUTHORED FIRST GEOCODER, BEFORE GOOGLE HAD MAPS.
+                            </li>
+                            <li>
+                                AUTHORED MULTI-THREADED ASP.NET WEB APPLICATION FOR
+                            </li>
+                            <li>
+                                REPLICATED ENTIRE INFOUSA CONSUMER DATABASE OF 230 MILLION ROWS BY 400 COLUMNS OVER ONE TERABYTE TOTAL DATABASE SIZE.
+                            </li>
+                            <li>
+                                DESIGNED SQL OBJECTS (STORED PROCEDURES, TRIGGERS, TABLES, CONSTRAINTS, UDF's, ETC...)
+                            </li>
+                            <li>
+                                AUTHORED c# MIDDLE TIER .NET OBJECTS
+                            </li>
+                            <li>
+                                AUTHORED CLASSIC ASP WEB UI/UX OBJECTS.
+                            </li>
+                            <li>
+                                MANAGED SQL INSTALL/CONFIG AND OBJECTS.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide zoom">
+                <div class="whiteShadow blackBevel shine">
+
+                    <div class="card-header">
+                        <div class="card-header " id="itemDetails">
+                            PEACHTREE FINANCIAL / CREDIT SUISSE
+                            <div class="card-subtitle">
+                                SENIOR SOFTWARE ARCHITECT
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-text themedUI themedUIBackground ">
+                        TEAM: INFORMATION TECHNOLOGY<br />
+                        SUPERVISOR: TONY OTTAVIO<br />
+
+                        VERIFICATION PHONE: +1 877-671-2117 <br />
+                        LOCATION: BOYNTON BEACH, FLORIDA, UNITED STATES
+                        <br /><br />
+                        AUTHORED MULTI-THREADED ASP.NET WEB APPLICATION FOR
+                        <i>
+                            <span class="highlight themedUIHighlight"></span>
+                        </i>
+                        <br />
+                        <ul class="tasks">
+                            <li>
+                                SARBANES OXLEY COMPLIANCE RESPONSIBILITIES ON 2 BILLION IN CASH and 20 BILLION IN INSURANCE PORTFOLIO
+                            </li>
+                            <li>
+                                RESPONSIBILITIES: TEAM LEAD (3 ENGINEERS)
+                            </li>
+                            <li>
+                                AUTHORED .NET WEB BASED APPLICATION TO SERVICE $20 BILLION USD INSURANCE POLICY AND $2 BILLION USD CASH PORTFOLIO SERVICING APPLICATION.
+                            </li>
+                            <li>
+                                AUTHORED WIN32/64 .NET APPLICATION FOR TREASURY ANALYSIS DEPARTMENT TO PERFORM COMPLEX INSTANT &quot;WHAT IF ???&quot; BUSINESS INTELLIGENCE SCENARIO SIMULATIONS.
+                            </li>
+                            <li>
+                                SUPERVISED AND DESIGNED SQL OBJECTS (STORED PROCEDURES, TRIGGERS, RULES, UDF's, TABLES, VIEWS, ETC...)
+                            </li>
+                            <li>
+                                DESIGNED ALL EXTRACT, TRANSFORM, LOAD DATA TRANSFORMATION OBJECTS.
+                            </li>
+                            <li>
+                                AUTHORED ALL VB.NET / c#.NET MIDDLE TIER BUSINESS LAYER OBJECTS.
+                            </li>
+                            <li>
+                                AUTHORED ASP.NET WEB UI / UX OBJECTS.
+                            </li>
+                            <li>
+                                MANAGED ALL SQL DATABASE SERVERS AND OBJECTS.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide zoom">
+                <div class="whiteShadow blackBevel shine">
+
+                    <div class="card-header">
+                        <div class="card-header " id="itemDetails">
+                            SEATTLE LAB
+                            <div class="card-subtitle">
+                                CHIEF INFORMATION OFFICER
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-text themedUI themedUIBackground ">
+
+                        TEAM: EXECUTIVE<br />
+                        SUPERVISOR: KEN WHELAN<br />
+
+                        VERIFICATION PHONE: TBA<br />
+                        LOCATION: SEATTLE, WASHINGTON UNITED STATES
+                        <br /><br />
+                        <br /><br />
+                        <i>
+                            LEADING SOFTWARE DEVELOPMENT, ACCOUNTING, AND INTERNET MARKETING FOR A TOP TIER SEATTLE SOFTWARE DEVELOPMENT CORPORATION.
+                        </i>
+                        <br />
+                        <ul class="tasks">
+                            <li>
+                                AUTHORED SCALABLE SQL BACKEND FOR WEB BASED OFFICE SOFTWARE SUITE. 2nd PLACE WASHIGNTON SOFTWARE ALIANCE PRODUCT OF THE YEAR.
+                            </li>
+                            <li>
+                                LED TEAM RESPONSIBLE FOR ZAP-ME / RSTAR NETWORKS SATELLITE MESSAGING AND CALENDAR SOFTWARE APPLICATIONS FOR K-12 SCHOOLS SPONSORED BY DELL CORPORATION.
+                            </li>
+                            <li>
+                                MANAGED DOUBLE ENTRY GL, AR, AP, AND PAYROLL ACCOUNTING SOFTWARE DURING REVENUE YEARS.
+                            </li>
+                            <li>
+                                ASSISTED IN THE GROWTH OF THE CORPORATION FROM 15 TO 45 TEAM MEMBERS WITH ZERO VENTURE CAPITAL INFUSION... PURE SWEAT EQUITY.
+                            </li>
+                            <li>
+                                ASSISTED IN THE DEVELOPMENT OF THE FIRST MAIL SERVER FOR WINDOWS OS, TRANSITIONING FROMO REGISTRY BASED USER INFORMATION TO SQL BASED USER INFORMATION.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    function showResumeItemDetails({
+        item
+    }) {
+
+        var swiperContainer = document.getElementById('swiper-container');
+        swiperContainer.style.height = '60%';
+
+        var resumeItemDetails =
+            document.getElementById('resumeItemDetails');
+
+        resumeItemDetails.style.transition = '3s';
+        resumeItemDetails.style.position = 'absolute';
+        resumeItemDetails.style.color = '#ffffff';
+
+        resumeItemDetails.style.visibility = 'visible';
+        resumeItemDetails.style.width = '80vw';
+        resumeItemDetails.style.top = '60vh';
+        resumeItemDetails.style.height = '35vh';
+        resumeItemDetails.style.left = '10vw';
+        resumeItemDetails.style.opacity = '1';
+        resumeItemDetails.style.overflow = 'auto';
+
+        window.dispatchEvent(new Event('resize'));
+
+
+    }
+
+    function modifyCardElements({
+        condition,
+        factor,
+        className,
+        actionType,
+        divToActOn
+    }) {
+
+        var elements =
+            document.querySelectorAll(className);
+
+        switch (condition) {
+            case "hide":
+                elements.forEach(function (element) {
+                    element.style.transition = "3s";
+                    element.style.transform = "rotateY(180deg)";
+                    element.style.opacity = "0";
+                    element.style.left = "-120vw";
+                    element.style.top = "120vh";
+                    element.style.visibility = "hidden";
+                });
+                document.body.resize();
+
+                break
+
+            case "mouseover":
+                elements.forEach(function (element) {
+                    element.style.transform.scale = factor;
+                });
+                break;
+
+            case "mouseout":
+                elements.forEach(function (element) {
+                    element.style.transform.scale = factor;
+                });
+                break;
+
+            case "click":
+                elements.forEach(function (element) {
+                    element.style.transform.scale = factor;
+
+                    if (actionType == "showDIV") {
+                        var div = document.getElementById(divToActOn);
+
+                        if (div != undefined) {
+                            div.style.transition = "1s";
+                            div.style.visibility = "visible";
+                            div.style.opacity = "1";
+                        }
+                    }
+                });
+                break;
+        }
+    }
+
+
+    document.getElementById("showResume").addEventListener("click", function (event) {
+        var experienceWrapper = document.getElementById("experienceWrapper");
+
+        if (experienceWrapper.style.visibility == "visible") {
+            experienceWrapper.style.transition = "5s";
+            experienceWrapper.style.visibility = "hidden";
+            experienceWrapper.style.opacity = "0";
+            experienceWrapper.style.left = "-100vw";
+            experienceWrapper.style.transform = "rotateX(180deg);"
+            return "hidden";
+        }
+
+        if (experienceWrapper.style.visibility == "hidden") {
+            experienceWrapper.style.transition = "1s";
+            experienceWrapper.style.visibility = "visible";
+            experienceWrapper.style.opacity = "1";
+            experienceWrapper.style.left = "0px";
+            experienceWrapper.style.transform = "rotateX(0deg);"
+        }
+
+    })
+
+    window.addEventListener('load', function (event) {
+
+        var swiper = new Swiper(".swiper-container", {
+            effect: 'coverflow',
+            grabCursor: false,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            coverflowEffect: {
+                rotate: 40,
+                stretch: 10,
+                depth: 450,
+                modifier: 1,
+                slideShadows: false,
+            },
+            autoplay: {
+                delay: 20000
+            },
+            loop: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
+        });
+        swiper.slideTo(2, false, false);
+
+
+        var slides =
+            document.querySelectorAll('swiper-slide').forEach(element => {
+                element.addEventListener('mouseenter', function () {
+                    this.style.width = '100vw';
+                    this.style.height = '100vh';
+                });
+                element.addEventListener('mouseleave', function () {
+                    this.style.width = '40vw';
+                    this.style.height = '70vh';
+                })
+
+            })
+        //var elements =
+        //    document.querySelectorAll('.card');
+
+        //elements.forEach(function (element) {
+        //    element.addEventListener('click', function (event) {
+        //        showResumeItemDetails({ item: element.id });
+        //    })
+        //});
+
+    });
+
+</script>
+
+

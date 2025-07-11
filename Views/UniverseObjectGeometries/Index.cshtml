@@ -1,0 +1,254 @@
+﻿@model IEnumerable<UniverseObjects.Models.UniverseObjectGeometry>
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_UniverseObjectRendererLayout.cshtml";
+    Layout = null;
+}
+
+<h2>UNIVERSE OBJECTS GEOMETRIES</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UniverseObjectID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryComplexity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryRadius)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryTube)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryArc)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryDetail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryLength)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryHeight)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryRadiusTop)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryRadiusBottom)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometrySteps)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryDepth)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryInnerRadius)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryOuterRadius)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryThresholdAngle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometrySegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryXSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryYSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryHeightSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryRadialSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryTubularSegnments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryCapSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryThetaSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryPhiSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryBevelSegments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryBevelSize)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryBevelOffset)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryBevelThickness)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryPhiStart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryPhiEnd)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryThetaStart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryThetaEnd)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryThetaLength)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryOpenEnded)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryOrigin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeometryQ)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UniverseObjectID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryComplexity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryRadius)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryTube)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryArc)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryDetail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryLength)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryHeight)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryRadiusTop)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryRadiusBottom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometrySteps)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryDepth)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryInnerRadius)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryOuterRadius)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryThresholdAngle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometrySegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryXSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryYSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryHeightSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryRadialSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryTubularSegnments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryCapSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryThetaSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryPhiSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryBevelSegments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryBevelSize)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryBevelOffset)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryBevelThickness)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryPhiStart)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryPhiEnd)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryThetaStart)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryThetaEnd)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryThetaLength)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryOpenEnded)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryOrigin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeometryQ)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.GeometryID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.GeometryID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.GeometryID })
+        </td>
+    </tr>
+}
+
+</table>

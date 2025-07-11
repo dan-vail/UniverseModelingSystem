@@ -1,0 +1,1346 @@
+﻿@model UniverseObjects.Models.CelestialSphere
+@{
+    //Layout = "~/Views/Shared/_MediaLayout.cshtml";
+    Layout = null;
+}
+
+
+<style>
+    #celestialSpheresMainMenu {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        font-size: clamp(14px, 1vmax, 48px);
+        color: #00ffff;
+        width: 100vw;
+        max-width: 100vw;
+        background-color: rgba(0, 0, 22, .5);
+        z-index: 99;
+        display: inline-flex;
+        flex-direction: row;
+        margin: 10px 10px 10px 10px;
+    }
+
+    .celestialSpheresMenuItem {
+        width: 12vw;
+        text-align: center;
+        background-color: rgba(128, 0, 0, .5);
+        color: #ff0000;
+    }
+
+    .submitButton {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        background-color: #00ff00;
+        color: #ffffff;
+        font-size: clamp(10px, 1.6vmax, 2vmax);
+    }
+
+    .topMenuItemList {
+        position: absolute;
+        top: clamp(180px, 15.5vh, 15vmax);
+        transition: all .5s;
+        font-size: clamp(14px, 1vmax, 2vmax);
+        color: #880000;
+        width: 25%;
+        background-color: transparent;
+        z-index: 99;
+        margin: 10px 10px 10px 10px;
+        visibility: hidden;
+        opacity: 0;
+        display: inline-block;
+    }
+
+    #infoMenuItemList {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        font-size: clamp(14px, .8vmax, 36px);
+        color: #00ffff;
+        width: 33vw;
+        background-color: transparent;
+        z-index: 99;
+        margin: 10px 10px 10px 10px;
+        visibility: hidden;
+        opacity: 0;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .tabMenuList {
+    }
+
+    .tabPage {
+        position: absolute;
+        top: 20vh;
+        left: 0px;
+        height: 70vh;
+        font-size: clamp(14px, 1vmax, 84px);
+        color: #00ffff;
+        width: 50vw;
+        background-color: rgba(128, 0, 0, .3);
+        z-index: 99;
+        margin: 20px 20px 20px 20px;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    #formSide {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 80vw;
+        overflow: auto;
+        background-color: transparent;
+        transition: all .1s;
+        visibility: hidden;
+    }
+
+    .lockedSubMenu {
+        position: absolute;
+        top: 5vh;
+        left: 0px;
+        font-size: clamp(14px, .9vmax, 42px);
+        color: #00ffff;
+        width: 100%;
+        background-color: rgba(32, 32, 32, .5);
+        z-index: 999999;
+        display: inline-block;
+        width: 100vw;
+    }
+
+    .settingsLabels {
+        font-size: clamp(14px, 1.2vmax, 42px);
+        color: #00ffff;
+        text-shadow: 1px 1px #000000;
+    }
+
+    .standardRangeSlider {
+        width: 20vw;
+    }
+</style>
+
+
+<div id="celestialSpheresMainMenu"
+     class="whiteShadow blackBevel">
+
+    <div id="dbMenuBar" 
+         class="dbMenuBar"
+         style="position: absolute;
+                top: 25vh;
+                left: 0px;
+                width: 25%;
+                display: flex;
+                flex-direction: column;
+                flex-wrap: wrap;">
+    </div>
+
+</div>
+
+<div id="lightingOptions"
+     class="themedUI themedUIBackground lockedSubMenu"
+     style="position: absolute; top: 4vh">
+    <label class="themedUI ">AMBIENT: &nbsp;</label>
+    <input id="ambientLightIntensity" 
+           class="themedUI themedUIBackground standardRangeSlider"
+           style="width: 30vw;"
+           type="range" min="0" max="2" step=".1" value="0" />
+    <label class="themedUI">SUN:&nbsp;</label>
+    <input id="solarLightIntensity" class="themedUI themedUIBackground themedUIBackground"
+           style="width: 30vw;"
+           type="range" min="0" max="2" step=".1" value="1" />
+</div>
+
+<div id="HUD"
+     style="position: absolute;
+            font-size: clamp(16px, 2vh, 38px);
+            top: 20vh;
+            width: 30vw;
+            right: 0px;
+            text-align: right;
+            visibility: visible;
+            opacity: 1;
+            z-index: 99999;">
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        SPHERE:
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation X:
+    </label>
+    <br />
+    <label id="sphereRotationX"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation Y:
+    </label>
+    <br />
+    <label id="sphereRotationY"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation Z:
+    </label>
+    <br />
+    <label id="sphereRotationZ"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+    <br />
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        ATMOSPHERE:
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation X:
+    </label>
+    <br />
+    <label id="sphereAtmosphereRotationX"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation Y:
+    </label>
+    <br />
+    <label id="sphereAtmosphereRotationY"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation Z:
+    </label>
+    <br />
+    <label id="sphereAtmosphereRotationZ"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+    <br />
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        OBSERVER:
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Position X:
+    </label>
+    <br />
+    <label id="cameraPositionX"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        Position Y:
+    </label>
+    <br />
+    <label id="cameraPositionY"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Position Z:
+    </label>
+    <br />
+    <label id="cameraPositionZ"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+</div>
+
+
+<div id="textureMenuItemList" class="topMenuItemList">
+    @*@{Html.RenderAction("DragDrop", "Home");}*@
+</div>
+
+<div id="focusMenuItemList" class="topMenuItemList">
+    <select id="tweenObject" class="themedUI themedUIBackground whiteShadow blackBevel">
+        <option value="sphere" class="themedUI themedUIBackground settingsLabels">
+            SPHERE
+        </option>
+        <option value="spaceStation" class="themedUI themedUIBackground settingsLabels">
+            STATION
+        </option>
+        <option value="insideVideo" class="themedUI themedUIBackground settingsLabels">
+            VIDEO
+        </option>
+        <option value="panorama" class="themedUI themedUIBackground settingsLabels">
+            PANORAMA
+        </option>
+        <option value="sun" class="themedUI themedUIBackground settingsLabels">
+            SUN
+        </option>
+    </select>
+</div>
+
+
+
+<!--<div id="worldCitiesMenuItemList" class="topMenuItemList whiteShadow blackBevel">
+    <div id="majorWorldCities" style="position: absolute; top: 0px; left: 1vw;">-->
+        @*@{Html.RenderAction("Index", "MajorWorldCities");}*@
+    <!--</div>
+</div>-->
+
+<div id="vectorsMenuItemList" 
+     style="width: 100%;"
+     class="topMenuItemList collapseable">
+
+    <div style="
+            display: flex;
+            flex-direction: row;
+            width: 100%;">
+
+        <div style="
+            position: absolute;
+            top: 0px;
+            width: 15vw;
+            left: 1vw;
+            text-align: left;">
+
+            <div id="cameraMenuItemList">
+                <label class="themedUI settingsLabels">CAMERA FOV</label>
+                <br />
+                <input id="cameraFOV" class="themedUI themedUIBackground standardRangeSlider" type="range" min="42" max="164" step="1" value="64" />
+                <br />
+                <br />
+                <input type="checkbox" id="lockToCamera" />
+                <label class="themedUI settingsLabels">LOCK</label>
+            </div>
+        </div>
+
+
+        <div style="
+           position: absolute;
+           top: 0px;
+           width: 20vw;
+           left: 15vw;
+           text-align: left;">
+            <div id="displacementVectors">
+
+                <label class="themedUI settingsLabels">
+                    VECTOR AMPLIFICATION FACTOR
+                </label><br />
+                <input id="vectorAmplificationFactor" class="themedUI themedUIBackground standardRangeSlider  themedUIBackground" type="range" min="-10" max="10" step="1" value="1" />
+                <br />
+                <br />
+                <label class="themedUI settingsLabels">
+                    DISPLACEMENT SCALE
+                </label>
+                <br />
+                <label id="displacementScaleLabel"
+                       style="
+                    color: #ffffff;
+                    text-align: right;
+                    width: 100%;">
+                    1
+                </label>
+                <br />
+                <br />
+                <input id="displacementScale"
+                       class="themedUI themedUIBackground standardRangeSlider"
+                       type="range" min="-100" max="100" step="1" value="1" />
+                <br />
+                <br />
+                <label class="themedUI settingsLabels">
+                    ATMOSPHERE DISPLACEMENT SCALE
+                </label>
+                <label id="atmosphereDisplacementScaleLabel"
+                       style="
+                    color: #ffffff;
+                    text-align: right;
+                    width: 100%;">
+                    1
+                </label>
+                <br />
+                <br />
+                <input id="atmosphereDisplacementScale"
+                       class="themedUI themedUIBackground standardRangeSlider"
+                       type="range" min="-100" max="100" step="1" value="1" />
+                <br />
+                <label class="themedUI settingsLabels">
+                ATMOSPHERE OPACITY SCALE
+                    </label>
+                <br />
+                <br />
+                <input id="atmosphereOpacityScale" class="themedUI themedUIBackground standardRangeSlider themedUIBackground" type="range" min="0" max="1" step=".01" value=".9" />
+                <br />
+            </div>
+        </div>
+
+        <div style="
+            position: absolute;
+            top: 0px;
+            width: 15vw;
+            left: 40vw;">
+            <div id="atmosphericVectors"
+                 class="themedUIbackground"
+                 style="width: 20vw;">
+
+                <div id="atmosphericDirectionContainer"
+                     style=" top: 30vh;
+                            left: 1vw;
+                           width: 25vw;
+                        position: absolute;">
+
+                    <div id="audioatmosphericDirection" class="">
+                        <label id="atmosphericDirectionXValue" class="controlsLabel"
+                               style="
+                            transform: rotate(0deg);
+                            transform-origin: 0% 50%;
+                            position: absolute; left: 0px; top: 0px;">
+                            ΔX:
+                        </label>
+                        <input id="atmosphericDirectionX"
+                               class="vector3Range themedUIBackground whiteShadow"
+                               type="range" min="-1" max="1" step=".01" value="0"
+                               style="
+                            width: 15vmax;
+                            transform: rotate(0deg);
+                            transform-origin: 50% 50%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;">
+
+                        <label id="atmosphericDirectionYValue"
+                               class="controlsLabel"
+                               style="
+                            transform: rotate(-90deg);
+                            transform-origin: 50% 100%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;">
+                            ΔY:
+                        </label>
+                        <input id="atmosphericDirectionY"
+                               class="vector3Range themedUIBackground whiteShadow"
+                               type="range" min="-1" max="1" step=".01" value="0"
+                               style="
+                            width: 15vmax;
+                            transform: rotate(-90deg);
+                            transform-origin: 50% 50%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;" />
+
+                        <label id="atmosphericDirectionZValue" class="controlsLabel"
+                               style="
+                            transform: rotate(-45deg);
+                            transform-origin: 0% 100%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;">
+
+                            ΔZ:
+                        </label>
+                        <input id="atmosphericDirectionZ"
+                               class="vector3Range themedUIBackground whiteShadow"
+                               type="range" min="-1" max="1" step=".01" value="0"
+                               style="
+                            width: 15vmax;
+                            transform: rotate(-45deg);
+                            transform-origin: 50% 50%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px; " />
+                    </div>
+                    <label class="themedUI controlsLabel"
+                           style="position: absolute; bottom: 0px; color: #00ffff">
+                        Atmospheric Direction:
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div style="
+            position: absolute;
+            top: 0px;
+            width: 30vw;
+            left: 50vw;">
+            <div id="spheroidsVectors">
+
+
+                <label class="themedUI settingsLabels">SPHEROID ROTATION VELOCITY</label><br />
+                <input id="spheroidRotationVelocity" class="themedUI themedUIBackground standardRangeSlider themedUIBackground" type="range" min="-100" max="100" step=".5" value="25" />
+                <br />
+
+
+                <label class="themedUI settingsLabels">SPHEROID ATMOSPHERE ROTATION VELOCITY</label><br />
+                <input id="spheroidAtmosphereRotationVelocity" class="themedUI themedUIBackground standardRangeSlider themedUIBackground" type="range" min="-100" max="100" step=".5" value="35" />
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="animationMenuItemList" class="topMenuItemList">
+    <input type="checkbox" id="animatePlanet" checked />
+    <label class="themedUI settingsLabels">SPHERE</label>
+    <br />
+
+    <input type="checkbox" id="animateAtmosphere" checked />
+    <label class="themedUI settingsLabels">ATMOSPHERE</label>
+    <br />
+
+    <label class="themedUI settingsLabels">ϱ</label>
+    <input id="videoVolume" class="themedUI themedUIBackground standardRangeSlider" type="range" min=".01" max=".99" step=".01" value=".25" />
+    <br />
+
+    <input type="checkbox" id="goofballAnimation" /><label class="themedUI menuTitleItem" style="color: #00ffff;">GOOFBALL</label>
+    <input id="goofiness" class="themedUI themedUIBackground standardRangeSlider" type="range" min=".01" max="1" step=".01" value=".01" style="color: #00ffff;" />
+
+</div>
+
+<div id="orbitalsMenuItemList"
+     style="
+            width: 100%;
+            display: flex;
+            flex-direction: column;"
+     class="topMenuItemList">
+    <div style="
+                position: absolute;
+                top: 0px;
+                left: 1vw;
+                width: 30vw;">
+        <div style="width: 100%;">
+            <input type="checkbox" id="orbitLock" />
+            <label class="themedUI settingsLabels">ORBIT SPHERE</label>
+        </div>
+        <div style="width: 100%;">
+            <label class="themedUI settingsLabels">SPHERE ORBIT DISTANCE</label>
+            <input id="orbitDistance" class="themedUI themedUIBackground standardRangeSlider" type="range" min="1" max="20000" step="10" value="5000" />
+        </div>
+        <div style="width: 100%;">
+            <label class="themedUI settingsLabels">SPHERE ORBIT VELOCITY</label><br />
+            <input id="orbitVelocity" class="themedUI themedUIBackground settingsLabels" type="range" min="1" max="100" step="1" value="1" />
+        </div>
+    </div>
+
+    <div style="
+                position: absolute;
+                top: 0px;
+                left: 35vw;
+                width: 30vw;">
+        <div style="width: 100%;">
+            <input type="checkbox" id="spaceStationOrbitLock" />
+            <label class="themedUI settingsLabels">
+                ORBIT SPACE STATION
+            </label>
+        </div>
+        <div style="width: 100%;">
+            <label class="themedUI settingsLabels">
+                SPACE STATION ORBIT DISTANCE
+            </label>
+            <input id="spaceStationOrbitDistance"
+                   class="themedUI themedUIBackground standardRangeSlider"
+                   type="range" min=".01" max="5" step=".01" value=".1" />
+        </div>
+        <div style="width: 100%;">
+            <label class="themedUI settingsLabels">
+                SPACE STATION ORBIT VELOCITY
+            </label>
+            <input id="spaceStationOrbitVelocity"
+                   class="themedUI themedUIBackground standardRangeSlider"
+                   type="range" min="1" max="1024" step="1" value="64" />
+        </div>
+
+    </div>
+
+
+</div>
+
+    <style>
+
+        /* Got this from a glass morphism site for generating css quickly*/
+        /* Generated by https://generator.ui.glass/ */
+        .cardBack {
+            background-color: #000000;
+            background-image: radial-gradient(at 47% 33%, hsl(358.42, 0%, 0%) 0, transparent 59%), radial-gradient(at 82% 65%, hsl(0.00, 100%, 25%) 0, transparent 55%);
+        }
+
+        .card {
+            backdrop-filter: blur(13px) saturate(200%);
+            -webkit-backdrop-filter: blur(13px) saturate(200%);
+            background-color: rgba(0, 0, 0, 0.54);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            width: 33vw;
+            max-width: 33vw;
+            /*        height: 70vh;
+                max-height: 70vh;
+        */ overflow: hidden;
+        }
+
+        .formCustomProperties {
+            background-color: rgba(0, 0, 22, .6);
+            font-size: clamp(14px, 1vmin, 38px);
+            color: #ffffff;
+            width: 20vw;
+        }
+
+        .tabMenuTitle {
+            font-size: clamp(14px, .9vmax, 38px);
+            color: #880000;
+            word-break: keep-all;
+        }
+
+            .tabMenuTitle a:hover {
+                color: #ffff00;
+            }
+
+        .tabPageTitle {
+            font-size: clamp(20px, 1.1vmin, 48px);
+            color: #ffffff;
+        }
+
+        .tabMenu {
+            position: relative;
+            width: 20vw;
+        }
+
+        .formControls {
+            font-size: clamp(20px, 1.1vmin, 48px);
+            width: 20vw;
+            word-wrap: normal;
+        }
+
+        .formControlsLabel {
+            font-size: clamp(20px, 1.1vmin, 48px);
+            width: 20vw;
+            word-wrap: normal;
+        }
+    </style>
+
+    @*<div id="spherePropertiesMenu"
+             style="position: absolute;
+        top: 14vh;
+        left: 0px;
+        width: 100vw;
+                background-color: rgba(255,0, 0, .5);
+                color: #880000;" class="cardBack">*@
+
+    <div id="infoMenuItemList" class="topMenuItemList" style="width: 33vw;">
+
+        <div id="tabMenuBasicSpecifications" style="width: 60vw;"
+             class="themedUI tabMenu">
+            <a href="#"
+               class="themedUI tabMenuTitle"
+               onclick="
+    ('tabBasicSpecifications')">
+                BASIC
+            </a>
+        </div>
+
+        <div id="tabMenuGeometrySpecifications"
+             class="themedUI tabMenu ">
+            <a href="#" class="themedUI tabMenuTitle"
+               onclick="showTabPage('tabGeometrySpecifications')">
+                GEOMETRY
+            </a>
+        </div>
+
+        <div id="tabMenuMaterialSpecifications"
+             class="themedUI tabMenu ">
+            <a href="#" class="themedUI tabMenuTitle"
+               onclick="showTabPage('tabMaterialSpecifications')">
+                MATERIAL
+            </a>
+        </div>
+
+        <div id="tabMenu3DSpecifications"
+             class="themedUI tabMenu ">
+            <a href="#" class="themedUI tabMenuTitle"
+               onclick="showTabPage('tab3DSpecifications')">
+                3D
+            </a>
+        </div>
+
+        <div id="tabMenuOrbitalSpecifications"
+             class="themedUI tabMenu ">
+            <a href="#" class="themedUI tabMenuTitle"
+               onclick="showTabPage('tabOrbitSpecifications')">
+                ORBIT
+            </a>
+        </div>
+
+
+        <div id="tabMenuParentObjectSpecifications"
+             class="themedUI tabMenu ">
+            <a href="#" class="themedUI tabMenuTitle"
+               onclick="showTabPage('tabParentObjectSpecifications')">
+                PARENT&nbsp;OBJECT
+            </a>
+        </div>
+    </div>
+    @*</div>*@
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div id="formSide" class=""
+             style="position: absolute;
+                    top: 25vh;
+                    left: 0px;
+                    width: 33vw;
+                    height: 70vh;
+                    z-index: 999;">
+
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ID)
+
+
+            <div id="tabBasicSpecifications"
+                 class="tabPage blackBevel whiteShadow card">
+                <label class="tabPageTitle">SPHEROID SPECIFICATIONS</label>
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { style = "width: 100%; background-color: rgba(0, 0, 32, .5); color: #00ffff; rows: 6; ", @class = "form-control formCustomProperties", } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.XCoord, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.XCoord, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.XCoord, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.YCoord, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.YCoord, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.YCoord, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.ZCoord, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.ZCoord, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.ZCoord, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.YSpin, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.YSpin, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.YSpin, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div id="tabGeometrySpecifications"
+                 class="tabPage blackBevel whiteShadow card">
+                <label class="tabPageTitle">SPHEREOID GEOMETRY</label>
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.GeometryXSegments, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.GeometryXSegments, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.GeometryXSegments, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.GeometryYSegments, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.GeometryYSegments, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.GeometryYSegments, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.Radius, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.Radius, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.Radius, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div id="tabMaterialSpecifications"
+                 class="themedUI tabPage blackBevel whiteShadow card">
+                <label class="tabPageTitle">SPHEROID 3D MATERIAL</label>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.MaterialType, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.MaterialType, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.MaterialType, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.MaterialColor, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.MaterialColor, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.MaterialColor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.Transparent, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        <div class="themedUI checkbox">
+                            @Html.EditorFor(model => model.Transparent)
+                            @Html.ValidationMessageFor(model => model.Transparent, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.DisplacementScale, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.DisplacementScale, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.DisplacementScale, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.Opacity, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.Opacity, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.Opacity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.Shininess, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.Shininess, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.Shininess, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.CastShadow, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        <div class="themedUI checkbox">
+                            @Html.EditorFor(model => model.CastShadow)
+                            @Html.ValidationMessageFor(model => model.CastShadow, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.RecieveShadow, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        <div class="themedUI checkbox">
+                            @Html.EditorFor(model => model.RecieveShadow)
+                            @Html.ValidationMessageFor(model => model.RecieveShadow, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.BlendingMode, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.BlendingMode, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.BlendingMode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.EnvironmentMap, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.EnvironmentMap, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.EnvironmentMap, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.Reflectivity, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.Reflectivity, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.Reflectivity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.MaterialCombine, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.MaterialCombine, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.MaterialCombine, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div id="tab3DSpecifications"
+                 class="themedUI tabPage blackBevel whiteShadow card">
+                <label class="tabPageTitle">SPHEROID IMAGING</label>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.TextureMapPath, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.TextureMapPath, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.TextureMapPath, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.AlphaTest, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.AlphaTest, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.AlphaTest, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.DepthTest, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        <div class="themedUI checkbox">
+                            @Html.EditorFor(model => model.DepthTest)
+                            @Html.ValidationMessageFor(model => model.DepthTest, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.BumpMapPath, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.BumpMapPath, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.BumpMapPath, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.BumpScale, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.BumpScale, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.BumpScale, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.DisplacementMapPath, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.DisplacementMapPath, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.DisplacementMapPath, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.NormalsMapPath, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.NormalsMapPath, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.NormalsMapPath, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div id="tabOrbitSpecifications"
+                 class="themedUI tabPage blackBevel whiteShadow card">
+                <label class="tabPageTitle">SPHEROID ORBIT DATA</label>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.OrbitalArgumentOfPeriapsis, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.OrbitalArgumentOfPeriapsis, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.OrbitalArgumentOfPeriapsis, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.OrbitalTrueAnomoly, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.OrbitalTrueAnomoly, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.OrbitalTrueAnomoly, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.OrbitalPlane, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.OrbitalPlane, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.OrbitalPlane, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.OrbitalEccentricity, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.OrbitalEccentricity, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.OrbitalEccentricity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.OrbitalSemiMajorAxis, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.OrbitalSemiMajorAxis, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.OrbitalSemiMajorAxis, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.OrbitalInclination, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.OrbitalInclination, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.OrbitalInclination, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.OrbitalOmegaLongitude, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.OrbitalOmegaLongitude, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.OrbitalOmegaLongitude, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.Mass, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.Mass, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.Mass, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div id="tabParentObjectSpecifications"
+                 class="themedUI tabPage blackBevel whiteShadow card">
+                <label class="tabPageTitle">SPHEROID PARENT DATA</label>
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.ImagePath, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.ImagePath, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.ImagePath, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*<div class="themedUI form-group">
+                        @Html.LabelFor(model => model.Enabled, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                        <div class="themedUI formControls">
+                            <div class="themedUI checkbox">
+                                @Html.EditorFor(model => model.Enabled)
+                                @Html.ValidationMessageFor(model => model.Enabled, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>*@
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.InsertionDateTime, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.InsertionDateTime, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.InsertionDateTime, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.ParentType, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.ParentType, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.ParentType, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.ParentID, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.ParentID, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.ParentID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.DistanceFromParent, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.DistanceFromParent, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.DistanceFromParent, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="themedUI form-group">
+                    @Html.LabelFor(model => model.WikipediaArticle, htmlAttributes: new { @class = "formControlsLabel themedUI" })
+                    <div class="themedUI formControls">
+                        @Html.EditorFor(model => model.WikipediaArticle, new { htmlAttributes = new { @class = "form-control formCustomProperties" } })
+                        @Html.ValidationMessageFor(model => model.WikipediaArticle, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="themedUI form-group showOnAllTabPages">
+                <input type="submit" value="SAVE" class="submitButton themedUI themedUIbackground" />
+            </div>
+
+        </div>
+
+    }
+
+
+
+
+    <script>
+
+        function toggleHUD() {
+            var HUD = document.getElementById("HUD");
+
+
+            if (HUD.style.visibility == "hidden") {
+                HUD.style.visibility = 'visible';
+                HUD.style.transition = ".5s";
+                HUD.style.opacity = '1';
+                return "visible";
+            }
+
+            if (HUD.style.visibility == "visible") {
+                HUD.style.transition = "3s";
+                HUD.style.visibility = 'hidden';
+                HUD.style.opacity = '0';
+                return "hidden";
+            }
+
+            HUD.style.visibility = 'visible';
+            HUD.style.transition = ".5s";
+            HUD.style.opacity = '1';
+            return "visible";
+
+
+        }
+
+        function showSubMenu({
+            subMenuID,
+            positionTop,
+            positionLeft,
+            alignment,
+            width,
+            height,
+            color,
+            transition,
+            backgroundColorRGBA
+        }) {
+            if (subMenuID == undefined) {
+                return false;
+            }
+
+            if (transition == undefined) {
+                transition = '1s';
+            }
+
+            if (height == undefined) {
+                transition = '1s';
+            }
+
+            if (positionTop == undefined) {
+                positionTop = '60vh';
+            }
+
+            if (positionLeft == undefined) {
+                positionLeft = '0px';
+            }
+
+            if (alignment == undefined) {
+                alignment = 'left';
+            }
+
+            if (width == undefined) {
+                width = '100%';
+            }
+
+            if (color == undefined) {
+                color = "#ffffff";
+            }
+
+            if (backgroundColorRGBA == undefined) {
+                backgroundColorRGBA = 'rgba(16, 16, 16, .9)';
+            }
+
+            var subMenu =
+                document.getElementById(subMenuID);
+
+            if (subMenu !== undefined) {
+                hideTabPages();
+                hideSubMenus();
+
+                alterObjectStyle({
+                    objectID: subMenuID,
+                    propertyToAlter: "top",
+                    propertyToAlterNewValue: '25vh',
+                    animateAlteration: true,
+                    transitionTime: transition,
+                    isToggle: false
+                });
+
+                alterObjectStyle({
+                    objectID: subMenuID,
+                    propertyToAlter: "visibility",
+                    propertyToAlterNewValue: "visible",
+                    animateAlteration: true,
+                    transitionTime: transition,
+                    isToggle: false
+                });
+
+                alterObjectStyle({
+                    objectID: subMenuID,
+                    propertyToAlter: "opacity",
+                    propertyToAlterNewValue: "1",
+                    animateAlteration: true,
+                    transitionTime: transition,
+                    isToggle: false
+                });
+
+                alterObjectStyle({
+                    objectID: subMenuID,
+                    propertyToAlter: "left",
+                    propertyToAlterNewValue: positionLeft,
+                    animateAlteration: true,
+                    transitionTime: transition,
+                    isToggle: false
+                });
+
+                alterObjectStyle({
+                    objectID: subMenuID,
+                    propertyToAlter: "width",
+                    propertyToAlterNewValue: '80vw',
+                    animateAlteration: true,
+                    transitionTime: transition,
+                    isToggle: false
+                });
+
+                alterObjectStyle({
+                    objectID: subMenuID,
+                    propertyToAlter: "height",
+                    propertyToAlterNewValue: '75vh',
+                    animateAlteration: true,
+                    transitionTime: transition,
+                    isToggle: false
+                });
+
+                alterObjectStyle({
+                    objectID: subMenuID,
+                    propertyToAlter: "overflow",
+                    propertyToAlterNewValue: "auto",
+                    animateAlteration: true,
+                    transitionTime: transition,
+                    isToggle: false
+                });
+
+                alterObjectStyle({
+                    objectID: subMenuID,
+                    propertyToAlter: "backgroundColor",
+                    propertyToAlterNewValue: backgroundColorRGBA,
+                    animateAlteration: true,
+                    transitionTime: transition,
+                    isToggle: false
+                });
+
+            }
+        }
+
+        function showTabMenu() {
+            document.querySelectorAll('.tabMenu').forEach(element => {
+                element.style.visibility = "visible";
+                element.style.opacity = "1";
+                element.style.width = "70vw";
+                element.style.top = "25vh";
+            });
+        }
+
+        function hideSubMenus() {
+            document.querySelectorAll('.topMenuItemList').forEach(element => {
+                element.style.transition = "2s";
+                element.style.visibility = "hidden";
+                element.style.opacity = "0";
+            })
+        }
+
+        function hideTabPages() {
+            document.querySelectorAll('.tabPage').forEach(element => {
+                element.style.transition = "2s";
+                element.style.visibility = "hidden";
+                element.style.opacity = "0";
+            })
+
+            document.querySelectorAll('.showOnAllTabPages').forEach(element => {
+                element.style.transition = "2s";
+                element.style.visibility = "hidden";
+                element.style.opacity = "0";
+            })
+        }
+
+        function showTabPage(tabPageName) {
+            hideTabPages();
+            var tabPage =
+                document.getElementById(tabPageName);
+            if (tabPage != undefined) {
+                tabPage.style.transition = '1s';
+                tabPage.style.visibility = 'visible';
+                tabPage.style.opacity = '1';
+                tabPage.style.position = 'absolute';
+                tabPage.style.top = '20vh';
+                tabPage.style.left = '1vw';
+                tabPage.style.width = '50vw';
+                tabPage.style.height = '70vh';
+            }
+            document.querySelectorAll('.showOnAllTabPages').forEach(element => {
+                element.style.visibility = 'visible';
+            })
+        }
+
+
+        document.getElementById("spaceStationOrbitLock")
+            .addEventListener("input", function (event) {
+                if (this.checked) {
+                    navigateToSpaceStation({ duration: 20000 });
+                }
+            });
+
+        fetchPage({
+            containerElementId: 'dbMenuBar',
+            pageUrl: '/ApplicationUIElements/MenuBar?uielementgroupid=2'
+        });
+
+
+    </script>

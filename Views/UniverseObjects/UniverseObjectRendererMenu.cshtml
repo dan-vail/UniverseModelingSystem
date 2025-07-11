@@ -1,0 +1,895 @@
+﻿@model UniverseObjects.Models.UniverseObject
+@{
+    Layout = null;
+}
+<style>
+    #universeObjectsMainMenu {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        font-size: clamp(14px, 1vmax, 48px);
+        color: #00ffff;
+        width: 100vw;
+        max-width: 100vw;
+        background-color: rgba(0, 0, 22, .5);
+        display: inline-flex;
+        flex-direction: row;
+        margin: 10px 10px 10px 10px;
+    }
+
+    .settingsContainer {
+        visibility: hidden;
+        opacity: 1;
+        width: 100%;
+    }
+
+    .universeObjectsMenuItem {
+        width: 12vw;
+        text-align: center;
+        background-color: rgba(128, 0, 0, .5);
+        color: #ff0000;
+    }
+
+    .submitButton {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        background-color: #00ff00;
+        color: #ffffff;
+        font-size: clamp(10px, 1.6vmax, 2vmax);
+    }
+
+    .topMenuItemList {
+        position: absolute;
+        top: clamp(180px, 15.5vh, 15vmax);
+        transition: all .5s;
+        font-size: clamp(14px, 1vmax, 2vmax);
+        color: #880000;
+        width: 25%;
+        background-color: transparent;
+        margin: 10px 10px 10px 10px;
+        visibility: hidden;
+        opacity: 0;
+        display: inline-block;
+    }
+
+    #infoMenuItemList {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        font-size: clamp(14px, .8vmax, 36px);
+        color: #00ffff;
+        width: 33vw;
+        background-color: transparent;
+        margin: 10px 10px 10px 10px;
+        visibility: hidden;
+        opacity: 0;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .tabMenuList {
+    }
+
+    .tabPage {
+        position: absolute;
+        top: 20vh;
+        left: 0px;
+        height: 70vh;
+        font-size: clamp(14px, 1vmax, 84px);
+        color: #00ffff;
+        width: 50vw;
+        background-color: rgba(128, 0, 0, .3);
+        margin: 20px 20px 20px 20px;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    #formSide {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 80vw;
+        overflow: auto;
+        background-color: transparent;
+        transition: all .1s;
+        visibility: hidden;
+    }
+
+    .lockedSubMenu {
+        position: absolute;
+        top: 5vh;
+        left: 0px;
+        font-size: clamp(14px, .9vmax, 42px);
+        color: #00ffff;
+        width: 100%;
+        background-color: rgba(32, 32, 32, .5);
+        display: inline-block;
+        width: 100vw;
+    }
+
+    .settingsLabels {
+        font-size: clamp(14px, 1.2vmax, 42px);
+        color: #00ffff;
+        text-shadow: 1px 1px #000000;
+    }
+
+    .standardRangeSlider {
+        width: 100%;
+        height: 32px;
+    }
+</style>
+
+<div id="HUD"
+     style="position: absolute;
+            font-size: clamp(12px, 1vmax, 28px);
+            top: 20vh;
+            width: 30vw;
+            right: 1vw;
+            text-align: right;
+            visibility: visible;
+            opacity: 1;">
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        SPHERE:
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation X:
+    </label>
+    <br />
+    <label id="sphereRotationX"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation Y:
+    </label>
+    <br />
+    <label id="sphereRotationY"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation Z:
+    </label>
+    <br />
+    <label id="sphereRotationZ"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+    <br />
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        ATMOSPHERE:
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation X:
+    </label>
+    <br />
+    <label id="sphereAtmosphereRotationX"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation Y:
+    </label>
+    <br />
+    <label id="sphereAtmosphereRotationY"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        Rotation Z:
+    </label>
+    <br />
+    <label id="sphereAtmosphereRotationZ"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+    <br />
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        OBSERVER:
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Position X:
+    </label>
+    <br />
+    <label id="cameraPositionX"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+
+    <label class="themedUI themedUIBackground settingsLabels">
+        Position Y:
+    </label>
+    <br />
+    <label id="cameraPositionY"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+    <br />
+    <label class="themedUI themedUIBackground settingsLabels">
+        Position Z:
+    </label>
+    <br />
+    <label id="cameraPositionZ"
+           class="themedUI themedUIBackground settingsLabels"
+           style="text-align: right;">
+        0
+    </label>
+</div>
+
+<div id="universeObjectsMainMenu"
+     class="whiteShadow blackBevel">
+
+    <div id="dbMenuBar"
+         class="dbMenuBar"
+         style="position: absolute;
+                top: 10vh;
+                left: 0px;
+                width: 25vw;
+                height: 50vh;
+                display: flex;
+                flex-direction: column;
+                flex-wrap: wrap;">
+
+    </div>
+
+</div>
+
+<div id="lightingOptions"
+     class="themedUI themedUIBackground lockedSubMenu"
+     style="position: absolute; top: 4vh">
+    <label class="themedUI ">AMBIENT: &nbsp;</label>
+    <input id="ambientLightIntensity"
+           class="themedUI themedUIBackground standardRangeSlider"
+           style="width: 30vw;"
+           type="range" min="0" max="2" step=".1" value="0" />
+    <label class="themedUI">SUN:&nbsp;</label>
+    <input id="solarLightIntensity" class="themedUI themedUIBackground themedUIBackground"
+           style="width: 30vw;"
+           type="range" min="0" max="2" step=".1" value="1" />
+</div>
+
+<div id="materialSettings" class="topMenuItemList">
+    @*@{Html.RenderAction("DragDrop", "Home");}*@
+</div>
+
+<div id="destinationAnimationsSettings" class="topMenuItemList">
+    <select id="tweenObject" class="themedUI themedUIBackground whiteShadow blackBevel">
+        <option value="sphere" class="themedUI themedUIBackground settingsLabels">
+            SPHERE
+        </option>
+        <option value="spaceStation" class="themedUI themedUIBackground settingsLabels">
+            STATION
+        </option>
+        <option value="insideVideo" class="themedUI themedUIBackground settingsLabels">
+            VIDEO
+        </option>
+        <option value="panorama" class="themedUI themedUIBackground settingsLabels">
+            PANORAMA
+        </option>
+        <option value="sun" class="themedUI themedUIBackground settingsLabels">
+            SUN
+        </option>
+    </select>
+</div>
+
+<div id="worldCities" class="topMenuItemList whiteShadow blackBevel">
+    <div id="majorWorldCities" style="position: absolute; top: 0px; left: 1vw;">
+        @*@{Html.RenderAction("Index", "MajorWorldCities");}*@
+    </div>
+</div>
+
+<div id="cameraSettings"
+     class="settingsContainer
+            collapseable">
+    <div style="
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            width: 100%;">
+
+        <div>
+            <label class="themedUI settingsLabels">
+                CAMERA FOV
+            </label>
+        </div>
+        <div>
+            <input id="cameraFOV"
+                   class="themedUI
+                                  themedUIBackground
+                                  standardRangeSlider"
+                   type="range"
+                   min="42"
+                   max="164"
+                   step="1"
+                   value="64" />
+        </div>
+        <div>
+            <label class="themedUI settingsLabels">
+                CAMERA CLIP NEAR (KM)
+            </label>
+        </div>
+        <div>
+            <input id="cameraClippingNear"
+                   class="themedUI
+                                  themedUIBackground
+                                  standardRangeSlider"
+                   type="range"
+                   min=".001"
+                   max="10"
+                   step=".001"
+                   value="1" />
+        </div>
+        <div>
+            <label class="themedUI settingsLabels">
+                CAMERA CLIP FAR (KM)
+            </label>
+        </div>
+        <div>
+            <input id="cameraClippingFar"
+                   class="themedUI
+                                  themedUIBackground
+                                  standardRangeSlider"
+                   type="range"
+                   min="10"
+                   max="100000000"
+                   step="1"
+                   value="1000000" />
+        </div>
+        <div>
+            <input type="checkbox" id="lockToCamera" />
+        </div>
+        <div>
+            <label class="themedUI settingsLabels">
+                LOCK
+            </label>
+        </div>
+    </div>
+</div>
+
+
+<div id="vectorSettings"
+     class="settingsContainer
+            collapseable">
+
+    <div style="
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            width: 100%;">
+
+        <div style="
+           position: absolute;
+           top: 0px;
+           width: 20vw;
+           left: 1vw;
+           text-align: left;">
+            <div id="displacementVectors">
+
+                <label class="themedUI settingsLabels">
+                    VECTOR AMPLIFICATION FACTOR
+                </label><br />
+                <input id="vectorAmplificationFactor" class="themedUI themedUIBackground standardRangeSlider  themedUIBackground" type="range" min="-10" max="10" step="1" value="1" />
+                <br />
+                <br />
+                <label class="themedUI settingsLabels">
+                    DISPLACEMENT SCALE
+                </label>
+                <br />
+                <label id="displacementScaleLabel"
+                       style="
+                    color: #ffffff;
+                    text-align: right;
+                    width: 100%;">
+                    1
+                </label>
+                <br />
+                <br />
+                <input id="displacementScale"
+                       class="themedUI themedUIBackground standardRangeSlider"
+                       type="range" min="-100" max="100" step="1" value="1" />
+                <br />
+                <br />
+                <label class="themedUI settingsLabels">
+                    ATMOSPHERE DISPLACEMENT SCALE
+                </label>
+                <label id="atmosphereDisplacementScaleLabel"
+                       style="
+                    color: #ffffff;
+                    text-align: right;
+                    width: 100%;">
+                    1
+                </label>
+                <br />
+                <br />
+                <input id="atmosphereDisplacementScale"
+                       class="themedUI themedUIBackground standardRangeSlider"
+                       type="range" min="-100" max="100" step="1" value="1" />
+                <br />
+                <label class="themedUI settingsLabels">
+                    ATMOSPHERE OPACITY SCALE
+                </label>
+                <br />
+                <br />
+                <input id="atmosphereOpacityScale" class="themedUI themedUIBackground standardRangeSlider themedUIBackground" type="range" min="0" max="1" step=".01" value=".9" />
+                <br />
+            </div>
+
+        </div>
+
+        <div style="
+            position: absolute;
+            top: 0px;
+            width: 15vw;
+            left: 40vw;">
+            <div id="atmosphericVectors"
+                 class="themedUIbackground"
+                 style="width: 20vw;">
+
+                <div id="atmosphericDirectionContainer"
+                     style=" top: 30vh;
+                            left: 1vw;
+                           width: 25vw;
+                        position: absolute;">
+
+                    <div id="audioatmosphericDirection" class="">
+                        <label id="atmosphericDirectionXValue" class="controlsLabel"
+                               style="
+                            transform: rotate(0deg);
+                            transform-origin: 0% 50%;
+                            position: absolute; left: 0px; top: 0px;">
+                            ΔX:
+                        </label>
+                        <input id="atmosphericDirectionX"
+                               class="vector3Range themedUIBackground whiteShadow"
+                               type="range" min="-1" max="1" step=".01" value="0"
+                               style="
+                            width: 15vmax;
+                            transform: rotate(0deg);
+                            transform-origin: 50% 50%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;">
+
+                        <label id="atmosphericDirectionYValue"
+                               class="controlsLabel"
+                               style="
+                            transform: rotate(-90deg);
+                            transform-origin: 50% 100%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;">
+                            ΔY:
+                        </label>
+                        <input id="atmosphericDirectionY"
+                               class="vector3Range themedUIBackground whiteShadow"
+                               type="range" min="-1" max="1" step=".01" value="0"
+                               style="
+                            width: 15vmax;
+                            transform: rotate(-90deg);
+                            transform-origin: 50% 50%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;" />
+
+                        <label id="atmosphericDirectionZValue" class="controlsLabel"
+                               style="
+                            transform: rotate(-45deg);
+                            transform-origin: 0% 100%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;">
+
+                            ΔZ:
+                        </label>
+                        <input id="atmosphericDirectionZ"
+                               class="vector3Range themedUIBackground whiteShadow"
+                               type="range" min="-1" max="1" step=".01" value="0"
+                               style="
+                            width: 15vmax;
+                            transform: rotate(-45deg);
+                            transform-origin: 50% 50%;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px; " />
+                    </div>
+                    <label class="themedUI controlsLabel"
+                           style="position: absolute; bottom: 0px; color: #00ffff">
+                        Atmospheric Direction:
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div style="
+            position: absolute;
+            top: 0px;
+            width: 30vw;
+            left: 50vw;">
+            <div id="spheroidsVectors">
+
+
+                <label class="themedUI settingsLabels">SPHEROID ROTATION VELOCITY</label><br />
+                <input id="spheroidRotationVelocity" class="themedUI themedUIBackground standardRangeSlider themedUIBackground" type="range" min="-100" max="100" step=".5" value="25" />
+                <br />
+
+
+                <label class="themedUI settingsLabels">SPHEROID ATMOSPHERE ROTATION VELOCITY</label><br />
+                <input id="spheroidAtmosphereRotationVelocity" class="themedUI themedUIBackground standardRangeSlider themedUIBackground" type="range" min="-100" max="100" step=".5" value="35" />
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="animationSettings" class="topMenuItemList">
+    <input type="checkbox" id="animatePlanet" checked />
+    <label class="themedUI settingsLabels">SPHERE</label>
+    <br />
+
+    <input type="checkbox" id="animateAtmosphere" checked />
+    <label class="themedUI settingsLabels">ATMOSPHERE</label>
+    <br />
+
+    <label class="themedUI settingsLabels">ϱ</label>
+    <input id="videoVolume" class="themedUI themedUIBackground standardRangeSlider" type="range" min=".01" max=".99" step=".01" value=".25" />
+    <br />
+
+    <input type="checkbox" id="goofballAnimation" /><label class="themedUI menuTitleItem" style="color: #00ffff;">GOOFBALL</label>
+    <input id="goofiness" class="themedUI themedUIBackground standardRangeSlider" type="range" min=".01" max="1" step=".01" value=".01" style="color: #00ffff;" />
+
+</div>
+
+<div id="orbitsSettings"
+     style="
+            width: 100%;
+            display: flex;
+            flex-direction: column;"
+     class="topMenuItemList">
+    <div style="
+                position: absolute;
+                top: 0px;
+                left: 1vw;
+                width: 30vw;">
+        <div style="width: 100%;">
+            <input type="checkbox" id="orbitLock" />
+            <label class="themedUI settingsLabels">ORBIT SPHERE</label>
+        </div>
+        <div style="width: 100%;">
+            <label class="themedUI settingsLabels">SPHERE ORBIT DISTANCE</label>
+            <input id="orbitDistance" class="themedUI themedUIBackground standardRangeSlider" type="range" min="1" max="20000" step="10" value="5000" />
+        </div>
+        <div style="width: 100%;">
+            <label class="themedUI settingsLabels">SPHERE ORBIT VELOCITY</label><br />
+            <input id="orbitVelocity" class="themedUI themedUIBackground settingsLabels" type="range" min="1" max="100" step="1" value="1" />
+        </div>
+    </div>
+
+    <div style="
+                position: absolute;
+                top: 0px;
+                left: 35vw;
+                width: 30vw;">
+        <div style="width: 100%;">
+            <input type="checkbox" id="spaceStationOrbitLock" />
+            <label class="themedUI settingsLabels">
+                ORBIT SPACE STATION
+            </label>
+        </div>
+        <div style="width: 100%;">
+            <label class="themedUI settingsLabels">
+                SPACE STATION ORBIT DISTANCE
+            </label>
+            <input id="spaceStationOrbitDistance"
+                   class="themedUI themedUIBackground standardRangeSlider"
+                   type="range" min=".01" max="5" step=".01" value=".1" />
+        </div>
+        <div style="width: 100%;">
+            <label class="themedUI settingsLabels">
+                SPACE STATION ORBIT VELOCITY
+            </label>
+            <input id="spaceStationOrbitVelocity"
+                   class="themedUI themedUIBackground standardRangeSlider"
+                   type="range" min="1" max="1024" step="1" value="64" />
+        </div>
+
+    </div>
+
+
+</div>
+
+<script>
+
+    function showSubMenu({
+        subMenuID,
+        positionTop,
+        positionLeft,
+        alignment,
+        width,
+        height,
+        color,
+        transition,
+        backgroundColorRGBA
+    }) {
+        if (subMenuID == undefined) {
+            return false;
+        }
+
+        if (transition == undefined) {
+            transition = '1s';
+        }
+
+        if (height == undefined) {
+            transition = '1s';
+        }
+
+        if (positionTop == undefined) {
+            positionTop = '60vh';
+        }
+
+        if (positionLeft == undefined) {
+            positionLeft = '0px';
+        }
+
+        if (alignment == undefined) {
+            alignment = 'left';
+        }
+
+        if (width == undefined) {
+            width = '100%';
+        }
+
+        if (color == undefined) {
+            color = "#ffffff";
+        }
+
+        if (backgroundColorRGBA == undefined) {
+            backgroundColorRGBA = 'rgba(16, 16, 16, .9)';
+        }
+
+        var subMenu =
+            document.getElementById(subMenuID);
+
+        if (subMenu !== undefined) {
+            hideTabPages();
+            hideSubMenus();
+
+            alterObjectStyle({
+                objectID: subMenuID,
+                propertyToAlter: "top",
+                propertyToAlterNewValue: '25vh',
+                animateAlteration: true,
+                transitionTime: transition,
+                isToggle: false
+            });
+
+            alterObjectStyle({
+                objectID: subMenuID,
+                propertyToAlter: "visibility",
+                propertyToAlterNewValue: "visible",
+                animateAlteration: true,
+                transitionTime: transition,
+                isToggle: false
+            });
+
+            alterObjectStyle({
+                objectID: subMenuID,
+                propertyToAlter: "opacity",
+                propertyToAlterNewValue: "1",
+                animateAlteration: true,
+                transitionTime: transition,
+                isToggle: false
+            });
+
+            alterObjectStyle({
+                objectID: subMenuID,
+                propertyToAlter: "left",
+                propertyToAlterNewValue: positionLeft,
+                animateAlteration: true,
+                transitionTime: transition,
+                isToggle: false
+            });
+
+            alterObjectStyle({
+                objectID: subMenuID,
+                propertyToAlter: "width",
+                propertyToAlterNewValue: '80vw',
+                animateAlteration: true,
+                transitionTime: transition,
+                isToggle: false
+            });
+
+            alterObjectStyle({
+                objectID: subMenuID,
+                propertyToAlter: "height",
+                propertyToAlterNewValue: '75vh',
+                animateAlteration: true,
+                transitionTime: transition,
+                isToggle: false
+            });
+
+            alterObjectStyle({
+                objectID: subMenuID,
+                propertyToAlter: "overflow",
+                propertyToAlterNewValue: "auto",
+                animateAlteration: true,
+                transitionTime: transition,
+                isToggle: false
+            });
+
+            alterObjectStyle({
+                objectID: subMenuID,
+                propertyToAlter: "backgroundColor",
+                propertyToAlterNewValue: backgroundColorRGBA,
+                animateAlteration: true,
+                transitionTime: transition,
+                isToggle: false
+            });
+
+        }
+    }
+
+    function showTabMenu() {
+        document.querySelectorAll('.tabMenu').forEach(element => {
+            element.style.visibility = "visible";
+            element.style.opacity = "1";
+            element.style.width = "100%";
+            element.style.top = "12vh";
+        });
+    }
+
+    function hideSubMenus() {
+        document.querySelectorAll('.topMenuItemList').forEach(element => {
+            element.style.transition = "2s";
+            element.style.visibility = "hidden";
+            element.style.opacity = "0";
+        })
+    }
+
+    function hideTabPages() {
+        document.querySelectorAll('.tabPage').forEach(element => {
+            element.style.transition = "2s";
+            element.style.visibility = "hidden";
+            element.style.opacity = "0";
+        })
+
+        document.querySelectorAll('.showOnAllTabPages').forEach(element => {
+            element.style.transition = "2s";
+            element.style.visibility = "hidden";
+            element.style.opacity = "0";
+        })
+    }
+
+    function showTabPage(tabPageName) {
+        hideTabPages();
+        var tabPage =
+            document.getElementById(tabPageName);
+        if (tabPage != undefined) {
+            tabPage.style.transition = '1s';
+            tabPage.style.visibility = 'visible';
+            tabPage.style.opacity = '1';
+            tabPage.style.position = 'absolute';
+            tabPage.style.top = '12vh';
+            tabPage.style.left = '1vw';
+            tabPage.style.width = '50vw';
+            tabPage.style.height = 'auto';
+        }
+        document.querySelectorAll('.showOnAllTabPages').forEach(element => {
+            element.style.visibility = 'visible';
+        })
+    }
+
+    function toggleUIObject({
+        objectId,
+        objectName,
+        visibility,
+        top,
+        left,
+        opacity,
+        transition
+    }) {
+        var uiObject = document.getElementById('objectId');
+        if (uiObject == undefined) {
+            uiObject = document.getElementById('objectName');
+        }
+
+        if (uiObject == undefined) {
+            return false;
+        }
+
+        if (uiObject.style.visibility == 'visible') {
+            uiObject.style.transition = '2s';
+            uiObject.style.visibility = 'hidden';
+            uiObject.style.top = '-100vh';
+            uiObject.style.left = '100vw';
+            uiObject.style.opacity = '0';
+            return 'true';
+        }
+
+        if (uiObject.style.visibility == 'hidden') {
+            uiObject.style.transition = '.25s';
+            uiObject.style.visibility = 'visible';
+            uiObject.style.top = '0px';
+            uiObject.style.left = '0px';
+            uiObject.style.opacity = '0';
+        }
+    }
+
+
+    async function buildMenuBar({
+        uiElementGroupId,
+        containerElementId
+    }) {
+        fetchPage({
+            containerElementId: 'dbMenuBar',
+            pageUrl: "/ApplicationUIElements/MenuBar?uielementgroupid=" + uiElementGroupId
+        });
+    }
+
+    window.addEventListener('load', function (event) {
+
+        buildMenuBar({
+            uiElementGroupId: 99999999,
+            containerElementId: "dbMenuBar"
+        });
+
+        //var formData = new FormData();
+        //formData.append('uielementgroupid', '99999999');
+        //    fetch("/ApplicationUIElements/MenuBar?uielementgroupid=99999999", {
+        //        method: 'get',
+        //        formdata: formData
+        //    }).then(response => response.text())
+        //        .then(html => {
+        //            document.getElementById("dbMenuBar").innerText = html
+        //        });
+    });
+
+
+    //fetch('/ApplicationUIElements/MenuBar?uielementgroupid=99999999', {
+
+    //}).then(response => response.text()
+    //    .then({
+    //        document.getElementById("dbMenuBar").innerText = response
+    //    })
+    //});
+
+
+    //if (universeObject.universeObjectId != undefined) {
+    //    if (universeObject.universeObjectId == 1) {
+    //        document.getElementById("spaceStationOrbitLock")
+    //            .addEventListener("input", function (event) {
+    //                if (this.checked) {
+    //                    navigateToSpaceStation({ duration: 20000 });
+    //                }
+    //            });
+    //    }
+    //};
+
+
+
+</script>
+

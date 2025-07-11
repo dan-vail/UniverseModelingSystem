@@ -1,0 +1,152 @@
+﻿@model UniverseObjects.Models.ApplicationUIElement
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+}
+
+<link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+
+<div id="contentContainer"
+     class="whiteShadow blackBevel">
+    <h2>Edit</h2>
+    <div>
+        @Html.ActionLink("Back to List", "Index",
+            new { @class = "formLinksExtendedStyle" })
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div style="position: absolute; top: 5vh; overflow: hidden; z-index: 9999;">
+
+            <div class="form-horizontal">
+                <h4>ApplicationUIElement</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.UIElementID)
+            </div>
+        </div>
+
+        <div style="
+                    overflow: auto;
+                    position: absolute;
+                    height: 50vh;
+                    z-index: 1;">
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UIElementHTMLType, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UIElementHTMLType, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.UIElementHTMLType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ApplicationUseType, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ApplicationUseType, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.ApplicationUseType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ApplicationPageURL, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ApplicationPageURL, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.ApplicationPageURL, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UIElementContainer, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UIElementContainer, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.UIElementContainer, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UIElementGroupID, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UIElementGroupID, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.UIElementGroupID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UIElementOrderInGroup, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UIElementOrderInGroup, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.UIElementOrderInGroup, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UIElementValue, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UIElementValue, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.UIElementValue, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UIElementInnerHTML, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UIElementInnerHTML, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.UIElementInnerHTML, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UIElementClassList, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UIElementClassList, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.UIElementClassList, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UIElementCSSText, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UIElementCSSText, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.UIElementCSSText, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UIElementJavascript, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UIElementJavascript, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.UIElementJavascript, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UIElementFunctionCall, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UIElementFunctionCall, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.UIElementFunctionCall, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UIElementFunctionCallEventTrigger, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UIElementFunctionCallEventTrigger, new { htmlAttributes = new { @class = "form-control formEditorsExtendedStyle" } })
+                    @Html.ValidationMessageFor(model => model.UIElementFunctionCallEventTrigger, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @*<input type="submit" value="Save" class="buttons btn btn-default" />*@
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+
+</script>

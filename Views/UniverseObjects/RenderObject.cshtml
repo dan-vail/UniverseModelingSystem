@@ -1,0 +1,459 @@
+﻿@model JsonResult
+
+
+@{Layout = null;}
+
+<script src="~/threejs/three.js.oldbuild/three.min.js"></script>
+<script src="~/threejs/three.js.oldbuild/OrbitControls.js"></script>
+<script src="~/threejs/three.js.oldbuild/tween.js"></script>
+
+@*<script src="~/Scripts/vailware.webgl.library.js"></script>*@
+<script src="~/Scripts/vailware.universeModeling.library.js"></script>
+
+<body style="overflow: hidden; margin: 0px 0px 0px 0px;">
+    <div id="controls"
+         style="position: absolute; top: 0px; left: 0px; z-index: 1;">
+        <button id="btnTravelToUniverseObject">
+            TRAVEL TO OBJECT
+        </button>
+        <button id="btnTravelToStar">
+            TRAVEL TO STAR
+        </button>
+    </div>
+    @*<div id="webGL" style="width: 100%; height: 100%;"></div>*@
+
+</body>
+
+<script>
+
+    var star;
+    var planet;
+    var glbObject;
+
+    function createUniverseObject({
+        universeObjectId,
+        universeObjectTypeId
+    }) {
+        if (universeObjectId == undefined) {
+            return false;
+        }
+
+        switch (universeObjectTypeId) {
+            case "100":
+                //Planet
+                break;
+
+            case "200":
+                //Star
+                fetch("/universeObjects/RenderStar?id=" + universeObjectId)
+                    .then(response => response.text())
+                    .then(data => {
+                        window.universeObject = data;
+                    });
+
+                //fetch("/universeObjects/UniverseObjectControls?type=" + universeObjectTypeId)
+                //    .then(response => response.text())
+                //    .then(data => {
+                //        window.universeObject = data;
+                //    });
+
+                break;
+
+            case "300":
+                //Black hole
+                break;
+
+            case "400":
+            //Galaxy
+
+            case "500":
+            //Comet
+
+            case "600":
+            //Asteroid
+
+            case "700":
+            //Moon
+
+            case "800":
+            //Spacecraft
+
+            case "900":
+            //Satellite
+
+            case "1000":
+            //Nebulae
+
+            case "1100":
+            //Electron
+
+            case "1200":
+            //Proton
+
+            case "1300":
+            //Neutron
+
+            case "1400":
+            //Tachyon
+
+            case "1500":
+            //Muon
+
+            case "1600":
+            //Gluon
+
+            case "1700":
+            //Quark
+
+            case "1800":
+            //Strangeness Up
+
+            case "1900":
+            //Strangeness Down
+
+            case "2000":
+            //Carbon Based Lifeform
+
+            case "2100":
+            //Queen cunt of the multiverse        }
+
+        }
+    }
+
+    function renderPlanet({ universeObjectId }) {
+
+        fetch("/universeobjects/universeobjectjson?id=1500")
+            .then(response => response.json())
+            .then(data => {
+
+                window.universeObjectData = data;
+                var universeObjectData = data;
+
+                // create the geometry and material
+
+                var geometry = new THREE.SphereBufferGeometry(
+                    universeObjectData.UniverseObjectRadius,
+                    1024,
+                    1024);
+
+                material = new THREE.MeshPhysicalMaterial({
+                   map: universeObjectData.UniverseObjectEquirectangularTextureMapPath,
+                   displacementMap: universeObjectData.UniverseObjectEquirectangularVectorDisplacementMapPath,
+                   displacementScale: 1 
+               });
+
+                var universeObjectMesh = new THREE.Mesh(geometry.material);
+                window.universeObjectMesh = universeObjectMesh;
+
+                universeObjectMesh.position.x =
+                    universeObjectData.UniverseObjectPositionVectorX;
+
+                universeObjectMesh.position.y =
+                    universeObjectData.UniverseObjectPositionVectorY;
+
+                universeObjectMesh.position.z =
+                    universeObjectData.UniverseObjectPositionVectorZ;
+
+                universeObjectMesh.rotation.x = 0;
+                universeObjectMesh.rotation.y = 0;
+                universeObjectMesh.rotation.z = 0;
+
+                universeObjectMesh.recieveShadow = false;
+
+                universeObjectMesh.Name = universeObjectData.UniverseObjectName;
+                window.scene.add(universeObjectMesh);
+
+                if (universeObjectData.UniverseObjectHasAtmosphere == true) {
+
+                    var universeObjectAtmosphereGeometry =
+                        new THREE.SphereGeometry(
+                            universeObjectData.UniverseObjectAtmosphereRadius,
+                            1024,
+                            1024);
+
+                    var universeObjectAtmosphereMaterial =
+                        new THREE.MeshPhysicalMaterial({
+                            map: universeObjectData.UniverseObjectAtmosphereEquirectangularTextureMapPath,
+                            displacementMap: universeObjectData.UniverseObjectAtmosphereEquirectangularVectorDisplacementMap,
+                            transparent: true,
+                            opacity: .9
+                        });
+
+                    universeObjectAtmosphereMaterial.side = THREE.DoubleSide;
+
+                    universeObjectAtmosphereMesh = new THREE.Mesh(
+                        universeObjectAtmosphereGeometry,
+                        universeObjectAtmosphereMaterial);
+
+                    universeObjectAtmosphereMesh.position.x =
+                        universeObjectData.UniverseObjectPositionVectorX;
+                    universeObjectAtmosphereMesh.position.y =
+                        universeObjectData.UniverseObjectPositionVectorY;
+                    universeObjectAtmosphereMesh.position.z =
+                        universeObjectData.UniverseObjectPositionVectorZ;
+
+                    universeObjectAtmosphereMesh.Name =
+                        universeObjectData.UniverseObjectName + "Atmosphere";
+
+                    universeObjectAtmosphereMesh.recieveShadow = false;
+                    window.scene.add(universeObjectAtmosphereMesh);
+                    universeObjectAtmosphereGeometry.computeVertexNormals();
+                }
+            })
+    }
+
+    function createRenderer({
+                universeObject,
+                containerId
+            }) {
+                    var container = document.getElementById(containerId);
+                    if (container == undefined) {
+                        var container =
+                            document.createElement('div');
+                        container.setAttribute('Id', "universeRenderer");
+                        container.style.width = "100%";
+                        container.style.height = "100%";
+                        document.body.append(container);
+                    }
+                    container =
+                        document.getElementById("universeRenderer");
+
+                    var webGL = document.createElement('div');
+                    webGL.setAttribute('Id', "webGL");
+                    webGL.style.position = "absolute";
+                    webGL.style.top = "0px;";
+                    webGL.style.left = "0px;";
+                    webGL.style.width = "100%";
+                    webGL.style.height = "100%";
+                    container.append(webGL);
+
+                    initializeScene({ sceneName: "universeRenderer" });
+                    setupCamera({ cameraName: undefined });
+
+                    window.rendererElementId = "webGL";
+
+                    setupRenderer({
+                        rendererElementId: "webGL",
+                        rendererId: "universeRenderer"
+                    });
+
+                    setupControls({
+                        cameraName: "universeRenderer",
+                        rendererName: "universeRenderer"
+                    });
+                }
+
+    function createAmbientLight() {
+                    ambientLight = new THREE.AmbientLight();
+                    ambientLight.intensity = 1;
+                    scene.add(ambientLight);
+                    ambientLight.name = "defaultAmbientLight";
+                    window.ambientLight = ambientLight;
+                }
+
+    function createStarMap() {
+
+        var textureLoader = new THREE.TextureLoader();
+        textureLoader.load("/images/universe/starmap_8k.png", texture => {
+            texture.mapping = THREE.EquirectangularReflectionMapping
+            window.scene.background = texture;
+        });
+    }
+
+    function renderStar() {
+                    var videoControl = document.createElement('div');
+                    videoControl.setAttribute("Id", "videoControl");
+                    videoControl.style.position = "absolute";
+                    videoControl.style.top = "0px";
+                    videoControl.style.left = "0px";
+                    videoControl.style.width = "100px";
+                    videoControl.style.height = "100px";
+                    videoControl.style.visibility = "hidden";
+                    document.body.append(videoControl);
+
+                    var videoControl = document.getElementById("videoControl");
+                    videoControl.style.top = "100px";
+
+                    videoSpherePlayer = document.createElement('video');
+                    videoControl.appendChild(videoSpherePlayer);
+                    videoSpherePlayer.setAttribute("id", "videoSpherePlayer");
+
+                    //videoSpherePlayer.src = "/videos/sun4K.mp4";
+                    videoSpherePlayer.muted = true;
+                    videoSpherePlayer.loop = true;
+                    videoSpherePlayer.controls = true;
+
+                    videoSphereSource = document.createElement('source');
+                    videoSphereSource.setAttribute("Id", "videoSphereSource");
+                    videoSphereSource.setAttribute('src', '/videos/theSun2X1.mp4');
+                    videoSphereSource.setAttribute('type', 'video/mp4');
+                    videoSpherePlayer.appendChild(videoSphereSource);
+
+                    videoSpherePlayer.load();
+                    videoSpherePlayer.play();
+
+                    videoSpherePlayer.width = 200;
+                    videoSpherePlayer.height = 200;
+
+                    videoSphereTexture = new THREE.VideoTexture(videoSpherePlayer);
+                    videoSphereTexture.format = THREE.RGBAFormat;
+                    videoSphereTexture.repeat.set(1, 1);
+                    videoSphereTexture.wrapS = THREE.RepeatWrapping;
+                    videoSphereTexture.wrapT = THREE.RepeatWrapping;
+
+
+                    //videoSphereTexture.transparent = true;
+
+                    var sunSurfaceGeometry =
+                        new THREE.SphereBufferGeometry(
+                            698000,
+                            1600,
+                            1600);
+
+                    var lessShittyGeometry
+                    new THREE.SphereBufferGeometry(696000, 1600, 1600);
+
+                    var sunSurfaceMaterial =
+                        new THREE.MeshPhysicalMaterial({
+                            map: videoSphereTexture,
+                            displacementMap: videoSphereTexture,
+                            displacementScale: -22000,
+                            transparent: true,
+                            opacity: .95,
+                            roughness: 0,
+                            emissive: 0xFFFFFF,
+                            emissiveIntensity: .1,
+                            emissiveMap: videoSphereTexture,
+                        });
+
+                    var baseSunMaterial =
+                        new THREE.MeshPhysicalMaterial({
+                            map: videoSphereTexture,
+                            displacementMap: videoSphereTexture,
+                            displacementScale: 22000,
+                            transparent: true,
+                           opacity: .96,
+                            roughness: 0,
+                            emissive: 0xFFFFFF,
+                            emissiveIntensity: .1,
+                            emissiveMap: videoSphereTexture,
+                        })
+
+                    sunSurfaceMaterial.side = THREE.DoubleSide;
+                    baseSunMaterial.side = THREE.DoubleSide;
+
+                    sunSurface =
+                        new THREE.Mesh(sunSurfaceGeometry, sunSurfaceMaterial);
+
+                    sunSurface.position.x = 0;
+                    sunSurface.position.y = 0;
+                    sunSurface.position.z = 0;
+
+                    window.scene.add(sunSurface);
+                    sphereAtmosphere = sunSurface;
+
+                    baseSun =
+                        new THREE.Mesh(lessShittyGeometry, baseSunMaterial);
+                    baseSun.position.x = 0;
+                    baseSun.position.y = 0;
+                    baseSun.position.z = 0;
+
+                    window.scene.add(baseSun);
+                    sphere = baseSun;
+                }
+
+    function animateUniverse(time) {
+                    requestAnimationFrame(animateUniverse);
+                    TWEEN.update(time);
+
+                    //camera.position.x =
+                    //    imaginaryObject.position.x +
+                    //    (orbitDistance * Math.sin(cameraOrbitTime) + 0);
+
+                    //camera.position.z =
+                    //    imaginaryObject.position.z +
+                    //    (orbitDistance * Math.cos(cameraOrbitTime) + 0);
+
+                    //cameraOrbitTime += orbitalVelocity;
+
+                    window.controls.update();
+                    window.renderer.render(window.scene, window.camera);
+                }
+
+    function travelToUniverseObject({
+        universeObjectPositionVector,
+        duration
+    }) {
+        alert("Traveling");
+
+        if (duration == undefined) {
+            duration = 10000;
+        }
+
+        var position = new THREE.Vector3().copy(window.camera.position);
+
+        var tween = new TWEEN.Tween(position)
+            .to(universeObjectPositionVector, duration)
+            .easing(TWEEN.Easing.Exponential.InOut)
+            .onUpdate(function () {
+                window.camera.position.copy(position);
+            }).start();
+        window.controls.target = universeObjectPositionVector;
+        window.controls.enabled = true;
+        window.controls.update();
+    }
+
+
+
+    function render() {
+                    animateUniverse(performance.now());
+                }
+
+    document.body.onresize = function () {
+                    var width = window.innerWidth;
+                    var height = window.innerHeight;
+                    window.renderer.setSize(width, height);
+                    window.camera.aspect = width / height;
+                    window.camera.updateProjectionMatrix();
+                }
+
+    //createUniverseObject({ universeObjectId: 1500, universeObjectTypeId: 100 });
+    createUniverseObject({ universeObjectId: 1100, universeObjectTypeId: 200 });
+        createRenderer({ universeObject: window.universeObject });
+        createAmbientLight();
+        createStarMap();
+        renderStar();
+        renderPlanet({ universeObjectId: 1500 });
+
+        document.body.onresize();
+        render();
+
+    window.camera.position.x = 0;
+    window.camera.position.y = 0;
+    window.camera.position.z = 8000; //z position hard coded for now. 
+                                    //8,000 kilometers from Earths centroid.
+
+    window.addEventListener("load", function (event) {
+
+        document.getElementById('btnTravelToUniverseObject').addEventListener("click", function (event) {
+            var universeObjectPositionVector = new THREE.Vector3(
+                window.universeObjectMesh.position.x,
+                window.universeObjectMesh.position.y,
+                window.universeObjectMesh.position.z + (window.universeObjectData.UniverseObjectRadius * 2.3));
+
+            travelToUniverseObject({ universeObjectPositionVector: universeObjectPositionVector });
+        })
+
+        document.getElementById('btnTravelToStar').addEventListener("click", function (event) {
+            var universeObjectPositionVector = new THREE.Vector3(
+                0,
+                0,
+                1000);
+
+            travelToUniverseObject({ universeObjectPositionVector: universeObjectPositionVector });
+        })
+
+    });
+
+</script>
+

@@ -1,0 +1,825 @@
+﻿
+<!DOCTYPE html PUBLIC
+          "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+
+    <meta name="viewport" content="width=device-width" />
+    <meta description="mymediaplay.com" />
+    <meta Latitude="32.7133795" />
+    <meta longitude="-114.7365814" />
+    <meta zoom="21" />
+    <meta googleMapsURI="https://www.google.com/maps/32.7133795,-114.7365814,21z" />
+    <meta geography="{lat: 32.7133795, long: -114.7365814}" />
+    <meta name="google-signin-client_id" content="166576250567-41quo5u4igr2iq2o7scug3250efhonc4.apps.googleusercontent.com" />
+
+    <title>mymediaplay.com</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <title>mymediaplay.com</title>
+
+
+    @*<script src="https://accounts.google.com/gsi/client" async=async defer=defer></script>
+        <script src="https://apis.google.com/js/platform.js" async=async defer=defer></script>*@
+
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js">
+    </script>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+
+    <script src="/Scripts/jquery-3.7.1.js"></script>
+    <script src="/threejs/build/three.min.js"></script>
+
+    <!-- VAILWARE LIBRARIES-->
+    <script src="/Scripts/vailware.master.library.beta.js"></script>
+    <link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+
+    <!-- UI Library-->
+    @*<link rel="stylesheet" href="/content/demo.css" />*@
+    @*<script src="/Scripts/swiper-bundle.js"></script>
+    <link href="/Content/swiper-bundle.css" rel="stylesheet" />*@
+
+    <style>
+
+        input[type=range] {
+            height: 2vh;
+            -webkit-appearance: none;
+            margin: .1vw .1vw;
+            width: clamp(20px, 15vmin, 80px);
+        }
+
+            input[type=range]:focus {
+                outline: inset;
+            }
+
+            input[type=range]::-webkit-slider-runnable- {
+                width: 100%;
+                height: clamp(20px, 1vmax, 80px);
+                cursor: pointer;
+                animate: 1s;
+                box-shadow: .125vw .125vw .06vw #000000;
+                background: transparent;
+                border-radius: .125vw;
+            }
+
+            input[type=range]::-webkit-slider-thumb {
+                box-shadow: .1vmin .1vmin .1vmin #000000;
+                border: .05vmin solid #000000;
+                height: 1vmax;
+                width: .5vmax;
+                border-radius: .7vmin;
+                background: rgba(255, 0, 0, .8);
+                cursor: pointer;
+                -webkit-appearance: none;
+                margin-top: -1px;
+            }
+
+            input[type=range]:focus::-webkit-slider-runnable-track {
+                background: rgba(255, 0, 0, .5);
+            }
+
+            input[type=range]::-moz-range-track {
+                width: 100%;
+                height: 30px;
+                cursor: pointer;
+                animate: 0.2s;
+                box-shadow: 6px 6px 1px #000000;
+                background: #3071A9;
+                border-radius: 5px;
+                border: 1px solid #000000;
+            }
+
+            input[type=range]::-moz-range-thumb {
+                box-shadow: 1px 1px 1px #000000;
+                border: 1px solid #000000;
+                height: 30px;
+                width: 15px;
+                border-radius: 5px;
+                background: #FFFFFF;
+                cursor: pointer;
+            }
+
+            input[type=range]::-ms-track {
+                width: 100%;
+                height: 30px;
+                cursor: pointer;
+                animate: 0.2s;
+                background: transparent;
+                border-color: transparent;
+                color: transparent;
+            }
+
+            input[type=range]::-ms-fill-lower {
+                background: #3071A9;
+                border: 1px solid #000000;
+                border-radius: 10px;
+                box-shadow: 6px 6px 1px #000000;
+            }
+
+            input[type=range]::-ms-fill-upper {
+                background: #3071A9;
+                border: 1px solid #000000;
+                border-radius: 10px;
+                box-shadow: 6px 6px 1px #000000;
+            }
+
+            input[type=range]::-ms-thumb {
+                margin-top: 1px;
+                box-shadow: 1px 1px 1px #000000;
+                border: 1px solid #000000;
+                height: 30px;
+                width: 15px;
+                border-radius: 5px;
+                background: #FFFFFF;
+                cursor: pointer;
+            }
+
+            input[type=range]:focus::-ms-fill-lower {
+                background: #3071A9;
+            }
+
+            input[type=range]:focus::-ms-fill-upper {
+                background: #3071A9;
+            }
+
+        .cleanUIOnClick {
+        }
+
+        .UIElementsContainer {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+
+
+    <style>
+        @@font-face {
+            font-family: audiowide;
+            src: url('/fonts/audiowide.ttf');
+        }
+
+        html, body {
+            font-family: audiowide;
+            background-color: transparent;
+            overflow: hidden;
+        }
+
+
+        h2 {
+        }
+
+            h2:hover {
+            }
+
+        h4 {
+        }
+
+            h4:hover {
+            }
+
+        #navigationWrapper {
+            font-family: Audiowide;
+            position: fixed;
+            background-color: transparent;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+        }
+
+        .whiteShadow {
+            -webkit-box-shadow: 5px 5px 15px 5px #ffffff;
+            box-shadow: 5px 5px 15px 5px #ffffff;
+        }
+
+        .blackBevel {
+            -webkit-box-shadow: 5px 5px 15px 5px #000000;
+            box-shadow: 5px 5px 15px 5px #000000;
+        }
+
+        .whiteBevel {
+            -webkit-box-shadow: 5px 5px 15px 5px #ffffff;
+            box-shadow: 5px 5px 15px 5px #ffffff;
+        }
+
+        .redGlow {
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #880000, 0 0 25px #880000, 0 0 30px #880000, 0 0 35px #880000;
+        }
+
+        .glowingRed {
+            animation: glowingRed 3s ease-in-out infinite alternate;
+        }
+
+        @@keyframes glowingRed {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #880000, 0 0 25px #880000, 0 0 30px #880000, 0 0 35px #880000;
+            }
+
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #FF0000, 0 0 40px #FF0000, 0 0 50px #FF0000, 0 0 60px #FF0000, 0 0 70px #FF0000;
+            }
+        }
+
+        .glowingOrange {
+            animation: glowingOrange 2s ease-in-out infinite alternate;
+        }
+
+        @@keyframes glowingOrange {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #b96b00, 0 0 25px #b96b00, 0 0 30px #ff8500, 0 0 35px #ff9c00;
+            }
+
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ffa400, 0 0 40px #ffa400, 0 0 50px #ffa400, 0 0 60px #ffa400, 0 0 70px #ffffff;
+            }
+        }
+
+        .glowingBlue {
+            animation: glowingBlue 2s ease-in-out infinite alternate;
+        }
+
+        @@keyframes glowingBlue {
+            from {
+                text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff, 0 0 20px #000022, 0 0 25px #000088, 0 0 30px #0000AA, 0 0 35px #0000CC;
+            }
+
+            to {
+                text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #0000ff, 0 0 40px #00aaaa, 0 0 50px #00DDDD, 0 0 60px #00ffff, 0 0 70px #00ffff;
+            }
+        }
+
+        .glowingGreen {
+            animation: glowingGreen 3s ease-in-out infinite alternate;
+        }
+
+        @@keyframes glowing {
+            from {
+                text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff, 0 0 20px #00aaaa, 0 0 25px #008800, 0 0 30px #00aa00, 0 0 35px #00cc00;
+            }
+
+            to {
+                text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #00ff00, 0 0 40px #00aaaa, 0 0 50px #00DDDD, 0 0 60px #00ffff, 0 0 70px #00ffff;
+            }
+        }
+
+        .buttons {
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <style>
+  
+        .buttons {
+            font-family: audiowide;
+            text-align: center;
+            font-size: clamp(12px, 1vmax, 20px);
+            background-color: rgba(16,16,16,.8);
+            color: #ffffff;
+            box-shadow: rgba(255 133 0, .9) 6px 6px 20px;
+            width: 8vw;
+            height: clamp(3vh, 5vh, 7vh);
+        }
+    </style>
+
+
+    <script>
+        //function onSignIn(googleUser) {
+        //    var profile = auth2.currentUser.get().getBasicProfile();
+        //    console.log('ID: ' + profile.getId());
+        //    console.log('Full Name: ' + profile.getName());
+        //    console.log('Given Name: ' + profile.getGivenName());
+        //    console.log('Family Name: ' + profile.getFamilyName());
+        //    console.log('Image URL: ' + profile.getImageUrl());
+        //    console.log('Email: ' + profile.getEmail());
+        //}
+    </script>
+
+    <div id="brandingWrapper"
+         class="
+                themedUIBackground
+                uiContainer"
+         style="
+                z-index: 1;
+                overflow: hidden;
+                display: inline-block;
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: clamp(50px, 7vmax, 100px);
+                background-color: transparent;">
+
+
+
+        <div style="position: absolute;
+                   top: 0px;
+                   left: 3px;
+                   display: inline-block;
+                   z-index: 9999;">
+            <a href="/Home/Index" style="color: #000022">
+                <label class="glowingOrange themedUI"
+                       style="font-size: clamp(20px, 4vmax, 36px);
+                            color: #000000; text-shadow: 2px 2px #000000;">
+                    mymediaplay
+                </label>
+            </a>
+        </div>
+
+    </div>
+
+   
+    
+    <div id="masterMenuIcons"
+         style="position: absolute;
+                    top: 0px;
+                    right: 0px;
+                    width: 20vmax;
+                    display: grid;
+                    grid-template-columns: 4vw 4vw 4vw;
+                    z-index: 9999;">
+
+        <div id="menuItemHUDToggler"
+             style="position: absolute;
+                    left: 5vmax;
+                    width: 10vmax;
+                    top: 0px;">
+            <button value="HUD"
+                    class="buttons themedUI themedUIBackground"
+                    style="width: 3vmax; height: 3vmax;"
+                    onclick="applicationMenuBarActivateItem({
+                                itemID: 'deviceMovementHUD',
+                                action: 'toggleDropDownMenu',
+                                topPosition: '3vh'})">
+                HUD
+            </button>
+        </div>
+
+        <div id="vrHotSpot"
+             style="
+                    position: absolute;
+                    left: 0px;
+                    width: 5vmax;
+                    top: 0px;">
+
+            <a href="#"
+               id="vrMode"
+               class="themedUI themedUIHighlight"
+               style="
+                      font-size: clamp(18px, 2.5vmax, 22px);
+                      color: #ffa400;
+                      text-shadow: 2px 2px #FFFFFF;"
+               onclick="toggleVRMode()">
+
+                <img src="/icons/vrOff.png"
+                     id="vrModeIcon"
+                     style="width: 3vmax;
+                    height: 3vmax;" />
+            </a>
+        </div>
+
+        <div id="settingsGear"
+             style="
+                        position: absolute;
+                        top: 0px;
+                        left: 10vmax;
+                        width: 5vmax;
+                        height: 5vmax;
+                        display: inline-block;
+                        z-index: 9999;
+                        visibility: visible;
+                        opacity: 1;">
+
+            <a href="#">
+                <img id="settingsIcon"
+                     src="~/icons/settings.png"
+                     style="
+                        width: 3vmax;
+                        height: 3vmax;" />
+            </a>
+        </div>
+
+        <div id="hamburgerMenu"
+             style="position: absolute;
+                  top: 0px;
+                  left: 15vmax;
+                  width: 5vmax;
+                  height: 5vmax;
+                  display: inline-block;
+                  z-index: 999999999;
+                  visibility: visible;
+                  opacity: 1;">
+
+            <a href="#"
+               style="
+                      font-size: clamp(18px, 3.5vmax, 36px);
+                      color: #000000;
+                      text-shadow: 3px 3px #000000;"
+               class="
+                      glowingBlue
+                      themedUI"
+               id="hamburgerIcon">
+                <b>&#9776</b>
+            </a>
+        </div>
+
+
+
+    </div>
+
+
+    <div id="infoMarqueeContainer"
+         class="
+                themedUI
+                themedUIHighlight"
+         style="position: absolute;
+                width: 100%;
+                top: clamp(40px, 10vh, 60px);
+                left: 0px;
+                font-size: clamp(10px, .9vmax, 14px);
+                z-index: 999999;
+                background-color: transparent;
+                color: #ff0000;
+                text-shadow: 1px 1px #ff0000">
+
+        <marquee id="nowPlayingMarquee" class="themedUI">
+            <label id="nowPlaying" class="themedUI">
+            </label>
+        </marquee>
+    </div>
+
+
+
+
+    <div class="uiContainer"
+         style="position: absolute;
+                z-index: 1;
+                bottom: 0px;
+                left: 0px;
+                width: 100%;
+                overflow: hidden;
+                background-color: transparent">
+        @{Html.RenderAction("Contact", "Home");}
+    </div>
+
+    @section Scripts {
+    }
+
+    <div id="fullScreenNavigation"
+         class="
+                themedUI
+                themedUIBackground"
+         style="position: absolute;
+                top: -120vh;
+                left: -120vw;
+                width: 100%;
+                height: 70%;
+                visibility: hidden;
+                opacity: 0;
+                overflow: hidden;
+                z-index: 99999999">
+        @{Html.RenderAction("Menu", "Home");}
+    </div>
+
+
+
+    <div id="layoutRenderedBody"
+         class="themedUI"
+         style="position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                background-color: transparent;">
+        @RenderBody()
+    </div>
+
+    <script>
+        function hideContainer({
+            containerID,
+        }) {
+            var container =
+                document.getElementById(containerID);
+            container.style.transition = "2s";
+            container.style.visibility = "hidden";
+            container.style.top = "-120vh";
+            container.style.left = "-110vw";
+            container.style.width = "1%";
+            container.style.height = "1vh";
+            container.style.opacity = "0";
+        }
+
+
+        function showHamburgerMenuContent() {
+            var fullScreenNavigation =
+                document.getElementById("fullScreenNavigation");
+            fullScreenNavigation.style.opacity = '1';
+            fullScreenNavigation.style.visibility = 'visible';
+
+        }
+
+        function showContainer({
+            containerID,
+            hideClass,
+            transition,
+            top,
+            left,
+            width,
+            height,
+            opacity,
+            visibility
+        }) {
+            var container =
+                document.getElementById(containerID);
+
+
+            if (transition != undefined) {
+                container.style.transition = transition;
+            }
+
+            if (top != undefined) {
+                container.style.top = top;
+            }
+
+            if (left != undefined) {
+                container.style.left = left;
+            }
+
+            if (width != undefined) {
+                container.style.width = width;
+            }
+
+            if (height != undefined) {
+                container.style.height = height;
+            }
+
+            container.style.opacity = "1";
+            container.style.visibility = "visible";
+        }
+
+        function toggleFullScreenNavigation() {
+            var fullScreenNavigation =
+                document.getElementById("fullScreenNavigation")
+
+            if (fullScreenNavigation.style.visibility == 'visible') {
+                fullScreenNavigation.style.transition = '2s';
+                fullScreenNavigation.style.visibility = 'hidden';
+                fullScreenNavigation.style.opacity = '0';
+                fullScreenNavigation.style.left = '-120vw';
+                fullScreenNavigation.style.top = '-120vh';
+                return false;
+            }
+
+            if (fullScreenNavigation.style.visibility = 'hidden') {
+                fullScreenNavigation.style.transition = '2s';
+                fullScreenNavigation.style.visibility = 'visible';
+                fullScreenNavigation.style.opacity = '1';
+                fullScreenNavigation.style.left = '15vw';
+                fullScreenNavigation.style.top = '25vh';
+                fullScreenNavigation.style.width = "70vw"
+                return false;
+            }
+        }
+
+        function toggleContainer({
+            containerID }) {
+
+            var container =
+                document.getElementById(containerID);
+
+            if (container == undefined) {
+                return false;
+            }
+
+            if (container.style.visibility == "visible") {
+                hideContainer({
+                    containerID: containerID
+                });
+                return false;
+            }
+
+            if (container.style.visibility == "hidden") {
+                showContainer({
+                    containerID: containerID,
+                    visibility: visible,
+                    opacity: 1
+                });
+                return false;
+            }
+        }
+
+        document.getElementById("hamburgerMenu").addEventListener("click", function () {
+            toggleFullScreenNavigation();
+        });
+
+      
+        document.getElementById("settingsIcon").addEventListener("mouseenter", function () {
+            this.style.transition = "2s";
+            this.src = "/icons/settingsHover.png"
+            this.style.width = "7vmax";
+            this.style.height = "7vmax";
+
+
+        });
+
+        document.getElementById("settingsIcon").addEventListener("mouseleave", function () {
+            this.style.transition = "2s";
+            this.src = "/icons/settings.png"
+            this.style.width = "5vmax";
+            this.style.height = "5vmax";
+        });
+
+
+        document.getElementById("settingsGear").addEventListener("click", function () {
+            showClass({ className: "uiContainer" });
+            showClass({ className: "vrContainer" });
+            showClass({ className: "settingsContainer" });
+            showClass({ className: "vrMenu" });
+            showClass({ className: "vrNowPlaying" })
+            showClass({ className: "uiMenu" });
+
+            cleanupUI();
+        });
+
+
+        showClass({
+            className: "uiContainer"
+        });
+
+   
+
+        $(document).ready(function () {
+
+            createActionableUIObjects();
+
+
+            var rangeControls = document.querySelectorAll("input[type='range']");
+            rangeControls.forEach(range => {
+
+                range.addEventListener("mouseout", function (event) {
+                    var valueBubble = document.getElementById("valueBubble");
+                    if (valueBubble != undefined) {
+                        valueBubble.style.transition = "2s";
+                        valueBubble.style.visibility = "hidden";
+                    }
+                });
+
+
+                range.addEventListener("input", function (event) {
+                    var mousePositionX = event.clientX;
+                    var mousePositionY = event.clientY;
+
+                    var rangeBounds =
+                        range.getBoundingClientRect();
+
+                    var left = rangeBounds.left;
+                    var top = rangeBounds.top;
+                    var bottom = rangeBounds.bottom;
+
+
+
+                    var valueBubble = document.getElementById("valueBubble");
+                    if (valueBubble == undefined) {
+                        var valueBubble = document.createElement("label");
+                        valueBubble.setAttribute("id", "valueBubble");
+                        valueBubble.style.position = "absolute";
+                        valueBubble.style.zIndex = "99999";
+                        valueBubble.style.fontSize = "16px";
+                        valueBubble.style.color = "#ff0000";
+                        valueBubble.style.backgroundColor = "rgba(128, 0, 0, .9);"
+                        valueBubble.style.left = left + 'px';
+                        valueBubble.style.top = bottom + 'px';
+                        valueBubble.style.transition = "2s";
+                        document.body.append(valueBubble);
+                    }
+                    valueBubble.style.transition = ".5s";
+                    valueBubble.style.visibility = "visible";
+                    valueBubble.innerHTML = "VALUE: " + this.value;
+                    valueBubble.style.left = left + 'px';
+                    valueBubble.style.top = bottom + 'px';
+                    valueBubble.style.backgroundColor = "rgba(16, 16, 16, .9);"
+                });
+            })
+
+
+
+            var themeObjectBackgroundColor =
+                document.getElementById("themeObjectBackgroundColor");
+
+            themeObjectBackgroundColor.addEventListener("input", function () {
+
+                var themeObjectBackgroundColor = document.getElementById("themeObjectBackgroundColor");
+                var localColor = themeObjectBackgroundColor.value;
+                var color = new THREE.Color(themeObjectBackgroundColor.value);
+                var rgbColor = color.getRGB;
+                var rgbaColor = new THREE.Color(rgbColor);
+                var rgba = "rgba(" + rgbaColor.r + "," + rgbaColor.g + ", " + rgbaColor.b + ", .3)";
+
+                $(".themedUIObjectBackgroundColor").css("background-color", rgba);
+            });
+
+            //$(".themedUIHighlight").on("mouseover", function (event) {
+            //    event.target.style.color = $("#themeHighlightColor").val;
+            //});
+
+            //$(".themedUIHighlight").on("mouseout", function (event) {
+            //    event.target.style.color = $("#themeColor").val;
+            //})
+
+            var themeHighlightColor =
+                document.getElementById("themeHighlightColor");
+
+            themeHighlightColor.addEventListener("input", function () {
+                $("themedUIEqualizerBar").css("background-color", this.value);
+                $("themedUIEqualizerBar").css("opacity", ".72");
+
+                $(".themedUIHighlight").css("color", this.value);
+
+                $(".themedUI").css("text-shadow",
+                    "2px 2px " + $("#themeBackgroundColor").val);
+            });
+
+            var themeColor = document.getElementById("themeColor");
+            themeColor.addEventListener("input", function () {
+                var themeColor = document.getElementById("themeColor");
+                var localColor = themeColor.value;
+                var color = new THREE.Color(this.value);
+                var rgbColor = color.getRGB;
+                var rgbaColor = new THREE.Color(rgbColor);
+                var rgba = "rgba(" + rgbaColor.r + "," + rgbaColor.g + ", " + rgbaColor.b + ", .3)";
+
+                $(".themedUI").css("color", localColor);
+                $(".ag-theme-vailware-dark").css("color", rgba);
+
+                if (window.scene != undefined) {
+                    window.scene.traverse(function (object) {
+                        if (object.type == "videoObjectLabel") {
+                            object.material.color.set(color);
+                        }
+                    });
+
+                    if (window.shellEqualizerBars.length > 0) {
+                        window.shellEqualizerBars.forEach(shellEqualizerBar => {
+                            shellEqualizerBar.material.color.set('0xFFFFFF');
+                        });
+                    }
+                }
+            });
+
+
+            themeBackgroundColor = document.getElementById("themeBackgroundColor");
+            themeBackgroundColor.addEventListener("input", function () {
+                var themeBackgroundColor = document.getElementById("themeBackgroundColor");
+                var localColor = themeBackgroundColor.value;
+
+                var color = new THREE.Color(themeBackgroundColor.value);
+
+                $(".themedUIEqualizerBar").css("backgroundColor", localColor);
+
+                $(".themedUIBackground").css("backgroundColor", localColor);
+                $(".themedUIBackground").css("opacity", ".9");
+
+                $(".ag-theme-vailware-dark").css("backgroundColor", localColor);
+                $(".ag-theme-vailware-dark").css("opacity", ".9");
+
+                $(".range").css("opacity", ".9");
+                $(".range").css("backgroundColor", localColor);
+
+
+            })
+
+            var themeColor =
+                document.getElementById("themeColor");
+
+            var themeBackgroundColor =
+                document.getElementById("themeBackgroundColor");
+
+            var themeHighlightColor =
+                document.getElementById("themeHighlightColor");
+
+            var themeObjectBackgroundColor =
+                document.getElementById("themeObjectBackgroundColor");
+
+            themeColor.dispatchEvent(new Event('input'));
+            themeBackgroundColor.dispatchEvent(new Event('input'));
+            themeHighlightColor.dispatchEvent(new Event('input'));
+            themeObjectBackgroundColor.dispatchEvent(new Event('input'));
+
+            cleanupUI();
+
+        });
+
+    </script>
+
+
+
+
+</body>
+</html>

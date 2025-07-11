@@ -1,0 +1,123 @@
+﻿@model UniverseObjects.Models.ApplicationUIElement
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutPhone.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ApplicationUIElement</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementHTMLType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementHTMLType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUseType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUseType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationPageURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationPageURL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementContainer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementContainer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementGroupID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementGroupID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementOrderInGroup)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementOrderInGroup)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementValue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementValue)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementInnerHTML)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementInnerHTML)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementClassList)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementClassList)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementCSSText)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementCSSText)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementJavascript)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementJavascript)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementFunctionCall)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementFunctionCall)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UIElementFunctionCallEventTrigger)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UIElementFunctionCallEventTrigger)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.UIElementID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

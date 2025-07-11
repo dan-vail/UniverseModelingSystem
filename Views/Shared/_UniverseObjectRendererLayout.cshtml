@@ -1,0 +1,760 @@
+﻿@{
+    ViewBag.Title = "UNIVERSE OBJECT MODELING";
+    Layout = null;
+}
+<head>
+    <link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSE OBJECTS</title>
+
+    <script src="/threejs/three.js.oldbuild/three.min.js"></script>
+    <script src="~/threejs/three.js.oldbuild/OrbitControls.js"></script>
+    <script src="~/threejs/three.js.oldbuild/GLTFLoader.js"></script>
+    <script src="~/threejs/three.js.oldbuild/TTFLoader.js"></script>
+    <script src="~/threejs/three.js.oldbuild/tween.js"></script>
+
+
+    <link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+    <script src="~/Scripts/vailware.universeModeling.library.js"></script>
+</head>
+
+
+<style>
+    #webGL {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+    }
+
+    #webGLFullScreenRenderer {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+    }
+
+    .mainNavBarLinks {
+        color: #ffffff;
+        font-size: clamp(12px, 1.1vmin, 24px);
+    }
+
+        .mainNavBarLinks a {
+            color: #ffffff;
+            font-size: clamp(12px, 1.1vmin, 24px);
+        }
+
+            .mainNavBarLinks a:hover {
+                color: #00ff00;
+            }
+
+
+    #generalObjectTabMenu {
+        position: absolute;
+        top: 2vh;
+        left: 0px;
+        width: 100%;
+        margin: 5px 5px 5px 5px;
+        box-shadow: rgba(255, 255, 255, .7) 20px 20px inset;
+        display: grid;
+        text-align: center;
+        background-color: rgba(16, 16, 16, .7);
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .tabMenuItem {
+        width: clamp(70px, 1vw, 120px);
+        font-size: clamp(12px, .9vw, 16px);
+        text-shadow: 1px 1px #000000;
+        color: #ff5e00;
+        background-color: rgba(16, 16, 16, .9);
+
+    }
+
+        .tabMenuItem a {
+            font-size: clamp(12px, .9vw, 16px);
+            text-shadow: 1px 1px #000000;
+            color: #ff5e00;
+        }
+
+            .tabMenuItem a:hover {
+                text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff, 0 0 20px #000022, 0 0 25px #000088, 0 0 30px #0000AA, 0 0 35px #0000CC;
+            }
+
+    .menuPageContainer {
+        position: absolute;
+        top: clamp(70px, 8vh, 120px);
+        left: 0px;
+        width: 100%;
+        height: 85vh;
+        visibility: hidden;
+        opacity: 0;
+        font-size: clamp(12px, 1vmax, 18px);
+        color: #00ffff;
+        text-align: left;
+        overflow: hidden;
+    }
+
+    .tabMenuTitle {
+        font-size: clamp(12px, 1.1vmin, 24px);
+        color: #ffffff;
+        text-align: left;
+        text-shadow: .1vmin .1vmin #000000;
+    }
+
+    .tabPageTitle {
+        font-size: clamp(12px, 1vmax, 22px);
+        color: #ffffff;
+        text-align: left;
+        text-shadow: 1px 1px #000000;
+    }
+
+    .generalObjectLabel {
+        font-size: clamp(14px, 1.1vmin, 22px);
+        text-shadow: 1px 1px #000000;
+        color: #ffffff;
+    }
+</style>
+
+<style>
+    body {
+        background-color: #000000;
+        overflow: hidden;
+        font-family: audiowide;
+    }
+
+    a {
+        font-family: audiowide;
+        font-size: clamp(10px, .9vmax, 16px);
+        color: #ff5e00;
+    }
+
+        a:hover {
+            color: #00ff00;
+        }
+
+    .asyncRenderContainer {
+        position: absolute;
+        overflow: hidden;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+    }
+</style>
+
+<body>
+
+    <div id="fullScreenNavigation"
+         style="position: absolute;
+                top: 10vh;
+                left: 10vw;
+                height: 80vh;
+                width: 80vw;
+                z-index: 9999;
+                visibility: hidden;">
+
+    </div>
+
+    <div id="webGLFullScreenRenderer">
+
+    </div>
+
+    <div id="contactContainer"
+         style="position: absolute;
+                bottom: 0px;
+                left: 0px;
+                overflow: hidden;
+                width: clamp(150px, 20vw, 250px);">
+
+@{Html.RenderAction("Contact", "Home");}
+    </div>
+
+    <div id="topNavigationContainer"
+         style="position: fixed;
+                width: 100%;
+                top: 0px;
+                left: 0px;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                z-index: 9999;">
+
+        <div id="hamburgerNavigation"
+             style="position: absolute;
+                    left: 0px;
+                    top: 0px;
+                    z-index: 99999;">
+
+            <a href="#" class="themedUIHighlight"
+               style="font-size: clamp(32px, 3.5vmax, 52px);
+                               text-decoration: none;
+                               color: #ff5e00;
+                               font-weight: 700;">☰</a>
+        </div>
+
+        <div id="colorsContainer"
+             style="position: absolute;
+                    left: 100px;
+                    top: 0px;
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    z-index: 99999;">
+            <div>
+                <input type="color" id="themeColor" />
+            </div>
+            <div>
+                <input type="color" id="themeBackgroundColor" />
+            </div>
+            <div>
+                <input type="color" id="themeHighlightColor" />
+            </div>
+            <div>
+                <input type="color" id="themeObjectBackgroundColor" />
+            </div>
+        </div>
+
+        <div style="position: absolute;
+                    top: 0px;
+                    right: 0px;
+                    display: flex;
+                    flex-direction: column ;
+                    text-align: right;
+                    margin: 2px 2px 2px 2px;
+                    z-index: 99999;">
+            <div>
+                <a href="#" id="siteBrand"
+                   class="themedUIHighlight"
+                   style="font-size: clamp(22px, 1.7vmax, 42px);
+                          color: #ff5e00;
+                          font-weight: 600;
+                          text-shadow: 2px 2px rgba(32, 32, 32, .9);">
+                    UNIVERSE OBJECT MODELING
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="generalObjectContent"
+         style="visibility: visible;
+                    width: 100%;
+                    position: absolute;
+                    top: 8vh;
+                    left: 0px;
+                    background-color: transparent;
+                    color: #00ffff;">
+
+        <div id="generalObjectTabMenu"
+             style="
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;"
+             class="themedUI themedUIBackground">
+
+            <div>
+                <button id="menuCollapser"
+                        class="tabMenuItem
+                               blackBevel
+                               themedUI
+                               themedUIBackground
+                               buttons"
+                        style="width: 50px;">
+                    <-
+                </button>
+            </div>
+
+            <div>
+                <button class="collapseable tabMenuItem blackBevel themedUI themedUIBackground"
+                        onclick="showMenuPageContainer({ containerID: 'menuPageHomeIndex' })">
+                    HOME
+                </button>
+            </div>
+
+            <div>
+                <select id="renderObjectSelector"
+                        class="collapseable tabMenuItem blackBevel themedUI themedUIBackground buttons">
+                    <option value="sun">
+                        SUN
+                    </option>
+                    <option value="earth">
+                        EARTH
+                    </option>
+                    <option value="moon">
+                        MOON
+                    </option>
+                    <option value="mars">
+                        MARS
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <button class="collapseable tabMenuItem blackBevel themedUI themedUIBackground buttons"
+                        onclick="showMenuPageContainer({ containerID: 'menuPageUniverseObjectsIndex' })">
+                    INDEX
+                </button>
+            </div>
+
+            <div>
+                <button class="collapseable tabMenuItem blackBevel themedUI themedUIBackground buttons"
+                        onclick="showMenuPageContainer({ containerID: 'menuPageUniverseObjectsCreate' })">
+                    CREATE
+                </button>
+            </div>
+
+            <div>
+                <button class="collapseable tabMenuItem blackBevel themedUI themedUIBackground buttons"
+                        onclick="showMenuPageContainer({ containerID: 'menuPageUniverseObjectRenderer' })">
+                    RENDER
+                </button>
+            </div>
+            <div>
+                <button class="collapseable tabMenuItem blackBevel themedUI themedUIBackground buttons"
+                        onclick="showMenuPageContainer({ containerID: 'menuPageContact' })">
+                    CONTACT
+                </button>
+            </div>
+        </div>
+
+        <div id="menuPageHomeIndex"
+             class="menuPageContainer">
+            <div style="position: absolute;
+                   width: 100%;
+                   left: 0px;
+                   top: 0px;">
+                <label class="tabPageTitle themedUIHighlight">
+                    UNIVERSE OBJECT MODELING HOME PAGE.
+                </label>
+            </div>
+            <div id="renderBodyAsyncContainer"
+                 class="asyncRenderContainer">
+                @RenderBody()
+            </div>
+        </div>
+
+        <div id="menuPageDataExplorer"
+             class="menuPageContainer">
+            <div style="position: absolute;
+                   width: 100%;
+                   left: 0px;
+                   top: 0px;">
+                <label class="tabPageTitle themedUIHighlight">
+                    DATA EXPLORER.
+                </label>
+            </div>
+            <div id="dataExplorerAsyncContainer"
+                 class="asyncRenderContainer">
+            </div>
+        </div>
+
+        <div id="menuPageUniverseObjectsIndex"
+             class="menuPageContainer">
+            <div style="
+                   position: absolute;
+                   width: 100%;
+                   left: 0px;
+                   top: 0px;">
+                <label class="tabPageTitle themedUIHighlight">
+                    UNIVERSE OBJECTS.
+                </label>
+            </div>
+            <div id="universeObjectsIndexAsyncContainer"
+                 class="asyncRenderContainer">
+            </div>
+
+        </div>
+
+        <div id="menuPageUniverseObjectsCreate"
+             class="menuPageContainer">
+            <div style="
+                   position: absolute;
+                   width: 100%;
+                   left: 0px;
+                   top: 0px;">
+                <label class="tabPageTitle themedUIHighlight">
+                    CREATE UNIVERSE OBJECT
+                </label>
+            </div>
+            <div id="universeObjectsCreateAsyncContainer"
+                 class="asyncRenderContainer">
+            </div>
+        </div>
+
+
+        <div id="menuPageUniverseObjectRenderer"
+             class="menuPageContainer">
+            <div style="position: absolute;
+                   width: 100%;
+                   left: 0px;
+                   top: 0px;">
+                <label class="tabPageTitle themedUIHighlight">
+                    RENDERER
+                </label>
+            </div>
+            <div id="universeObjectRendererAsyncContainer"
+                 class="asyncRenderContainer">
+            </div>
+        </div>
+
+        <div id="menuPageContact"
+             class="menuPageContainer">
+            <div style="position: absolute;
+                   width: 100%;
+                   left: 0px;
+                   top: 0px;
+                   height: 80vh;">
+                <label class="tabPageTitle themedUIHighlight">
+                    CONTACT
+                </label>
+            </div>
+
+            <div id="contactAsyncContainer"
+                 class="asyncRenderContainer"
+                 style="height: 100%;">
+                <div id="miniContact"
+                     style="position: absolute;
+            background: transparent;
+            bottom: 0px;
+            left: 0px;
+            color: white;
+            font-family: audiowide;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            z-index: 9;"
+                     class="themedUIHighlight">
+
+                    <div>
+                        <div>
+                            <button id="showResume"
+                                    style="display: flex; flex-wrap: nowrap;"
+                                    class="buttons themedUIHighlight">
+                                DAN&nbsp;E.&nbsp;VAIL&nbsp;III
+                            </button>
+                        </div>
+
+                        <div class="themedUI">
+                            SOFTWARE ENGINEER IN ALGODONES
+                        </div>
+
+                        <div>
+                            <label class="themedUIHighlight">
+                                ALGODONES BC MX<br />
+                            </label>
+                        </div>
+
+                        <div>
+                            <a href="tel: +15205962892" class="contactLinks themedUIHighlight">
+                                USA PHONE: +1 520 596 2892
+                            </a>
+                        </div>
+                        <div>
+                            <a href="tel: +526865908895" class="contactLinks themedUIHighlight">
+                                MX PHONE: + 52 686 590 8895
+                            </a>
+                        </div>
+
+                        <div class="themedUIHighlight">
+                            <label>
+                                <strong>EMAIL:</strong>
+                            </label>
+                            <a href="mailto:dan@universeobjects.com" class="contactLinks">dan@universeobjects.com</a><br />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+   
+
+</body>
+
+<script>
+
+
+    document.getElementById("themeColor")
+        .addEventListener("input", function () {
+            document.querySelectorAll('.themedUI').forEach(element => {
+                element.style.color = this.value;
+            })
+
+            //var themeColor = document.getElementById("themeColor");
+            //var localColor = themeColor.value;
+            //var color = new THREE.Color(this.value);
+            //var rgbColor = color.getRGB;
+            //var rgbaColor = new THREE.Color(rgbColor);
+            //var rgba = "rgba(" + rgbaColor.r + "," + rgbaColor.g + ", " + rgbaColor.b + ", .3)";
+
+        });
+
+
+    document.getElementById("themeBackgroundColor")
+        .addEventListener("input", function () {
+            document.querySelectorAll('.themedUIBackground').forEach(element => {
+                element.style.background = this.value;
+            });
+        });
+
+    document.getElementById("themeHighlightColor")
+        .addEventListener("input", function () {
+            document.querySelectorAll('.themedUIHighlight').forEach(element => {
+                element.style.color = this.value;
+            });
+            document.querySelectorAll('.shadow').forEach(element => {
+                element.style.textShadow = "1px 1px " + this.value;
+            });
+
+        });
+
+    document.getElementById("hamburgerNavigation")
+        .addEventListener("click", function () {
+            var fullScreenNavigation =
+                document.getElementById('fullScreenNavigation');
+
+            var dbMenuBar =
+                document.getElementById('dbMenuBar');
+
+            if (fullScreenNavigation.style.visibility == 'hidden') {
+                //hideMenuPageContainers();
+                //hideSubMenus();
+                //HideTabPages();
+                //dbMenuBar.style.visibility = "hidden";
+                //toggleFullscreenNavigation();
+                return 'visible';
+            }
+            hideAsyncRenderContainers();
+            toggleFullscreenNavigation();
+            collapseMenus();
+            showSubMenus();
+        })
+
+    function hideAsyncRenderContainers() {
+        var asyncRenderContainers =
+            document.querySelectorAll('.asyncRenderContainer');
+        asyncRenderContainers.forEach(element => {
+            element.style.transition = '2s';
+            element.style.opacity = "0";
+            element.style.visibility = 'hidden';
+        });
+    };
+
+    function collapseMenus() {
+        var collapseables =
+            document.querySelectorAll('.collapseable');
+        collapseables.forEach(element => {
+            element.style.transition = '2s';
+            element.style.opacity = "0";
+            element.style.visibility = 'hidden';
+        });
+    }
+
+    function expandMenus() {
+        var collapseables =
+            document.querySelectorAll('.collapseable');
+        collapseables.forEach(element => {
+            element.style.transition = '.5s';
+            element.style.opacity = "1";
+            element.style.visibility = 'visible';
+        });
+    }
+
+    document.getElementById("menuCollapser")
+        .addEventListener("click", function () {
+            var menuCollapser =
+                document.getElementById("menuCollapser");
+
+            switch (menuCollapser.innerHTML) {
+                case '<-':
+                    collapseMenus();
+                    menuCollapser.innerHTML = "->";
+                    break;
+
+                case '->':
+                    expandMenus();
+                    menuCollapser.innerHTML = "<-";
+                    break;
+            }
+        });
+
+    function toggleFullscreenNavigation() {
+        var fullScreenNavigation =
+            document.getElementById('fullScreenNavigation');
+        if (fullScreenNavigation.style.visibility == 'hidden') {
+            fullScreenNavigation.style.visibility = 'visible';
+            return 'visible';
+        }
+        if (fullScreenNavigation.style.visibility == 'visible') {
+            fullScreenNavigation.style.visibility = 'hidden';
+            return 'hidden';
+        }
+    }
+
+    function createStarMap() {
+        window.rendererElementId = "webGLFullScreenRenderer";
+
+        initializeScene({ sceneName: "universeRenderer" });
+        scene = window.scene;
+        var loader = new THREE.ImageLoader()
+            .load("/images/Universe/starmap_8k.png", function (image) {
+            window.scene.background = image;
+        });
+
+        setupCamera({ cameraName: undefined });
+
+        setupRenderer({
+            rendererElementId: "webGL",
+            rendererId: "universeRenderer"
+        });
+
+        setupControls({
+            cameraName: "universeRenderer",
+            rendererName: "universeRenderer"
+        });
+
+        createAmbientLight();
+
+
+    }
+
+
+    var renderObjectSelector =
+        document.getElementById('renderObjectSelector');
+
+    renderObjectSelector.addEventListener('change', function (event) {
+        var objectName = renderObjectSelector.value;
+
+        //hideAsyncRenderContainers();
+        //hideMenuPageContainers();
+
+        webGLFullScreenRenderer = document.getElementById('webGLFullScreenRenderer');
+        webGLFullScreenRenderer.style.visibility = "visible";
+        webGLFullScreenRenderer.style.opacity = "1";
+        webGLFullScreenRenderer.style.width = "100%";
+        webGLFullScreenRenderer.style.height = "100%";
+
+        switch (objectName) {
+            case 'sun':
+                loadUrl({
+                    Url: "/Home/Suntest",
+                    targetElementId: "webGLFullScreenRenderer"
+                });
+                break;
+
+            case 'earth':
+                loadUrl({
+                    Url: "/CelestialSpheres/celestialspheredetails?id=1",
+                    targetElementId: "webGLFullScreenRenderer"
+                });
+                break
+
+            case 'moon':
+                loadUrl({
+                    Url: "/CelestialSpheres/celestialspheredetails?id=2",
+                    targetElementId: "webGLFullScreenRenderer"
+                });
+                break;
+
+
+            case 'mars':
+                loadUrl({
+                    Url: "/CelestialSpheres/celestialspheredetails?id=3",
+                    targetElementId: "webGLFullScreenRenderer"
+                });
+                break
+        }
+    })
+
+
+    function animate(time) {
+        requestAnimationFrame(animate);
+        TWEEN.update(time);
+
+        camera.rotation.y += .001;
+
+        controls.update();
+        renderer.render(scene, camera);
+    }
+
+
+    function render() {
+        animate(performance.now());
+    }
+
+    document.body.onresize = function () {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        window.renderer.setSize(width, height);
+        window.camera.aspect = width / height;
+        window.camera.updateProjectionMatrix();
+    }
+
+    document.body.onresize();
+    render();
+
+    window.addEventListener("load", event => {
+
+        //fetch("/ApplicationUIElements/MenuBar?uielementgroupid=8888")
+        //    .then(response => response.text())
+        //    .then(html => function () {
+        //        document.getElementById('fullScreenNavigation')
+        //            .innerHTML = html;
+        //    });
+
+        loadUrl({
+            Url: "/UniverseObjects/rendergalaxy",
+            targetElementId: "webGLFullScreenRenderer"
+        });
+
+
+        //fetch("/UniverseObjects/Index")
+        //    .then(response => response.text())
+        //    .then(html => function () {
+        //        document.getElementById('universeObjectsIndexAsyncContainer')
+        //            .innerHTML = html;
+        //    });
+
+    });
+
+
+    async function loadUrl({
+        Url, targetElementId }) {
+
+        const response =
+            await fetch(Url)
+
+        const html =
+            await response.txt;
+
+        const targetElement =
+            document.getElementById(targetElementId);
+        targetElement.innerHTML = html;
+
+        const scripts =
+            targetElement.querySelectorAll('script');
+
+        scripts.forEach((script) => {
+            const scriptBuilder =
+                document.createElement("script");
+
+            if (script.src) {
+                scriptBuilder.src = script.src;
+                scriptBuilder.async = true;
+            } else {
+                scriptBuilder.textContent = script.textContent;
+            }
+
+            document.body.append(scriptBuilder);
+        })
+
+    };
+
+    //hideMenuPageContainers();
+</script>

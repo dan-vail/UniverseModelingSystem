@@ -1,0 +1,323 @@
+﻿@model UniverseObjects.Models.UniverseObjectGeometry
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_UniverseObjectRendererLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>UniverseObjectGeometry</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UniverseObjectID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniverseObjectID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryComplexity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryComplexity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryRadius)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryRadius)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryTube)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryTube)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryArc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryArc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryDetail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryDetail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryLength)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryLength)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryHeight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryHeight)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryRadiusTop)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryRadiusTop)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryRadiusBottom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryRadiusBottom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometrySteps)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometrySteps)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryDepth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryDepth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryInnerRadius)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryInnerRadius)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryOuterRadius)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryOuterRadius)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryThresholdAngle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryThresholdAngle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometrySegments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometrySegments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryXSegments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryXSegments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryYSegments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryYSegments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryHeightSegments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryHeightSegments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryRadialSegments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryRadialSegments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryTubularSegnments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryTubularSegnments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryCapSegments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryCapSegments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryThetaSegments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryThetaSegments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryPhiSegments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryPhiSegments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryBevelSegments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryBevelSegments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryBevelSize)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryBevelSize)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryBevelOffset)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryBevelOffset)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryBevelThickness)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryBevelThickness)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryPhiStart)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryPhiStart)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryPhiEnd)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryPhiEnd)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryThetaStart)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryThetaStart)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryThetaEnd)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryThetaEnd)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryThetaLength)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryThetaLength)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryOpenEnded)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryOpenEnded)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryOrigin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryOrigin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryP)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeometryQ)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeometryQ)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.GeometryID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

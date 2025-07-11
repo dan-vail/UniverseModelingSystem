@@ -1,0 +1,642 @@
+﻿@{
+Layout = "/views/universeobjects/_RenderObjectLayout.cshtml";
+//Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <script src="/threejs/three.js.oldbuild/three.min.js"></script>
+    <script src="~/threejs/three.js.oldbuild/OrbitControls.js"></script>
+    <script src="~/threejs/three.js.oldbuild/GLTFLoader.js"></script>
+    <script src="~/threejs/three.js.oldbuild/TTFLoader.js"></script>
+    <script src="~/threejs/three.js.oldbuild/tween.js"></script>
+
+    <link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+    <script src="~/Scripts/vailware.universeModeling.library.js"></script>
+</head>
+<body>
+    <div id="videoControl">
+    </div>
+    <div id="HUD"
+         style="position: absolute;
+                    font-size: clamp(12px, 1vmax, 28px);
+                    top: 20vh;
+                    width: 30vw;
+                    height: 50vh;
+                    left: 1vw;
+                    text-align: right;
+                    visibility: visible;
+                    opacity: 1;
+                    z-index: 999999;">
+
+        <div>
+            <label class="themedUI  settingsLabels">
+                <b>UNIVERSE OBJECT</b>
+            </label>
+        </div>
+        <label class="themedUI  settingsLabels">
+            DISTANCE UNIT:
+        </label>
+        <label class="themedUI  settingsLabels">
+            DISTANCE UNIT:
+        </label>
+        <br />
+        <label class="themedUI  settingsLabels">
+            ROTATION X:
+        </label>
+        <br />
+        <label id="sphereRotationX"
+               class="themedUI  settingsLabels"
+               style="text-align: right;">
+            0
+        </label>
+        <br />
+        <label class="themedUI  settingsLabels">
+            Rotation Y:
+        </label>
+        <br />
+        <label id="sphereRotationY"
+               class="themedUI  settingsLabels"
+               style="text-align: right;">
+            0
+        </label>
+        <br />
+        <label class="themedUI  settingsLabels">
+            Rotation Z:
+        </label>
+        <br />
+        <label id="sphereRotationZ"
+               class="themedUI  settingsLabels"
+               style="text-align: right;">
+            0
+        </label>
+        <br />
+        <br />
+
+        <label class="themedUI  settingsLabels">
+            ATMOSPHERE:
+        </label>
+        <br />
+        <label class="themedUI  settingsLabels">
+            Rotation X:
+        </label>
+        <br />
+        <label id="sphereAtmosphereRotationX"
+               class="themedUI  settingsLabels"
+               style="text-align: right;">
+            0
+        </label>
+        <br />
+
+        <label class="themedUI  settingsLabels">
+            Rotation Y:
+        </label>
+        <br />
+        <label id="sphereAtmosphereRotationY"
+               class="themedUI  settingsLabels"
+               style="text-align: right;">
+            0
+        </label>
+        <br />
+
+        <label class="themedUI  settingsLabels">
+            Rotation Z:
+        </label>
+        <br />
+        <label id="sphereAtmosphereRotationZ"
+               class="themedUI  settingsLabels"
+               style="text-align: right;">
+            0
+        </label>
+        <br />
+        <br />
+
+        <label class="themedUI  settingsLabels">
+            OBSERVER:
+        </label>
+        <br />
+        <label class="themedUI  settingsLabels">
+            Position X:
+        </label>
+        <br />
+        <label id="cameraPositionX"
+               class="themedUI  settingsLabels"
+               style="text-align: right;">
+            0
+        </label>
+        <br />
+
+        <label class="themedUI  settingsLabels">
+            Position Y:
+        </label>
+        <br />
+        <label id="cameraPositionY"
+               class="themedUI  settingsLabels"
+               style="text-align: right;">
+            0
+        </label>
+        <br />
+        <label class="themedUI  settingsLabels">
+            Position Z:
+        </label>
+        <br />
+        <label id="cameraPositionZ"
+               class="themedUI  settingsLabels"
+               style="text-align: right;">
+            0
+        </label>
+    </div>
+ 
+        <div>
+            <select id="universeObjectSelector"
+                    class="whiteShadow buttons"
+                    style="position: absolute;
+                        top: 15vh;
+                        left: 0px;
+                        width: 20vw;
+                        z-index: 99999;">
+                <option value="mars">
+                    MARS
+                </option>
+                <option value="sun">
+                    SUN
+                </option>
+                <option value="moon">
+                    MOON
+                </option>
+                <option value="spaceStation">
+                    SPACESTATION
+                </option>
+
+            </select>
+        </div>
+
+    <script>
+        var star;
+
+        function createRenderer({
+            universeObject,
+            containerId
+        }) {
+            var container = document.getElementById(containerId);
+            if (container == undefined) {
+                var container =
+                    document.createElement('div');
+                container.setAttribute('Id', "universeRenderer");
+                container.style.width = "100%";
+                container.style.height = "100%";
+                document.body.append(container);
+            }
+            container =
+                document.getElementById("universeRenderer");
+
+            var webGL = document.createElement('div');
+            webGL.setAttribute('Id', "webGL");
+            webGL.style.position = "absolute";
+            webGL.style.top = "0px;";
+            webGL.style.left = "0px;";
+            webGL.style.width = "100%";
+            webGL.style.height = "100%";
+            container.append(webGL);
+
+            initializeScene({ sceneName: "universeRenderer" });
+            setupCamera({ cameraName: undefined });
+
+            window.rendererElementId = "webGL";
+
+            setupRenderer({
+                rendererElementId: "webGL",
+                rendererId: "universeRenderer"
+            });
+
+            setupControls({
+                cameraName: "universeRenderer",
+                rendererName: "universeRenderer"
+            });
+        }
+
+        function createAmbientLight() {
+            ambientLight = new THREE.AmbientLight();
+            ambientLight.intensity = 1;
+            scene.add(ambientLight);
+            ambientLight.name = "defaultAmbientLight";
+            window.ambientLight = ambientLight;
+        }
+
+        function renderPlanet({ universeObjectId }) {
+
+            fetch("/universeobjects/details?id=1500")
+                .then(response => response.json);
+            if (universeObjectId == undefined) {
+                return false;
+            }
+
+            // load the geometry and the textures
+            var loader = new THREE.TextureLoader();
+
+            var geometry = new THREE.SphereBufferGeometry(
+                universeObject.UniverseObjectRadius,
+                1024,
+                1024);
+
+            material = new THREE.MeshPhysicalMaterial();
+
+            if (universeObject.UniverseObjectEquirectangularTextureMapPath != null) {
+                material.map =
+                    loader.load(universeObjectSpheroid.TextureMapPath,
+                        function (texture) {
+                        });
+            }
+
+
+            //if (universeObjectSpheroid.Transparent == null) {
+            //} else {
+            //    material.transparent = universeObjectSpheroid.Transparent;
+            //}
+
+            //if (universeObjectSpheroid.Opacity == null) {
+            //} else {
+            //    material.opacity = universeObjectSpheroid.Opacity;
+            //}
+
+            //if (universeObjectSpheroid.Specular == null) {
+            //} else {
+            //    material.specular = universeObjectSpheroid.Specular;
+            //}
+
+            //if (universeObjectSpheroid.DepthTest == null) {
+            //} else {
+            //    material.depthTest = universeObjectSpheroid.DepthTest;
+            //}
+
+            //if (universeObjectSpheroid.BlendingMode == null) {
+            //} else {
+            //    material.blending = universeObjectSpheroid.BlendingMode;
+            //}
+
+            //if (universeObjectSpheroid.EnvironmentMap == null) {
+            //} else {
+            //    material.envMap = universeObjectSpheroid.EnvironmentMap;
+            //}
+
+            //if (universeObjectSpheroid.MaterialColor == null) {
+            //} else {
+            //    material.color = universeObjectSpheroid.MaterialColor;
+            //}
+
+            //if (universeObjectSpheroid.AlphaTest == null) {
+            //} else {
+            //    material.alphaTest = universeObjectSpheroid.AlphaTest;
+            //}
+
+            if (universeObject.UniverseEquirectangularVectorDisplacementMapPath != null) {
+                material.displacementMap = loader.load(universeObject.UniverseObjectEquirectangularVectorDisplacementMapPath);
+                material.displacementScale = 1;
+            }
+
+            //if (universeObjectSpheroid.BumpMapPath == null) {
+            //} else {
+            //    material.bumpMap = loader.load(universeObjectSpheroid.BumpMapPath);
+            //    material.bumpScale = universeObjectSpheroid.BumpScale;
+            //}
+
+            //if (universeObjectSpheroid.NormalsMapPath == null) {
+            //} else {
+            //    material.normalMap = loader.load(universeObjectSpheroid.NormalsMapPath);
+            //}
+
+            var universeObjectMesh = new THREE.Mesh(geometry, material);
+
+            universeObjectMesh.position.x = universeObject.UniverseObjectPositionVectorX;
+            universeObjectMesh.position.y = universeObject.UniverseObjectPositionVectorY;
+            universeObjectMesh.position.z = universeObject.UniverseObjectPositionVectorZ;
+
+            universeObjectMesh.rotation.x = 0;
+            universeObjectMesh.rotation.y = 0;
+            universeObjectMesh.rotation.z = 0;
+
+            universeObjectMesh.recieveShadow = false;
+
+            universeObjectMesh.Name = universeObject.UniverseObjectName;
+            scene.add(universeObjectMesh);
+
+            var renderedUniverseObjectMesh =
+                window.scene.children[
+                window.scene.children.findIndex
+                    (o => o.Name == universeObject.UniverseObjectName)];
+
+            window.universeObjectMeshes.push(renderedUniverseObjectMesh);
+
+            if (universeObject.UniverseObjectHasAtmosphere == true) {
+
+                var universeObjectAtmosphereGeometry =
+                    new THREE.SphereGeometry(
+                        universeObject.UniverseObjectAtmosphereRadius,
+                        universeObjectSpheroid.GeometryXSegments,
+                        universeObjectSpheroid.GeometryYSegments);
+
+                atmosphereMaterial =
+                    new THREE.MeshPhysicalMaterial({
+                        map: loader.load(universeObjectSpheroid.AtmosphereTexturePath),
+                        displacementMap: loader.load(universeObjectSpheroid.AtmosphereDisplacementMapPath),
+                        transparent: true,
+                        opacity: .9
+                    });
+
+
+                atmosphereMaterial.side = THREE.DoubleSide;
+
+                if (universeObjectSpheroid.AtmosphereDisplacementMapPath == null) {
+                } else {
+                    atmosphereMaterial.displacementMap =
+                        loader.load(universeObjectSpheroid.AtmosphereDisplacementMapPath);
+
+
+                    //atmosphereMaterial.displacementScale = 99;
+
+                    //    atmosphereMaterial.displacementScale =
+                    //        universeObjectSpheroid.AtmosphereDisplacementScale;
+                }
+
+                sphereAtmosphere = new THREE.Mesh(
+                    atmosphereGeometry, atmosphereMaterial);
+
+                sphereAtmosphere.position.x = sphere.XCoord;
+                sphereAtmosphere.position.y = sphere.YCoord;
+                sphereAtmosphere.position.z = sphere.ZCoord;
+
+                sphereAtmosphere.Name =
+                    universeObjectSpheroid.Name + "Atmosphere";
+
+                sphereAtmosphere.recieveShadow = false;
+
+
+                scene.add(sphereAtmosphere);
+                atmosphereGeometry.computeVertexNormals();
+
+
+                var renderedSphereAtmosphere =
+                    window.scene.children[
+                    window.scene.children.findIndex
+                        (o => o.Name == sphereAtmosphere.Name)];
+
+                window.spheres.push(renderedSphereAtmosphere);
+            }
+        }
+
+        function renderVideoSphere() {
+            var videoControl = document.getElementById("videoControl");
+
+            videoControl.style.top = "100px";
+
+            videoSpherePlayer = document.createElement('video');
+            videoControl.appendChild(videoSpherePlayer);
+            videoSpherePlayer.id = "videoSpherePlayer";
+            //videoSpherePlayer.src = "/videos/sun4K.mp4";
+            videoSpherePlayer.muted = true;
+            videoSpherePlayer.loop = true;
+            videoSpherePlayer.controls = true;
+
+            videoSphereSource = document.createElement('source');
+            videoSphereSource.id = "videoSphereSource";
+            videoSphereSource.setAttribute('src', '/videos/theSun2X1.mp4');
+            videoSphereSource.setAttribute('type', 'video/mp4');
+            videoSpherePlayer.appendChild(videoSphereSource);
+
+            videoSpherePlayer.load();
+            videoSpherePlayer.play();
+
+            videoSpherePlayer.width = 200;
+            videoSpherePlayer.height = 200;
+
+            videoSphereTexture = new THREE.VideoTexture(videoSpherePlayer);
+            videoSphereTexture.format = THREE.RGBAFormat;
+            //videoSphereTexture.transparent = true;
+
+            var sunSurfaceGeometry =
+                new THREE.SphereBufferGeometry(
+                    696000,
+                    1600,
+                    1600);
+
+            var lessShittyGeometry =
+                new THREE.SphereBufferGeometry(697000, 1600, 1600);
+
+            var sunSurfaceMaterial =
+                new THREE.MeshStandardMaterial({
+                    map: videoSphereTexture,
+                    displacementMap: videoSphereTexture,
+                    displacementScale: -3000,
+                    transparent: false,
+                    emissive: 0xFFFFFF,
+                    emissiveIntensity: .1,
+                    emissiveMap: videoSphereTexture
+                });
+
+            var baseSunMaterial =
+                new THREE.MeshPhysicalMaterial({
+                    map: videoSphereTexture,
+                    displacementMap: videoSphereTexture,
+                    displacementScale: 1,
+                    transparent: false,
+                    transmission: .5,
+                    opacity: .7,
+                    roughness: .1,
+                    emissive: 0xFFFFFF,
+                    emissiveIntensity: .1,
+                    emissiveMap: videoSphereTexture
+                })
+
+            sunSurfaceMaterial.side = THREE.DoubleSide;
+            baseSunMaterial.side = THREE.DoubleSide;
+
+            sunSurface =
+                new THREE.Mesh(sunSurfaceGeometry, sunSurfaceMaterial);
+
+            sunSurface.position.x = 0;
+            sunSurface.position.y = 0;
+            sunSurface.position.z = 2.649E+17;
+
+            window.scene.add(sunSurface);
+            star = sunSurface;
+
+            baseSun =
+                new THREE.Mesh(lessShittyGeometry, baseSunMaterial);
+            baseSun.position.x = 0;
+            baseSun.position.y = 0;
+            baseSun.position.z = 0;
+
+            //window.scene.add(baseSun);
+
+        }
+
+        function createStarMap() {
+            var imageLoader = new THREE.ImageLoader();
+            var scene = window.scene;
+
+            scene.background = imageLoader.load("/images/universe/starmap_8k.png");
+        }
+
+        function animateUniverse(time) {
+            requestAnimationFrame(animateUniverse);
+            TWEEN.update(time);
+
+            window.scene.children[1].rotation.y -= .001;
+
+            //camera.position.x =
+            //    imaginaryObject.position.x +
+            //    (orbitDistance * Math.sin(cameraOrbitTime) + 0);
+
+            //camera.position.z =
+            //    imaginaryObject.position.z +
+            //    (orbitDistance * Math.cos(cameraOrbitTime) + 0);
+
+            //cameraOrbitTime += orbitalVelocity;
+
+                updateHUD({ sphere: undefined, sphereAtmosphere: undefined})
+
+            controls.update();
+            window.renderer.render(window.scene, window.camera);
+        }
+
+        function tweenToUniverseObject({
+            universeObject,
+            duration
+        }) {
+
+
+            var universeObjectLengthX = 0;
+
+            if (universeObject == undefined) {
+                var targetVector = new THREE.Vector3(
+                    256, 500, 1000);
+            }
+
+            if (duration == undefined) {
+                duration = 10000;
+            }
+
+            var intialVector = new THREE.Vector3(
+                window.camera.position.x,
+                window.camera.position.y,
+                window.camera.position.z
+            );
+
+            var targetVector =
+                new THREE.Vector3(-0.2, 0.1, 0.15);
+
+            var controlsTargetVector =
+                new THREE.Vector3(0, 0, 0);
+
+            camera.position.x = -10000;
+            camera.position.y = 10000;
+            camera.position.z = -20000;
+
+            var position =
+                new THREE.Vector3()
+                    .copy(camera.position);
+
+            var tween = new TWEEN.Tween(position)
+                .to(targetVector, duration)
+                .easing(TWEEN.Easing.Exponential.InOut)
+                .onUpdate(function () {
+                    camera.position.copy(position);
+                })
+                .onComplete(function () {
+                    window.camera.position.z = 1024;
+                }).start();
+
+            //var controlsTween = new
+            //    TWEEN.Tween(controls.target)
+            //    .to(targetVector, duration)
+            //    .easing(TWEEN.Easing.Quadratic.InOut)
+            //    .onUpdate(function () {
+
+            //    })
+            //    .onComplete(function () {
+            //        //window.camera.lookAt(window.controls.target);
+            //    })
+            //    .start();
+
+            //var target = new THREE.Vector3().copy(controls.target);
+
+            //var tween = new TWEEN.Tween(target)
+            //        .to(controlsTargetVector, duration)
+            //        .easing(TWEEN.Easing.Exponential.InOut)
+            //        .onUpdate(function () {
+            //            controls.target.copy(target);
+            //        })
+            //        .onComplete(function () {
+
+            //        }).start();
+
+            //catch (error) {
+            //    console.log(
+            //        "tweenTo universeObject failed." +
+            //        "Maybe: " +
+            //        "fucking moving..." +
+            //        "initial vectors in database wrong..." +
+            //        "a damn database failure, some other shit I cant think of?");
+            window.controls.enabled = true;
+            window.controls.update();
+
+        }
+
+        function render() {
+            animateUniverse(performance.now());
+        }
+
+        document.body.onresize = function () {
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            window.renderer.setSize(width, height);
+            window.camera.aspect = width / height;
+            window.camera.updateProjectionMatrix();
+        }
+
+        //createUniverseObject({ universeObjectId: 1500, universeObjectTypeId: 100 });
+        //createUniverseObject({ universeObjectId: 1100, universeObjectTypeId: 200 });
+
+        createRenderer({ universeObject: window.universeObject });
+
+        createAmbientLight();
+
+        createStarMap();
+
+        //3.405852E16 is the diameter of our galaxy....
+        loadUniverseGLBObject({
+            name: "milkyway.glb",
+            _Path: "/GLBObjects/",
+            fullName: "/GLBObjects/Milkyway.glb",
+            scalar: 1000,
+            positionX: 0,
+            positionY: 0,
+            positionZ: 0,
+            quaternionX: 0,
+            quaternionY: 0,
+            quaternionZ: 0,
+            quaternionW: 0,
+            alias: "milkyway",
+            universeObjectId: undefined,
+            universeObjectGLBId: undefined,
+            GLBObjectPath: "/GLBObjects"
+        });
+
+        window.controls.target.set(0, 0, 0);
+        tweenToUniverseObject({ universeObject: "galaxy", duration: 10000});
+        document.body.onresize();
+        render();
+
+        document.getElementById("universeObjectSelector")
+            .addEventListener("input", function (event) {
+                if (this.value == "sun") {
+                    renderVideoSphere();
+                }
+        })
+    </script>
+</body>
+</html>

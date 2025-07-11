@@ -1,0 +1,420 @@
+﻿
+@{
+    ViewBag.Title = "VR VIWER";
+    //Layout = "~/Views/Shared/_UniverseObjectRendererLayout.cshtml";
+    Layout = null;
+}
+
+
+<style>
+    #webGLRenderDIV {
+        width: 100vw;
+        height: 100vh;
+    }
+
+    #settingsMenu {
+        position: absolute;
+        right: 1px;
+        top: 8vh;
+        transition: all 5s;
+        width: 20vw;
+        z-index: 99;
+    }
+
+    #settingsToggler {
+        position: absolute;
+        top: 2px;
+        right: 68px;
+        z-index: 99999;
+    }
+
+    .menuTitleItem {
+        color: #ff0000;
+        background-color: rgba(200, 0, 0, .16);
+        font-size: clamp(12px, 1.4vh, 72px);
+    }
+
+    .menuTitleSubItem {
+        color: rgba(0, 255, 0, .9);
+        font-size: clamp(11px, 1.2vh, 64px);
+    }
+
+    .vrControl {
+        font-family: audiowide;
+        color: #00ff00;
+        font-size: clamp(11px, 1vmax, 32px);
+    }
+
+    .vrLabel{
+        font-family: audiowide;
+        color: #00ff00;
+        font-size: clamp(11px, 1vmax, 32px);
+    }
+
+</style>
+
+
+<div id="webGLRenderDIV" style="position: absolute; top: 0px; left: 0px; width: 100vw; height: 100vh; background-color: #000000;">
+
+</div>
+
+<div id="twoDPlayer">
+
+</div>
+
+<div id="HUD">
+
+</div>
+
+<div id="settingsMenu" style="display: inline-block;">
+
+    <div id="vrSettings">
+        <div>
+            <label class="vrLabel">VR SPHERE</label>
+        </div>
+        <div id="cameraFOVContainer"
+             class="vrControl">
+            <label class="vrLabel">CAMERA FOV</label>
+            <input id="vrCameraFOV"
+                   class="rangeSelector"
+                   type="range" min="12" max="110" step=".1" value="52" />
+        </div>
+
+        <div>
+            <label class="vrLabel">LIGHTING</label>
+            <input id="vrAmbientLightIntensity"
+                   class="rangeSelector"
+                   type="range" min="0" max="3"
+                   step=".01" value="1" />
+        </div>
+
+        <div>
+            <label class="vrLabel">REPEAT U</label>
+            <input id="repeatU" class="rangeSelector" type="range" min=".01" max="4" step=".01" value=".01" />
+        </div>
+
+        <div>
+            <label class="vrLabel">REPEAT V</label>
+            <input id="repeatV" class="rangeSelector" type="range" min=".01" max="4" step=".01" value=".01" />
+        </div>
+
+        <div>
+            <label class="vrLabel">EMISSIVE COLOR</label>
+            <input id="vrEmissiveColor"
+                   class="rangeSelector"
+                   type="color" />
+        </div>
+
+
+        <div>
+            <label class="vrLabel">MATERIAL COLOR</label>
+            <input id="vrMaterialColor"
+                   class="rangeSelector"
+                   type="color" />
+        </div>
+
+        <div>
+            <label class="vrLabel">EMISIIVE INTENSITY</label>
+            <input id="vrEmissiveIntensity"
+                   class="rangeSelector"
+                   type="range" min="0" max="3" step=".01" value=".5" />
+        </div>
+
+        <div>
+            <label class="vrLabel">SCALE</label>
+            <input id="vrScale"
+                   class="rangeSelector"
+                   type="range" min="-3" max="3" step=".01" value="1" />
+        </div>
+
+        <div>
+            <label class="vrLabel">DISPLACEMENT</label>
+            <input id="vrDisplacementFactor"
+                   class="rangeSelector"
+                   type="range" min="-99" max="99" step="1" value="1" />
+
+        </div>
+
+        <div>
+            <label class="vrLabel">OPACITY</label>
+            <input id="vrOpacity"
+                   class="rangeSelector"
+                   type="range" min="0" max="1" step=".01" value=".5" />
+        </div>
+
+
+        <div>
+            <label class="vrLabel">TRANSMISSION</label>
+            <input id="vrTransmission"
+                   class="rangeSelector"
+                   type="range" min="0" max="1" step=".01" value=".5" />
+        </div>
+
+        <div>
+            <label class="vrLabel">ROUGHNESS</label>
+            <input id="vrRoughness"
+                   class="rangeSelector"
+                   type="range" min="0" max="1" step=".01" value=".5" />
+        </div>
+
+        <div>
+            <label class="vrLabel">METALNESS</label>
+            <input id="vrMetalness"
+                   class="rangeSelector"
+                   type="range" min="0" max="1" step=".01" value=".5" />
+        </div>
+
+        <div>
+            <label class="vrLabel">IOR</label>
+            <input id="vrIor"
+                   class="rangeSelector"
+                   type="range" min="0" max="3.4" step=".01" value="1.6" />
+        </div>
+
+    </div>
+        </div>
+<div id="videoControl">
+
+</div>
+
+
+<script src="/threejs/three.js.oldbuild/three.js"></script>
+<script src="~/threejs/three.js.oldbuild/tween.js"></script>
+<script src="/threejs/three.js.oldbuild/OrbitControls.js"></script>
+<script src="/threejs/three.js.oldbuild/opentype.js"></script>
+
+<script>
+    var camera,
+        scene,
+        controls,
+        ambientLight,
+        webGLRenderer,
+        vrSphere,
+        vrMaterial,
+        vrGeometry,
+        videoSphereTexture;
+
+    function loadEnvironment(equirectangular) {
+        try {
+            var loader = new THREE.TextureLoader();
+            var equirectangularTexture = loader.load(equirectangular);
+            equirectangularTexture.mapping = THREE.EquirectangularReflectionMapping;
+            return equirectangularTexture;
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    scene = new THREE.Scene();
+    scene.background = loadEnvironment("/images/Universe/starmap_8k.png");
+
+    function renderVideoSphere() {
+        var videoControl = document.getElementById("videoControl");
+
+        videoControl.style.top = "100px";
+        videoControl.style.zIndex = "99";
+
+        videoSpherePlayer = document.createElement('video');
+        videoControl.appendChild(videoSpherePlayer);
+        videoSpherePlayer.id = "videoSpherePlayer";
+        //videoSpherePlayer.src = "/videos/sun4K.mp4";
+        videoSpherePlayer.muted = true;
+        videoSpherePlayer.loop = true;
+        videoSpherePlayer.controls = true;
+
+        videoSphereSource = document.createElement('source');
+        videoSphereSource.id = "videoSphereSource";
+        videoSphereSource.setAttribute('src', '/videos/adult3.mp4');
+        videoSphereSource.setAttribute('type', 'video/mp4');
+        videoSpherePlayer.appendChild(videoSphereSource);
+
+        videoSpherePlayer.load();
+        videoSpherePlayer.play();
+
+        videoSpherePlayer.width = 200;
+        videoSpherePlayer.height = 200;
+
+        videoSphereTexture = new THREE.VideoTexture(videoSpherePlayer);
+        videoSphereTexture.format = THREE.RGBAFormat;
+        //videoSphereTexture.transparent = true;
+
+        vrGeometry =
+            new THREE.SphereBufferGeometry(
+                1024,
+                1024,
+                1024);
+
+
+        vrMaterial =
+            new THREE.MeshPhysicalMaterial({
+                map: videoSphereTexture,
+                displacementMap: videoSphereTexture,
+                displacementScale: 0,
+                ior: 1.6,
+                roughness: .5,
+                transparent: true,
+                opacity: .99,
+                emissive: 0xFFFF00,
+                emissiveIntensity: .01,
+                emissiveMap: videoSphereTexture,
+                metalness: .5,
+                reflectivity: .1,
+                iridescencesIOR: .1
+            });
+
+        vrMaterial.side = THREE.DoubleSide;
+
+        vrSphere =
+            new THREE.Mesh(vrGeometry, vrMaterial);
+
+        vrSphere.position.x = 0;
+        vrSphere.position.y = 0;
+        vrSphere.position.z = 0;
+        scene.add(vrSphere);
+
+    }
+    renderVideoSphere();
+
+
+    function createLighting() {
+        try {
+            ambientLight = new THREE.AmbientLight();
+            ambientLight.intensity = 1;
+            scene.add(ambientLight);
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    createLighting();
+
+    webGLRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    webGLRenderer.setPixelRatio(window.devicePixelRatio);
+    webGLRenderer.setSize(window.innerWidth, window.innerHeight);
+    webGLRenderer.shadowMap.enabled = true;
+    webGLRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    webGLRenderer.setClearColor(0x000000);
+    document.querySelector('#webGLRenderDIV').appendChild(webGLRenderer.domElement);
+    camera = new THREE.PerspectiveCamera(
+        52, window.innerWidth / window.innerHeight, 1, 5000000
+    );
+
+    camera.position.x = 0;
+    camera.position.y = 0;
+    camera.position.z = 200;
+
+    camera.rotation.x = 0;
+    camera.rotation.y = 0;
+    camera.rotation.z = 0;
+
+    controls = new THREE.OrbitControls(camera, webGLRenderer.domElement);
+    controls.enableDamping = true;
+    controls.damping = .25;
+
+    function degreesToRadians(degrees) {
+        var radians = (degrees * (3.141592654 / 180));
+        return radians;
+    }
+
+    var cameraOrbitTime = .01;
+    var orbitalVelocity = .025;
+
+    function addListeners() {
+        document.getElementById('repeatU').addEventListener('input', function () {
+            videoSphereTexture.repeat.set(this.value, document.getElementById('repeatV').value);
+            videoSphereTexture.wrapS = THREE.RepeatWrapping;
+            videoSphereTexture.wrapT = THREE.MirroredRepeatWrapping;
+        });
+
+        document.getElementById('repeatV').addEventListener('input', function () {
+            videoSphereTexture.repeat.set(document.getElementById('repeatU').value, this.value);
+            videoSphereTexture.wrapS = THREE.RepeatWrapping;
+            videoSphereTexture.wrapT = THREE.MirroredRepeatWrapping;
+        });
+
+        var vrDisplacementFactor =
+            document.getElementById('vrDisplacementFactor');
+        vrDisplacementFactor.addEventListener('input', function () {
+            vrSphere.material.displacementScale = this.value;
+
+        });
+
+        var vrScale = document.getElementById('vrScale');
+        vrScale.addEventListener('input', function () {
+            vrSphere.scale.set(this.value, this.value, this.value);
+
+        });
+
+        var vrEmissiveIntensity = document.getElementById('vrEmissiveIntensity');
+        vrEmissiveIntensity.addEventListener('input', function () {
+            vrSphere.material.emissiveIntensity = this.value;
+
+        });
+
+        var vrIor = document.getElementById('vrIor');
+        vrIor.addEventListener('input', function () {
+            vrSphere.material.ior = this.value;
+        });
+
+
+        var vrOpacity = document.getElementById('vrOpacity');
+        vrOpacity.addEventListener('input', function () {
+            vrSphere.material.opacity = this.value;
+        });
+
+
+        document.getElementById('vrMaterialColor')
+            .addEventListener('input', function (event) {
+                var color = new THREE.Color(this.value);
+                vrMaterial.color=color;
+            });
+        
+
+        document.getElementById('vrAmbientLightIntensity')
+            .addEventListener('input', function (event) {
+                ambientLight.intensity = this.value;
+            });
+
+        document.getElementById('vrCameraFOV').addEventListener('input', function (event) {
+            camera.fov = this.value;
+            updateProjectionMatrix();
+        })
+
+    }
+
+    addListeners();
+
+    function animate(time) {
+        requestAnimationFrame(animate);
+        TWEEN.update(time);
+
+        //if (orbitSun.checked == true) {
+        //    camera.position.x = theSun.position.x + (orbitDistance * Math.sin(cameraOrbitTime) + 0);
+        //    camera.position.z = theSun.position.z + (orbitDistance * Math.cos(cameraOrbitTime) + 0);
+        //    cameraOrbitTime += orbitalVelocity;
+        //}
+        camera.updateProjectionMatrix();
+        controls.update();
+        webGLRenderer.render(scene, camera);
+
+    }
+
+    function render() {
+        animate(performance.now());
+    }
+
+    document.body.onresize = function () {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        webGLRenderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+
+    }
+
+    document.body.onresize();
+    render();
+
+    var videoSpherePlayer = document.getElementById("videoSpherePlayer");
+        videoSpherePlayer.play();
+
+</script>

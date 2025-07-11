@@ -1,0 +1,98 @@
+﻿@model IEnumerable<UniverseObjects.Models.MajorWorldCity>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    //Layout = "~/Views/Shared/_UniverseObjectRendererLayout.cshtml";
+}
+<script src="~/DataTables/datatables.min.js"></script>
+<link href="~/DataTables/datatables.min.css" rel="stylesheet" />
+
+<table class="table" id="majorWorldCitiesTable">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City_Ascii)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Latitude)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Longitude)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CountryISO2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CountryISO3)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdministrativeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Capital)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Population)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IconPath)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City_Ascii)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Latitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Longitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CountryISO2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CountryISO3)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdministrativeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Capital)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Population)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IconPath)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+
+</table>
+<script>
+    var majorWorldCitiesTable =
+        new DataTable('majorWorldCitiesTable');
+
+</script>

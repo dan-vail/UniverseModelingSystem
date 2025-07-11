@@ -1,0 +1,1876 @@
+﻿
+
+
+<!DOCTYPE html PUBLIC
+          "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+
+    <meta name="viewport" content="width=device-width" />
+    <meta description="mymediaplay.com" />
+    <meta Latitude="32.7133795" />
+    <meta longitude="-114.7365814" />
+    <meta zoom="21" />
+    <meta googleMapsURI="https://www.google.com/maps/32.7133795,-114.7365814,21z" />
+    <meta geography="{lat: 32.7133795, long: -114.7365814}" />
+    <meta name="google-signin-client_id" content="166576250567-41quo5u4igr2iq2o7scug3250efhonc4.apps.googleusercontent.com" />
+
+    <title>mymediaplay.com</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <title>mymediaplay.com</title>
+
+
+    @*<script src="https://accounts.google.com/gsi/client" async=async defer=defer></script>
+        <script src="https://apis.google.com/js/platform.js" async=async defer=defer></script>*@
+
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js">
+    </script>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+
+    <script src="/Scripts/jquery-3.7.1.js"></script>
+    <script src="/Scripts/bootstrap.bundle.js"></script>
+    <script src="/threejs/build/three.min.js"></script>
+
+    <!-- VAILWARE LIBRARIES-->
+    <script src="/Scripts/vailware.master.library.beta.js"></script>
+
+    <!-- Font Awesome CSS -->
+    @*<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />*@
+
+
+    <!-- UI Library-->
+    @*<link rel="stylesheet" href="/content/demo.css" />*@
+    <script src="/Scripts/swiper-bundle.js"></script>
+    <link href="/Content/swiper-bundle.css" rel="stylesheet" />
+
+    <style>
+
+        input[type=range] {
+            height: 2vh;
+            -webkit-appearance: none;
+            margin: .1vw .1vw;
+            width: clamp(20px, 15vmin, 80px);
+        }
+
+            input[type=range]:focus {
+                outline: inset;
+            }
+
+            input[type=range]::-webkit-slider-runnable- {
+                width: 100%;
+                height: clamp(20px, 1vmax, 80px);
+                cursor: pointer;
+                animate: 1s;
+                box-shadow: .125vw .125vw .06vw #000000;
+                background: transparent;
+                border-radius: .125vw;
+            }
+
+            input[type=range]::-webkit-slider-thumb {
+                box-shadow: .1vmin .1vmin .1vmin #000000;
+                border: .05vmin solid #000000;
+                height: 1vmax;
+                width: .5vmax;
+                border-radius: .7vmin;
+                background: rgba(255, 0, 0, .8);
+                cursor: pointer;
+                -webkit-appearance: none;
+                margin-top: -1px;
+            }
+
+            input[type=range]:focus::-webkit-slider-runnable-track {
+                background: rgba(255, 0, 0, .5);
+            }
+
+            input[type=range]::-moz-range-track {
+                width: 100%;
+                height: 30px;
+                cursor: pointer;
+                animate: 0.2s;
+                box-shadow: 6px 6px 1px #000000;
+                background: #3071A9;
+                border-radius: 5px;
+                border: 1px solid #000000;
+            }
+
+            input[type=range]::-moz-range-thumb {
+                box-shadow: 1px 1px 1px #000000;
+                border: 1px solid #000000;
+                height: 30px;
+                width: 15px;
+                border-radius: 5px;
+                background: #FFFFFF;
+                cursor: pointer;
+            }
+
+            input[type=range]::-ms-track {
+                width: 100%;
+                height: 30px;
+                cursor: pointer;
+                animate: 0.2s;
+                background: transparent;
+                border-color: transparent;
+                color: transparent;
+            }
+
+            input[type=range]::-ms-fill-lower {
+                background: #3071A9;
+                border: 1px solid #000000;
+                border-radius: 10px;
+                box-shadow: 6px 6px 1px #000000;
+            }
+
+            input[type=range]::-ms-fill-upper {
+                background: #3071A9;
+                border: 1px solid #000000;
+                border-radius: 10px;
+                box-shadow: 6px 6px 1px #000000;
+            }
+
+            input[type=range]::-ms-thumb {
+                margin-top: 1px;
+                box-shadow: 1px 1px 1px #000000;
+                border: 1px solid #000000;
+                height: 30px;
+                width: 15px;
+                border-radius: 5px;
+                background: #FFFFFF;
+                cursor: pointer;
+            }
+
+            input[type=range]:focus::-ms-fill-lower {
+                background: #3071A9;
+            }
+
+            input[type=range]:focus::-ms-fill-upper {
+                background: #3071A9;
+            }
+
+        .cleanUIOnClick {
+        }
+
+        .UIElementsContainer {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+
+
+    <script>
+
+        //function showDropZone() {
+        //    var dropZone = document.getElementById("dropTools");
+        //    dropZone.style.visibility = "visible";
+        //    dropZone.style.backgroundColor = "rgba(255, 0, 0, .8)";
+        //    dropZone.style.fontSize = "clamp(32px, 8vh, 96px)";
+        //    dropZone.style.paddingTop = "40vh";
+        //    dropZone.innerHTML = "DROP FILE...";
+        //}
+
+        //function hideDropZone() {
+        //    var dropZone = document.getElementById("dropTools");
+        //    dropZone.style.visibility = "hidden";
+        //}
+
+
+        //window.addEventListener("dragover", function (event) {
+        //}, false);
+
+        //window.addEventListener("dragenter", function (event) {
+        //    showDropZone();
+        //}, false);
+
+
+        //window.addEventListener("dragleave", function (event) {
+        //}, false);
+
+    </script>
+
+    <style>
+        @@font-face {
+            font-family: audiowide;
+            src: url('/fonts/audiowide.ttf');
+        }
+
+        html, body {
+            font-family: audiowide;
+            background-color: transparent;
+            overflow: hidden;
+        }
+
+
+        h2 {
+        }
+
+            h2:hover {
+            }
+
+        h4 {
+        }
+
+            h4:hover {
+            }
+
+        #navigationWrapper {
+            font-family: Audiowide;
+            position: fixed;
+            background-color: transparent;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+        }
+
+        .whiteShadow {
+            -webkit-box-shadow: 5px 5px 15px 5px #ffffff;
+            box-shadow: 5px 5px 15px 5px #ffffff;
+        }
+
+        .blackBevel {
+            -webkit-box-shadow: 5px 5px 15px 5px #000000;
+            box-shadow: 5px 5px 15px 5px #000000;
+        }
+
+        .whiteBevel {
+            -webkit-box-shadow: 5px 5px 15px 5px #ffffff;
+            box-shadow: 5px 5px 15px 5px #ffffff;
+        }
+
+        .redGlow {
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #880000, 0 0 25px #880000, 0 0 30px #880000, 0 0 35px #880000;
+        }
+
+        .glowingRed {
+            animation: glowingRed 3s ease-in-out infinite alternate;
+        }
+
+        @@keyframes glowingRed {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #880000, 0 0 25px #880000, 0 0 30px #880000, 0 0 35px #880000;
+            }
+
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #FF0000, 0 0 40px #FF0000, 0 0 50px #FF0000, 0 0 60px #FF0000, 0 0 70px #FF0000;
+            }
+        }
+
+        .glowingOrange {
+            animation: glowingOrange 2s ease-in-out infinite alternate;
+        }
+
+        @@keyframes glowingOrange {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #b96b00, 0 0 25px #b96b00, 0 0 30px #ff8500, 0 0 35px #ff9c00;
+            }
+
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ffa400, 0 0 40px #ffa400, 0 0 50px #ffa400, 0 0 60px #ffa400, 0 0 70px #ffffff;
+            }
+        }
+
+        .glowingBlue {
+            animation: glowingBlue 2s ease-in-out infinite alternate;
+        }
+
+        @@keyframes glowingBlue {
+            from {
+                text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff, 0 0 20px #000022, 0 0 25px #000088, 0 0 30px #0000AA, 0 0 35px #0000CC;
+            }
+
+            to {
+                text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #0000ff, 0 0 40px #00aaaa, 0 0 50px #00DDDD, 0 0 60px #00ffff, 0 0 70px #00ffff;
+            }
+        }
+
+        .glowingGreen {
+            animation: glowingGreen 3s ease-in-out infinite alternate;
+        }
+
+        @@keyframes glowing {
+            from {
+                text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff, 0 0 20px #00aaaa, 0 0 25px #008800, 0 0 30px #00aa00, 0 0 35px #00cc00;
+            }
+
+            to {
+                text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #00ff00, 0 0 40px #00aaaa, 0 0 50px #00DDDD, 0 0 60px #00ffff, 0 0 70px #00ffff;
+            }
+        }
+
+        .buttons {
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="dropTargetInformation"
+         style="
+                        position: absolute;
+                        z-index: 9;
+                        visibility: hidden;">
+    </div>
+
+    <div id="dropObjects"
+         style="position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                visibility: hidden;
+                transition: .1s;">
+    </div>
+
+
+    @*<div id="dropTools">
+            <div id="basic_drop_zone" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; background-color: rgba(0, 92, 0, .4)">
+            </div>
+        </div>
+
+
+        <input type="file"
+               name="file"
+               multiple="true"
+               id="basic"
+               class="simple-upload"
+               style="position: absolute; top: 2px; right: 20vw" />*@
+
+    <div id="infoMarqueeContainer"
+         class="themedUI"
+         style="position: absolute;
+                width: 100%;
+                bottom: 0px;
+                left: 0px;
+                font-size: clamp(18px, 1.2vmax, 42px);
+                z-index: 999999;
+                background-color: transparent;
+                color: #ff0000;
+                text-shadow: 1px 1px 1px #000022">
+        <marquee id="nowPlayingMarquee" class="themedUI">
+            <label id="nowPlaying" class="themedUI">
+            </label>
+        </marquee>
+    </div>
+
+    <style>
+
+        .informationHUD {
+            position: absolute;
+            top: 24vh;
+            left: 10vw;
+            text-align: left;
+            font-size: clamp(12px, 1vh, 24px);
+            background-color: transparent;
+            color: #00ffff;
+            width: 80vw;
+            /*            z-index: 99;
+        */ display: block;
+        }
+
+        .HUDItems {
+            position: absolute;
+            text-align: center;
+            font-size: clamp(12px, 2vh, 32px);
+            background-color: transparent;
+            color: #ff0000;
+        }
+
+        /*       #dropTools {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100vw;
+            height: 100vh;
+            background-image: linear-gradient(0deg, transparent, rgba(0, 0, 0, .64));
+            visibility: hidden;
+            font-family: Audiowide;
+            font-size: clamp(12px, 2vh, 48px);
+            color: #00ffff;
+            text-align: center;
+        }
+
+        #fileName {
+        }*/
+    </style>
+
+    @*<div id="uploadInformation" class="informationHUD">
+            <table>
+                <tr>
+                    <td>
+                        <div id="progress" class="HUDItems"></div>
+                    </td>
+                    <td>
+                        <div id="filename" class="HUDItems"></div>
+                    </td>
+
+                </tr>
+            </table>
+        </div>*@
+
+    <style>
+        /*clamp(minimum, preferred, maximum);*/
+        .menuItem {
+            color: #00FFFF;
+        }
+
+            .menuItem img {
+                width: 4vh;
+                height: 4vh;
+                padding-top: 10px;
+            }
+    </style>
+
+
+
+    <style>
+        .mainMenuDIV {
+            font-size: clamp(12px, 4vh, 92px);
+            transition: 0s;
+        }
+
+            .mainMenuDIV:hover {
+                transition: .5s;
+                background-color: transparent;
+            }
+
+            .mainMenuDIV a {
+                font-size: clamp(12px, 4vh, 92px);
+            }
+
+                .mainMenuDIV a:hover {
+                    font-size: clamp(12px, 4.1vh, 92px);
+                }
+
+        .mainMenuHref {
+            font-size: clamp(12px, 4vh, 92px);
+        }
+
+            .mainMenuHref a {
+                font-size: clamp(12px, 4vh, 92px);
+            }
+
+                .mainMenuHref a:hover {
+                    font-size: clamp(12px, 4.1vh, 92px);
+                }
+
+
+        .buttons {
+            font-family: audiowide;
+            text-align: center;
+            font-size: clamp(12px, 1vmax, 24px);
+            background-color: rgba(16,16,16,.8);
+            color: #ffffff;
+            box-shadow: rgba(255 133 0, .9) 6px 6px 20px;
+            width: 10vw;
+            height: clamp(3vh, 5vh, 7vh);
+        }
+    </style>
+
+
+    <script>
+        //function onSignIn(googleUser) {
+        //    var profile = auth2.currentUser.get().getBasicProfile();
+        //    console.log('ID: ' + profile.getId());
+        //    console.log('Full Name: ' + profile.getName());
+        //    console.log('Given Name: ' + profile.getGivenName());
+        //    console.log('Family Name: ' + profile.getFamilyName());
+        //    console.log('Image URL: ' + profile.getImageUrl());
+        //    console.log('Email: ' + profile.getEmail());
+        //}
+    </script>
+
+
+
+    <div id="brandingWrapper"
+         class="themedUIObjectBackground uiContainer"
+         style="z-index: 1; overflow: hidden; display: inline-block; position: absolute; top: 0px; left: 0px; width: 100%; height: clamp(50px, 7vmax, 100px); background-color: transparent;">
+
+
+
+        <div style="position: absolute;
+                   top: 0px;
+                   left: 3px;
+                   display: inline-block;
+                   z-index: 9999;">
+            <a href="/Home/Index" style="color: #000022">
+                <label class="glowingOrange themedUI"
+                       style="font-size: clamp(20px, 4vmax, 36px);
+                            color: #000000; text-shadow: 2px 2px #000000;">
+                    mymediaplay
+                </label>
+            </a>
+        </div>
+    </div>
+
+    <div id="vrMenuContainer"
+         class="
+                vrNowPlaying
+                themedUI
+                themedUIBackground"
+         style="
+                position: absolute;
+                top: 0px;
+                left: clamp(240px, 40vmax, 45vmax);
+                width: 100%;
+                max-width: 60vw;
+                display: grid;
+                grid-row-start: auto;
+                grid-template-columns: 10vw 10vw 10vw 10vw;
+                text-align: center;
+                z-index: 9;
+                font-size: clamp(12px, 1vw, 18px);
+                opacity: 1;
+                visibility: visible;">
+
+        <div id="masterGainContainer"
+             style="
+                       width: 100%;
+                       display: flex;
+                       flex-direction: column;">
+
+            <div>
+                <label id="masterGainLabel"
+                       class="themedUI"
+                       style="">
+                    MASTER:
+                </label>
+            </div>
+
+            <div>
+                <input type="range"
+                       id="masterGainControl"
+                       class="
+                           touchFriendlyRange
+                           themedUIBackground"
+                       min="0"
+                       max="1"
+                       value=".1"
+                       step=".01"
+                       style="
+                           top: 0px;
+                           left: 0px;
+                           width: 100%;
+                           box-shadow: 5px 4px 20px rgba(255, 255, 255, .8);"
+                       oninput="modifyGains({
+                                    channel: 'masterGain',
+                                    gain: this.value})" />
+            </div>
+        </div>
+
+        <div id="zoomControlContainer"
+             style="
+                       width: 100%;
+                       display: flex;
+                       flex-direction: column;">
+            <div>
+                <label id="zoomLabel"
+                       class="themedUI"
+                       style="">
+                    ZOOM:
+                </label>
+            </div>
+            <div style="">
+                <input type="range"
+                       id="cameraFOV"
+                       class="
+                                   touchFriendlyRange
+                                   themedUIBackground"
+                       min="9"
+                       max="96"
+                       value="62"
+                       step="1"
+                       style="
+                           top: 0px;
+                           left: 0px;
+                           width: 100%;
+                           box-shadow: 5px 4px 20px rgba(255, 255, 255, .8);"
+                       oninput="window.camera.FOV = this.value" />
+            </div>
+        </div>
+
+        <div id="materialEmmissionControlContainer"
+             style="
+                       width: 100%;
+                       display: flex;
+                       flex-direction: column;">
+
+            <div id="materialEmmissionLabel">
+                <label id="materialIntensityLabel"
+                       class="themedUI"
+                       style="
+                           left: 0px;
+                           top: 0px;
+                           text-align: right;">
+                    LIGHTING:
+                </label>
+            </div>
+            <div style="">
+                <input type="range"
+                       id="materialEmmisionIntensity"
+                       class="touchFriendlyRange themedUIBackground"
+                       min="0"
+                       max="2"
+                       value="1"
+                       step=".01"
+                       style="
+                           top: 0px;
+                           left: 0px;
+                           width: 100%;
+                           box-shadow: 5px 4px 20px rgba(255, 255, 255, .8);"
+                       oninput="alterObjectMaterialProperties({
+                  meshObjectName: document.getElementById('AVSourcesSelector').value,
+                  materialPropertyName: 'emissiveIntensity',
+                  materialPropertyValue: this.value})" />
+            </div>
+        </div>
+
+        <div id="videoPlayerPositionContainer"
+             style="
+                       width: 100%;
+                       display: flex;
+                       flex-direction: column;">
+            <div>
+                <label id="videoPlayerPositionLabel"
+                       class="themedUI"
+                       style="">
+                    POSITION:
+                </label>
+            </div>
+
+            <div id="currentVideoPositionControl"
+                 style="">
+                <input type="range"
+                       id="variableVideoPosition"
+                       class="
+                                touchFriendlyRange
+                                themedUIBackground"
+                       min="0"
+                       max="100"
+                       value="0"
+                       step=".01"
+                       style="
+                           top: 0px;
+                           left: 0px;
+                           width: 100%;
+                           box-shadow: 5px 4px 20px rgba(255, 255, 255, .8);" />
+
+                <label id="currentVideoPlayerPositionLabel"
+                       class="
+                           themedUI
+                           themedUIBackground
+                           whiteShadow">
+                    N/A
+                </label>
+                <label class="
+                                  themedUI
+                                  themedUIBackground
+                                  whiteShadow">
+                    /
+                </label>
+                <label id="currentVideoPlayerVideoLengthLabel"
+                       class="
+                                    themedUI
+                                    themedUIBackground
+                                    whiteShadow">
+                    N/A
+                </label>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="masterMenuIcons"
+         style="position: absolute;
+                    top: 0px;
+                    right: 0px;
+                    width: 20vmax;
+                    display: grid;
+                    grid-template-columns: 4vw 4vw 4vw;
+                    z-index: 9999;">
+
+        <div id="menuItemHUDToggler"
+             style="position: absolute;
+                    left: 5vmax;
+                    width: 7vmax;
+                    top: 0px;">
+            <button value="HUD"
+                    class="buttons themedUI themedUIBackground"
+                    style="width: 3vmax; height: 3vmax;"
+                    onclick="applicationMenuBarActivateItem({itemID: 'deviceMovementHUD', action: 'toggleDropDownMenu'})">
+                HUD
+            </button>
+        </div>
+
+        <div id="vrHotSpot"
+             style="
+                    position: absolute;
+                    left: 0px;
+                    width: 5vmax;
+                    top: 0px;">
+
+            <a href="#"
+               id="vrMode"
+               class="themedUI themedUIHighlight"
+               style="
+                      font-size: clamp(18px, 2.5vmax, 22px);
+                      color: #ffa400;
+                      text-shadow: 2px 2px #FFFFFF;"
+               onclick="toggleVRMode()">
+
+                <img src="/icons/vrOff.png"
+                     id="vrModeIcon"
+                     style="width: 5vmax;
+                    height: 5vmax;" />
+            </a>
+        </div>
+
+        <div id="settingsGear"
+             style="
+                        position: absolute;
+                        top: 0px;
+                        left: 10vmax;
+                        width: 5vmax;
+                        height: 5vmax;
+                        display: inline-block;
+                        z-index: 9999;
+                        visibility: visible;
+                        opacity: 1;">
+
+            <a href="#">
+                <img id="settingsIcon"
+                     src="~/icons/settings.png"
+                     style="
+                        width: 5vmax;
+                        height: 5vmax;" />
+            </a>
+        </div>
+
+        <div id="hamburgerMenu"
+             style="position: absolute;
+                  top: 0px;
+                  left: 15vmax;
+                  width: 5vmax;
+                  height: 5vmax;
+                  display: inline-block;
+                  z-index: 999999999;
+                  visibility: visible;
+                  opacity: 1;">
+
+            <a href="#"
+               style="
+                          font-size: clamp(18px, 3.5vmax, 36px);
+                          color: #000000;
+                          text-shadow: 3px 3px #000000;"
+               class="glowingOrange themedUI"
+               id="hamburgerIcon">
+                <b>&#9776</b>
+            </a>
+        </div>
+
+
+
+    </div>
+
+
+    <div id="subMenu"
+         class="
+         actionableElement
+         themedBackground
+         themedUIHighlight
+         uiMenu"
+         style=" position: absolute; z-index: 999; display: grid; grid-template-rows: 5vmax; grid-template-columns: repeat(auto-fit, 8vw); justify-content: center; overflow: auto; top: clamp(40px, 10vh, 60px); left: 0px; width: 100%; height: clamp(40px, 7vh, 100px); background-color: transparent;">
+
+
+        <div id="modifyMenuLayout">
+            <button id="mainMenuOrientationControl"
+                    value="orientationLayout"
+                    class="themedUI themedUIBackground buttons"
+                    onclick="modifySubMenuLayout({direction: 'vertical'})">
+                VERTICAL
+            </button>
+
+        </div>
+
+        <div id="sourcesSelector">
+            <select id="AVSourcesSelector"
+                    class="
+                    themedUIBackground
+                    themedUIHighlight
+                    buttons">
+            </select>
+        </div>
+
+        <div id="menuItemAudio">
+            <button value="AUDIO"
+                    class="
+                    themedUIBackground
+                    themedUIHighlight
+                    buttons"
+                    onclick="applicationMenuBarActivateItem({itemID: 'audioGraphArchitect', action: 'toggleDropDownMenu'})">
+                AUDIO
+            </button>
+        </div>
+
+
+        <div>
+            <button value="MEDIA"
+                    class="
+                    themedUIBackground
+                    themedUIHighlight
+                    buttons"
+                    onclick="applicationMenuBarActivateItem({itemID: 'fileManager', action: 'toggleDropDownMenu'})">
+                MEDIA
+            </button>
+        </div>
+
+        <div id="menuItemSources">
+            <button value="SOURCES"
+                    class="
+                    themedUIBackground
+                    themedUIHighlight
+                    buttons"
+                    onclick="applicationMenuBarActivateItem({itemID: 'sources', action: 'toggleDropDownMenu'})">
+                SOURCES
+            </button>
+        </div>
+
+        <div id="menuItemDevices">
+            <button value="DEVICES"
+                    class="
+                    themedUIBackground
+                    themedUIHighlight
+                    buttons"
+                    onclick="applicationMenuBarActivateItem({itemID: 'devices', action: 'toggleDropDownMenu'})">
+                I/O
+            </button>
+        </div>
+
+        <div id="menuItemObjects">
+            <button value="3D OBJECTS"
+                    class="
+                    themedUIBackground
+                    themedUIHighlight
+                    buttons"
+                    onclick="applicationMenuBarActivateItem({itemID: 'videoObjectsDropDown', action: 'toggleDropDownMenu', topPosition: '3vh'})">
+                OBJECTS
+            </button>
+        </div>
+
+
+        <div id="menuItemAnimation">
+            <button value="ANIMATION"
+                    class="
+                    themedUIBackground
+                    themedUIHighlight
+                    buttons"
+                    onclick="applicationMenuBarActivateItem({itemID: 'animation', action: 'toggleDropDownMenu'})">
+                ANIMATION
+            </button>
+        </div>
+
+        <div id="menuItemEnvironment">
+            <button value="ENVIRONENT"
+                    class="
+                    themedUIBackground
+                    themedUIHighlight
+                    buttons"
+                    onclick="applicationMenuBarActivateItem({itemID: 'environment', action: 'toggleDropDownMenu'})">
+                ENVIRONMENT
+            </button>
+        </div>
+
+        <div id="menuItemYoutube">
+            <button value="YOUTUBE"
+                    class="
+                    themedUIBackground
+                    themedUIHighlight
+                    buttons"
+                    onclick="applicationMenuBarActivateItem({itemID: 'youtube', action: 'toggleDropDownMenu', topPosition: '7vh'})">
+                YOUTUBE
+            </button>
+        </div>
+
+        <div id="menuItemVisualizer">
+            <select id="showAudioVisualizer"
+                    class="mainMenuBarDropDownSelect
+                           themedUI
+                           themedUIBackground"
+                    oninput="processVisualizerOptionsDropDown({
+                                 visualizer: null,
+                                 action: null,
+                                 options: null,
+                                 string: this.value})">
+                <option value="NONE">NONE</option>
+                <option value="rawAudio">RAW AUDIO</option>
+                <option value="eqBottom">EQ BOTTOM</option>
+                <option value="eqLeft">EQ LEFT</option>
+                <option value="eqHidden">EQ HIDDEN</option>
+                <option value="Beta">PARTICLE SYSTEM</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="vrControls"
+         class="vrPlaying"
+         style="position: absolute;
+                    top: clamp(50px, 6vh, 70px);
+                    left: 0px;
+                    visibility: visible;
+                    opacity: 1;
+                    width: 100%;
+                    transition: 1s;">
+        @{Html.RenderAction("VRControls", "Home");}
+    </div>
+
+
+
+
+    <script>
+        function vailwareProcessGoogleAuthentication(googleUser) {
+
+            var googleAuthentication = window.googleUser();
+
+            googleAuthentication.sub = window.googleUser.sub;
+            googleAuthentication.name = window.googleUser.name;
+            googleAuthentication.given_name = window.googleUser.given_name;
+            googleAuthentication.family_name = window.googleUser.family_name;
+            googleAuthentication.picture = window.googleUser.picture;
+            googleAuthentication.email = window.googleUser.email;
+            googleAuthentication.email_verified =
+                window.googleUser.email_verified;
+            googleAuthentication.iat = window.googleUser.iat;
+            googleAuthentication.exp = window.googleUser.exp;
+            googleAuthentication.jti = window.googleUser.jti;
+
+            $.ajax({
+                type: "POST",
+                url: "/googleAuthentications/Create",
+                data: JSON.stringify(googleAuthentication),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response != null) {
+                        vailwareGoogleAuthenticatedUserInfo = response;
+                        document.getElementById("nowPlaying").innerHTML =
+                            "Hello " + vailwareGoogleAuthenticatedUserInfo.name;
+                    } else {
+                        document.getElementById("nowPlaying").innerHTML =
+                            "Posting Google authentication to database failed...";
+                    }
+                },
+                failure: function (error) {
+                    handleEvent("Failed posting googleAuthentication to database...", error, true);
+                },
+                error: function (error) {
+                    handleEvent("Failed posting googleAuthentication to database...", error, true);
+                }
+            });
+        }
+
+        function vailwareGoogleSignIn(response) {
+            // decodeJwtResponse() is a custom function defined by you
+            // to decode the credential response.
+
+            const responsePayload = response.credential;
+            window.googleResponsePayload = responsePayload;
+            window.googleResponse = response;
+
+            var url = 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' +
+                responsePayload;
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                async: false,
+                success: function (userInfo) {
+                    ////info about user
+                    window.googleUser.sub = userInfo.sub;
+                    window.googleUser.name = userInfo.name;
+                    window.googleUser.given_name = userInfo.given_name;
+                    window.googleUser.family_name = userInfo.family_name;
+                    window.googleUser.picture = userInfo.picture;
+                    window.googleUser.email = userInfo.email;
+                    window.googleUser.email_verified = userInfo.email_verified;
+                    window.googleUser.iat = userInfo.iat;
+                    window.googleUser.exp = userInfo.exp;
+                    window.googleUser.jti = userInfo.jti;
+                    window.googleUser = userInfo;
+
+                    var parsedGoogleIdentityInformation =
+                        JSON.stringify(window.googleUser);
+
+                    var googleProfileDIV =
+                        document.getElementById("googleProfileDIV");
+
+                    googleProfileDIV.innerHTML =
+                        "<h2><b><u>WELCOME " +
+                        userInfo.name +
+                        "</u></b><br></h2>" +
+                        "<img src='" +
+                        userInfo.picture +
+                        "'>" +
+                        "<br>" +
+                        "email: " +
+                        userInfo.email +
+                        "<br>";
+
+                    console.log(userInfo);
+                    postGoogleAuthentication(userInfo);
+                },
+                error: function (e) {
+                    console.log('error');
+
+                }
+            });
+        }
+    </script>
+
+    <div id="googleLoginContainer" class="uiMenu">
+        <div id="g_id_onload"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID"
+             data-login_uri="https://your.domain/your_login_endpoint"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-size="large"
+             data-theme="outline"
+             data-text="sign_in_with"
+             data-shape="rectangular"
+             data-logo_alignment="left">
+        </div>
+
+        <div id="oAuthLogins" style="
+                    top: 10px;
+                    right: 10vw;
+                    z-index: 1024;
+                    visibility: hidden;">
+            <div id="facebookLoginContainer">
+                <div class="fb-login-button" data-width="" data-size="small" data-button-type="continue_with" data-layout="default" data-auto-logout-link="true" data-use-continue-as="true"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="uiContainer"
+         style="position: absolute;
+                z-index: 1;
+                bottom: 0px;
+                left: 0px;
+                width: 100%;
+                overflow: hidden;
+                background-color: transparent">
+        @{Html.RenderAction("Contact", "Home");}
+    </div>
+
+
+
+    @section Scripts {
+    }
+
+    <div id="fullScreenNavigation"
+         class="
+                themedUI
+                themedUIBackground"
+         style="position: absolute;
+                top: -120vh;
+                left: -120vw;
+                width: 100%;
+                height: 70%;
+                visibility: hidden;
+                opacity: 0;
+                z-index: 99999999">
+        @{Html.RenderAction("Menu", "Home");}
+    </div>
+
+
+    <div id="layoutRenderedBody"
+         class="
+                themedUI
+                themedUIBackground"
+         style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; background-color: transparent;">
+        @RenderBody()
+    </div>
+
+    <script>
+
+        function hideContainer({
+            containerID,
+        }) {
+            var container =
+                document.getElementById(containerID);
+            container.style.transition = "2s";
+            container.style.visibility = "hidden";
+            container.style.top = "-120vh";
+            container.style.left = "-110vw";
+            container.style.width = "1%";
+            container.style.height = "1vh";
+            container.style.opacity = "0";
+        }
+
+
+        function showHamburgerMenuContent() {
+            var fullScreenNavigation =
+                document.getElementById("fullScreenNavigation");
+            fullScreenNavigation.style.opacity = '1';
+            fullScreenNavigation.style.visibility = 'visible';
+
+        }
+
+        function showContainer({
+            containerID,
+            hideClass,
+            transition,
+            top,
+            left,
+            width,
+            height,
+            opacity,
+            visibility
+        }) {
+            var container =
+                document.getElementById(containerID);
+
+
+            if (transition != undefined) {
+                container.style.transition = transition;
+            }
+
+            if (top != undefined) {
+                container.style.top = top;
+            }
+
+            if (left != undefined) {
+                container.style.left = left;
+            }
+
+            if (width != undefined) {
+                container.style.width = width;
+            }
+
+            if (height != undefined) {
+                container.style.height = height;
+            }
+
+            container.style.opacity = "1";
+            container.style.visibility = "visible";
+        }
+
+
+        function toggleFullScreenNavigation() {
+            var fullScreenNavigation =
+                document.getElementById("fullScreenNavigation")
+
+            if (fullScreenNavigation.style.visibility == 'visible') {
+                fullScreenNavigation.style.transition = '2s';
+                fullScreenNavigation.style.visibility = 'hidden';
+                fullScreenNavigation.style.opacity = '0';
+                fullScreenNavigation.style.left = '-120vw';
+                fullScreenNavigation.style.top = '-120vh';
+                return false;
+            }
+
+            if (fullScreenNavigation.style.visibility = 'hidden') {
+                fullScreenNavigation.style.transition = '2s';
+                fullScreenNavigation.style.visibility = 'visible';
+                fullScreenNavigation.style.opacity = '1';
+                fullScreenNavigation.style.left = '15vw';
+                fullScreenNavigation.style.top = '25vh';
+                fullScreenNavigation.style.width = "70vw"
+                return false;
+            }
+        }
+
+        function toggleContainer({
+            containerID }) {
+
+            var container =
+                document.getElementById(containerID);
+
+            if (container == undefined) {
+                return false;
+            }
+
+            if (container.style.visibility == "visible") {
+                hideContainer({
+                    containerID: containerID
+                });
+                return false;
+            }
+
+            if (container.style.visibility == "hidden") {
+                showContainer({
+                    containerID: containerID,
+                    visibility: visible,
+                    opacity: 1
+                });
+                return false;
+            }
+        }
+
+        function placeEqualizer({
+            location,
+            direction,
+            size
+        }) {
+            var visualizerContainer =
+                document.getElementById("visualizer-container");
+            switch (location) {
+                case "bottom":
+                    visualizerContainer.style.opacity = "1";
+                    visualizerContainer.style.visibility = "visible";
+                    visualizerContainer.style.position = "absolute";
+                    visualizerContainer.style.height = "25vh";
+                    visualizerContainer.style.bottom = "100vh";
+                    visualizerContainer.style.left = "0px";
+
+                case "right":
+                    visualizerContainer.style.opacity = "1";
+                    visualizerContainer.style.visibility = "visible";
+                    visualizerContainer.style.position = "absolute";
+                    visualizerContainer.style.right = "0px";
+                    visualizerContainer.style.height = "100%";
+                    visualizerContainer.style.transform = "rotate(-90deg)";
+                    visualizerContainer.style.transformOrigin = "100% 100%";
+
+                case "hidden":
+                    visualizerContainer.style.position = "absolute";
+                    visualizerContainer.style.left = "110vw";
+                    visualizerContainer.style.opacity = "0";
+                    visualizerContainer.style.visibility = "hidden";
+            }
+        }
+
+        function hideClass({
+            className }) {
+
+            if (className == undefined) {
+                return false;
+            }
+
+            var className = "." + className;
+            $(className).css("transition", "3s");
+            $(className).css("visibility", "hidden");
+            $(className).css("opacity", "0");
+        }
+
+        function showClass({
+            className
+        }) {
+
+            if (className == undefined) {
+                return false;
+            }
+
+            var jQueryclassName = "." + className;
+            $(jQueryclassName).css("transition", "3s");
+            $(jQueryclassName).css("visibility", "visible");
+            $(jQueryclassName).css("opacity", "1");
+        }
+
+
+
+        document.getElementById("hamburgerMenu").addEventListener("click", function () {
+            toggleFullScreenNavigation();
+        });
+
+        document.getElementById("vrMode").addEventListener("mouseenter", function () {
+            var vrModeIcon =
+                document.getElementById("vrModeIcon");
+            vrModeIcon.style.transition = "2s";
+            vrModeIcon.src = '/icons/vrOn.png';
+            vrModeIcon.style.width = "7vmax";
+            vrModeIcon.style.height = "7vmax";
+        });
+
+        document.getElementById("vrMode").addEventListener("mouseleave", function () {
+            var vrModeIcon =
+                document.getElementById("vrModeIcon");
+            vrModeIcon.style.transition = "2s";
+            vrModeIcon.src = '/icons/vrOff.png';
+            vrModeIcon.style.width = "5vmax";
+            vrModeIcon.style.height = "5vmax";
+        });
+
+
+        document.getElementById("settingsIcon").addEventListener("mouseenter", function () {
+            this.style.transition = "2s";
+            this.src = "/icons/settingsHover.png"
+            this.style.width = "7vmax";
+            this.style.height = "7vmax";
+
+
+        });
+
+        document.getElementById("settingsIcon").addEventListener("mouseleave", function () {
+            this.style.transition = "2s";
+            this.src = "/icons/settings.png"
+            this.style.width = "5vmax";
+            this.style.height = "5vmax";
+        });
+
+
+        document.getElementById("settingsGear").addEventListener("click", function () {
+            showClass({ className: "uiContainer" });
+            showClass({ className: "vrContainer" });
+            showClass({ className: "settingsContainer" });
+            showClass({ className: "vrMenu" });
+            showClass({ className: "vrNowPlaying" })
+            showClass({ className: "uiMenu" });
+
+            cleanupUI();
+        });
+
+
+        showClass({
+            className: "uiContainer"
+        });
+
+        function VRCreateSphereEnvironment() {
+
+            //try {
+            //    window.scene.children.forEach(function (object) {
+            //        if (object.type == "Mesh") {
+            //            if (object.videoPlayerName != undefined) {
+            //                window.scene.object.remove();
+            //            }
+            //        }
+            //    });
+            //    window.videoObjects.length = 0;
+            //} catch (error) { }
+
+            var vrPlayer =
+                window.videoPlayers[window.videoPlayers.findIndex
+                    (o => o.id == "vrPlayer")];
+
+
+            if (vrPlayer == undefined) {
+                var vrPlayer = createNewAVSource({
+                    newAVSourceName: "vrPlayer",
+                    geometryType: "sphere"
+                });
+            }
+
+            var vrPlayer =
+                window.videoPlayers[window.videoPlayers.findIndex
+                    (o => o.id == "vrPlayer")];
+
+            changeVideoPlayerMedia({
+                media: "/videos/562-czechvr-3d-1920x960-30fps-smartphone_lq-fullvideo-1.mp4",
+                videoPlayerName: "vrPlayer"
+            });
+
+            var vrMediaSelector =
+                document.getElementById("vrMediaSelector");
+
+            if (vrMediaSelector == undefined) {
+                var vrMediaSelector =
+                    document.createElement("select");
+                vrMediaSelector.setAttribute("id", "vrMediaSelector");
+                vrMediaSelector.style.position = "absolute";
+                vrMediaSelector.style.top = "96vh";
+                vrMediaSelector.style.right = "0px";
+                vrMediaSelector.style.fontSize = "clamp(20px, 2vmax, 26px)";
+                vrMediaSelector.style.backgroundColor = "rgba(72, 0, 0, .6)";
+                vrMediaSelector.style.color = "#ff0000";
+                vrMediaSelector.style.zIndex = "999999";
+                vrMediaSelector.style.width = "50vw";
+                document.body.appendChild(vrMediaSelector);
+            }
+
+            populateMediaFilesSelector("vrMediaSelector");
+
+
+            var vrMediaSelector =
+                document.getElementById("vrMediaSelector");
+
+
+            vrMediaSelector.addEventListener("input", function (event) {
+                changeVideoPlayerMedia({
+                    media: this.value,
+                    videoPlayerName: "vrPlayer"
+                });
+
+            });
+
+            var vrSphere =
+                window.videoObjects[window.videoObjects.findIndex
+                    (o => o.name == "vrPlayer")];
+            window.vrSphere = vrSphere;
+
+            var objectScale = 1800;
+            var objectCount = window.videoObjects.length;
+
+            vrSphere.position.x =
+                (objectCount * objectScale) * 10;
+
+            vrSphere.position.y =
+                (objectCount * objectScale) * 15;
+
+            vrSphere.position.z =
+                (-1 * (objectCount * objectScale) * 20);
+
+            var cameraTargetVector = new THREE.Vector3(
+                vrSphere.position.x - 10,
+                vrSphere.position.y - 10,
+                vrSphere.position.z - 10)
+
+            var camera = window.camera;
+
+            var cameraTween = new
+                TWEEN.Tween(window.camera.position)
+                .to(cameraTargetVector, 5000)
+                .easing(TWEEN.Easing.Quadratic.InOut)
+                .onUpdate(function () {
+                })
+                .onComplete(function () {
+                    window.camera.rotation.x = 0;
+                    window.camera.rotation.y = 0;
+                    window.camera.rotation.z = 0;
+                })
+                .start();
+
+
+            if (vrSphere != undefined) {
+                window.controls.target = vrSphere.position;
+                window.controls.update();
+            }
+
+
+            vrMediaSelector.addEventListener("input", function () {
+                var vrPlayer =
+                    window.videoPlayers[window.videoPlayers.findIndex
+                        (o => o.name == "VRPlayer")];
+
+                changeVideoPlayerMedia({
+                    media: "/userData/explorerdan@gmail.com/Virtual Reality/" + this.value,
+                    videoPlayerName: "VRPlayer"
+                });
+
+            })
+        }
+
+
+
+        function modifySubMenuLayout({
+            direction
+        }) {
+
+            if (direction == "refresh") {
+                var direction =
+                    document.getElementById('mainMenuOrientationControl').innerHTML;
+
+                switch (direction) {
+                    case "vertical":
+                        var elements =
+                            document.querySelectorAll(".applicationMenuBarItemsDropDown");
+
+                        elements.forEach(function (element) {
+                            element.style.left = "15vw";
+                            element.style.top = "10vh";
+                            element.style.width = "75vw";
+                            element.style.height = "90vh";
+                        });
+                        return "vertical";
+
+                    case "horizontal":
+                        var elements =
+                            document.querySelectorAll(".applicationMenuBarItemsDropDown");
+
+                        elements.forEach(function (element) {
+                            element.style.left = "3vw";
+                            element.style.top = "14vh";
+                            element.style.width = "90vw";
+                            element.style.height = "88vh";
+                        });
+                        return "horizontal";
+                }
+            }
+
+            if (direction == "hide") {
+                var subMenu =
+                    document.getElementById("subMenu");
+
+                subMenu.style.top = "-50vh";
+                subMenu.style.opacity = "0";
+                subMenu.style.visibility = "hidden";
+
+                var elements =
+                    document.querySelectorAll(".applicationMenuBarItemsDropDown");
+
+                elements.forEach(function (element) {
+                    element.style.left = "4vw";
+                    element.style.top = "12vh";
+                    element.style.width = "90vw";
+                    element.style.height = "88vh";
+                });
+
+                return false;
+            }
+
+            var mainMenuOrientationControl =
+                document.getElementById("mainMenuOrientationControl");
+
+            if (mainMenuOrientationControl.innerHTML == "Y") {
+                direction = "vertical";
+            }
+
+            if (mainMenuOrientationControl.innerHTML == "X") {
+                direction = "horizontal";
+            }
+
+            var subMenu =
+                document.getElementById("subMenu");
+
+            switch (direction) {
+                case "horizontal":
+
+                    var mainMenuOrientationControl =
+                        document.getElementById("mainMenuOrientationControl");
+                    mainMenuOrientationControl.innerHTML = "Y"
+
+                    subMenu.style.transition = "2s";
+                    subMenu.style.top = "clamp(50px, 12vh, 80px)";
+                    subMenu.style.width = "100%";
+                    subMenu.style.height = "6vh";
+                    subMenu.style.left = "0px";
+                    subMenu.style.overflow = "hidden";
+
+                    var elements =
+                        document.querySelectorAll(".applicationMenuBarItemsDropDown");
+
+                    elements.forEach(function (element) {
+                        element.style.left = "3vw";
+                        element.style.top = "14vh";
+                        element.style.width = "90vw";
+                        element.style.height = "88vh";
+                    });
+
+                    showClass({ className: 'uiContainer' });
+                    break;
+
+                case "vertical":
+                    var mainMenuOrientationControl =
+                        document.getElementById("mainMenuOrientationControl");
+                    mainMenuOrientationControl.innerHTML = "X"
+
+                    subMenu.style.transition = "2s";
+                    subMenu.style.width = "12vw";
+                    subMenu.style.top = "clamp(50px, 12vh, 80px)";
+                    subMenu.style.height = "90vh";
+                    subMenu.style.left = "3vw";
+                    subMenu.style.overflow = "hidden";
+
+                    var elements =
+                        document.querySelectorAll(".applicationMenuBarItemsDropDown");
+
+                    elements.forEach(function (element) {
+                        element.style.left = "15vw";
+                        element.style.top = "10vh";
+                        element.style.width = "75vw";
+                        element.style.height = "90vh";
+                    });
+                    showClass({ className: 'uiContainer' });
+                    break;
+            }
+        }
+
+
+        //window.addEventListener("deviceorientation", function (event) {
+
+        //})
+
+        //window.addEventListener("devicemotion", function (event) {
+
+        //})
+
+        function variableObjectTween({
+            objectName,
+            property,
+            value,
+            duration
+        }) {
+
+            //if (object == undefined) {
+            //    return false;
+            //}
+
+            //if (property == undefined) {
+            //    return false;
+            //}
+
+            if (value == undefined) {
+                value = 100;
+            }
+
+            //if (duration == undefined) {
+            //    duration = 5000;
+            //}
+
+            var objectToAnimate =
+                window.scene.children[window.scene.children.findIndex
+                    (o => o.name == objectName)];
+
+            var scale =
+                new THREE.Vector3().copy(objectToAnimate.scale);
+
+            var destinationScale =
+                new THREE.Vector3({
+                    x: value,
+                    y: value,
+                    z: value
+                });
+
+            try {
+                var tween =
+                    new TWEEN.Tween(scale)
+                        .to(destinationScale, duration)
+                        .easing(TWEEN.Easing.Quadratic.InOut)
+                        .onUpdate(function () {
+                            objectToAnimate.scale = scale;
+                        })
+                        .onComplete(function () {
+                        })
+                        .start();
+            } catch (error) {
+                alert(error.message);
+                console.log(error);
+            }
+        }
+
+        //var performGeneralAnimation = document.getElementById("performGeneralAnimation");
+        //performGeneralAnimation.addEventListener("click", function () {
+
+        //    var animationTypeSelect =
+        //        document.getElementById("objectAnimationType");
+
+        //    if (animationTypeSelect != undefined) {
+        //        var animationType = animationTypeSelect.value;
+        //    } else {
+        //        return false;
+        //    }
+
+        //    var objectToAnimate =
+        //        document.getElementById("objectToAnimate");
+
+        //    if (objectToAnimate != undefined) {
+        //        var objectToAnimateName = objectToAnimate.value;
+        //    } else {
+        //        return false;
+        //    }
+
+        //    var generalValue1 =
+        //        document.getElementById("generalValue1");
+        //    alert(generalValue1.value);
+        //    if (generalValue1 != undefined) {
+        //        value = generalValue1.value;
+        //    } else {
+        //        return false;
+        //    }
+
+
+        //        variableObjectTween({
+        //            objectName: objectToAnimateName,
+        //            property: animationType,
+        //            value: value,
+        //            duration: 5000
+        //        });
+        //});
+
+
+        $(document).ready(function () {
+            createActionableUIObjects();
+
+
+            var rangeControls = document.querySelectorAll("input[type='range']");
+            rangeControls.forEach(range => {
+
+                range.addEventListener("mouseout", function (event) {
+                    var valueBubble = document.getElementById("valueBubble");
+                    if (valueBubble != undefined) {
+                        valueBubble.style.transition = "2s";
+                        valueBubble.style.visibility = "hidden";
+                    }
+                });
+
+
+                range.addEventListener("input", function (event) {
+                    var mousePositionX = event.clientX;
+                    var mousePositionY = event.clientY;
+
+                    var rangeBounds =
+                        range.getBoundingClientRect();
+
+                    var left = rangeBounds.left;
+                    var top = rangeBounds.top;
+                    var bottom = rangeBounds.bottom;
+
+
+
+                    var valueBubble = document.getElementById("valueBubble");
+                    if (valueBubble == undefined) {
+                        var valueBubble = document.createElement("label");
+                        valueBubble.setAttribute("id", "valueBubble");
+                        valueBubble.style.position = "absolute";
+                        valueBubble.style.zIndex = "99999";
+                        valueBubble.style.fontSize = "16px";
+                        valueBubble.style.color = "#ff0000";
+                        valueBubble.style.backgroundColor = "rgba(128, 0, 0, .9);"
+                        valueBubble.style.left = left + 'px';
+                        valueBubble.style.top = bottom + 'px';
+                        valueBubble.style.transition = "2s";
+                        document.body.append(valueBubble);
+                    }
+                    valueBubble.style.transition = ".5s";
+                    valueBubble.style.visibility = "visible";
+                    valueBubble.innerHTML = "VALUE: " + this.value;
+                    valueBubble.style.left = left + 'px';
+                    valueBubble.style.top = bottom + 'px';
+                    valueBubble.style.backgroundColor = "rgba(16, 16, 16, .9);"
+                });
+            })
+
+            try {
+                createNewAVSource({ newAVSourceName: 'video', geometryType: 'cube' });
+            } catch (error) { }
+
+            modifySubMenuLayout({ direction: "horizontal" });
+
+
+            var themeObjectBackgroundColor =
+                document.getElementById("themeObjectBackgroundColor");
+
+            themeObjectBackgroundColor.addEventListener("input", function () {
+
+                var themeObjectBackgroundColor = document.getElementById("themeObjectBackgroundColor");
+                var localColor = themeObjectBackgroundColor.value;
+                var color = new THREE.Color(themeObjectBackgroundColor.value);
+                var rgbColor = color.getRGB;
+                var rgbaColor = new THREE.Color(rgbColor);
+                var rgba = "rgba(" + rgbaColor.r + "," + rgbaColor.g + ", " + rgbaColor.b + ", .3)";
+
+                $(".themedUIObjectBackgroundColor").css("background-color", rgba);
+            });
+
+            //$(".themedUIHighlight").on("mouseover", function (event) {
+            //    event.target.style.color = $("#themeHighlightColor").val;
+            //});
+
+            //$(".themedUIHighlight").on("mouseout", function (event) {
+            //    event.target.style.color = $("#themeColor").val;
+            //})
+
+            var themeHighlightColor =
+                document.getElementById("themeHighlightColor");
+
+            themeHighlightColor.addEventListener("input", function () {
+                $("themedUIEqualizerBar").css("background-color", this.value);
+                $("themedUIEqualizerBar").css("opacity", ".72");
+
+                $(".themedUIHighlight").css("color", this.value);
+
+                $(".themedUI").css("text-shadow",
+                    "2px 2px " + $("#themeBackgroundColor").val);
+            });
+
+            var themeColor = document.getElementById("themeColor");
+            themeColor.addEventListener("input", function () {
+                var themeColor = document.getElementById("themeColor");
+                var localColor = themeColor.value;
+                var color = new THREE.Color(this.value);
+                var rgbColor = color.getRGB;
+                var rgbaColor = new THREE.Color(rgbColor);
+                var rgba = "rgba(" + rgbaColor.r + "," + rgbaColor.g + ", " + rgbaColor.b + ", .3)";
+
+                $(".themedUI").css("color", localColor);
+                $(".ag-theme-vailware-dark").css("color", rgba);
+
+                if (window.scene != undefined) {
+                    window.scene.traverse(function (object) {
+                        if (object.type == "videoObjectLabel") {
+                            object.material.color.set(color);
+                        }
+                    });
+
+                    if (window.shellEqualizerBars.length > 0) {
+                        window.shellEqualizerBars.forEach(shellEqualizerBar => {
+                            shellEqualizerBar.material.color.set('0xFFFFFF');
+                        });
+                    }
+                }
+            });
+
+
+            themeBackgroundColor = document.getElementById("themeBackgroundColor");
+            themeBackgroundColor.addEventListener("input", function () {
+                var themeBackgroundColor = document.getElementById("themeBackgroundColor");
+                var localColor = themeBackgroundColor.value;
+
+                var color = new THREE.Color(themeBackgroundColor.value);
+
+                $(".themedUIEqualizerBar").css("backgroundColor", localColor);
+
+                $(".themedUIBackground").css("backgroundColor", localColor);
+                $(".themedUIBackground").css("opacity", ".9");
+
+                $(".ag-theme-vailware-dark").css("backgroundColor", localColor);
+                $(".ag-theme-vailware-dark").css("opacity", ".9");
+
+                $(".range").css("opacity", ".9");
+                $(".range").css("backgroundColor", localColor);
+
+
+            })
+
+            var themeColor =
+                document.getElementById("themeColor");
+
+            var themeBackgroundColor =
+                document.getElementById("themeBackgroundColor");
+
+            var themeHighlightColor =
+                document.getElementById("themeHighlightColor");
+
+            var themeObjectBackgroundColor =
+                document.getElementById("themeObjectBackgroundColor");
+
+            themeColor.dispatchEvent(new Event('input'));
+            themeBackgroundColor.dispatchEvent(new Event('input'));
+            themeHighlightColor.dispatchEvent(new Event('input'));
+            themeObjectBackgroundColor.dispatchEvent(new Event('input'));
+
+            cleanupUI();
+
+            //    enumerateWDMDevices();
+
+
+            buildObjectSelector({
+                selectElementID: 'objectToAnimate',
+                objectType: 'ALL',
+                parentContainerID: 'objectToAnimateSelectContainer'
+            });
+
+            buildObjectSelector({
+                selectElementID: 'spotLightOrbitObjectsSelector',
+                objectType: 'ALL',
+                parentContainerID: 'spotLightOrbitObjectsSelectContainer'
+            });
+
+            buildObjectSelector({
+                selectElementID: 'spotLightFocusObjectsSelector',
+                objectType: 'ALL',
+                parentContainerID: 'spotLightFocusObjectsSelectContainer'
+            });
+        });
+
+    </script>
+
+
+</body>
+</html>

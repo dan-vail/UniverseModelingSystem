@@ -1,0 +1,255 @@
+﻿@model IEnumerable<UniverseObjects.Models.CelestialSphere>
+
+@{
+    ViewBag.Title = "CelestialSpheresTable";
+    //Layout = "~/Views/Shared/_UniverseObjectRendererLayout.cshtml";
+    Layout = null;
+
+}
+<link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+<script src="~/Scripts/vailware.master.library.beta.js"></script>
+<script src="~/Scripts/jquery-3.7.1.js"></script>
+
+<script src="~/DataTables/datatables.js"></script>
+<script src="~/DataTables/Responsive-2.5.0/js/responsive.dataTables.min.js"></script>
+<link href="~/DataTables/datatables.css" rel="stylesheet" />
+<link href="~/DataTables/Responsive-2.5.0/css/responsive.dataTables.min.css" rel="stylesheet" />
+<style>
+
+
+
+    #CelestialSpheres {
+        background-color: transparent;
+        mix-blend-mode: hard-light;
+        overflow: auto;
+    }
+
+        #CelestialSpheres a {
+            color: #00ffff;
+        }
+
+            #CelestialSpheres a:hover {
+                color: #00ff00;
+            }
+
+    .tableHead {
+        color: #00ff00;
+        font-size: clamp(14px, 1.5vmax, 30px);
+        font-family: Audiowide;
+        background-color: rgba(0,0,16,.5);
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background: none;
+        color: #000000;
+        border-radius: 4px;
+        border: 1px solid #828282;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+        background: none;
+        color: #000000;
+    }
+
+    .page-item.active .page-link {
+        background-color: #00ffff;
+        border: 1px solid black;
+        color: #00ff00;
+    }
+
+    .page-link {
+        color: #FFFFFF;
+    }
+
+    .pageTitle {
+        font-size: clamp(14px, 3vmax, 48px);
+        color: #00ffff;
+        text-shadow: .16vh .16vh #000000;
+    }
+
+
+    .whiteBoxShadow {
+        box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.6), 0 6px 20px 0 rgba(255, 255, 255, 0.32);
+    }
+
+    .dataTables_wrapper tr td {
+        background-color: transparent;
+    }
+</style>
+
+<style>
+    .hoverHighlight {
+        background-color: transparent;
+    }
+
+        .hoverHighlight:hover {
+            background-color: rgba(0, 255, 0, .8);
+            border: 5px inset;
+        }
+</style>
+
+<body style="background: transparent;">
+
+    <div id="pageContent"
+         class="themedUI blackBevel whiteBoxShadow"
+         style="overflow: hidden;
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                background: transparent;">
+
+
+        <table id="CelestialSpheres"
+               class="
+               themedUI
+               blackBevel
+               whiteShadow
+               themedUIBackground"
+               style="overflow: auto;
+                        position: fixed;
+                        background: transparent;
+                        color: #00FFFF;
+                        width: 100%;
+                        height: auto;
+                        max-height: 30vh;
+                        font-size: clamp(14px, 1.4vmax, 32px);">
+            <thead class="tableHead"
+                   style="background-color: transparent;">
+                <tr class="themedUI">
+                    <th class="themedUI">
+                        @Html.DisplayNameFor(model => model.ID)
+                    </th>
+                    <th class="themedUI">
+                        @Html.DisplayNameFor(model => model.IconPath)
+                    </th>
+                    <th class="themedUI">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    @*<th class="themedUI">
+                        @Html.DisplayNameFor(model => model.Radius)
+                    </th>
+                    <th class="themedUI">
+                        @Html.DisplayNameFor(model => model.Mass)
+                    </th>*@
+                </tr>
+            </thead>
+
+
+            <tbody style="background-color: #000000;">
+                @foreach (var item in Model)
+                {
+
+                    <tr  class="hoverHighlight renderSphereLink" data-sphereID="@item.ID">
+                        <td class="themedUI">
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td class="themedUI">
+                            @Html.DisplayFor(modelItem => item.IconPath)
+                        </td>
+                        <td class="themedUI">
+                            <a href="#">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </a>
+                        </td>
+                        @*<td class="themedUI">
+                            @Html.DisplayFor(modelItem => item.Radius)
+                        </td>
+                        <td class="themedUI">
+                            @Html.DisplayFor(modelItem => item.Mass)
+                        </td>*@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+            </body>
+
+
+<script>
+    var dataTable = new DataTable('CelestialSpheres', {
+            responsive: true,
+            "pagingType": "full",
+            columns: [
+                { 'visible': false },
+                {
+                    data: 'iconPath', render: function (data, type, row, meta) {
+                        return '<img src="' + data + '" style="height: 3vmax; width: 3vmax; " border="0" />';
+                    }
+                },
+                { 'data': 'Name' },
+            ]
+        });
+
+
+    document.querySelectorAll('.renderSphereLink').forEach(element => {
+        element.addEventListener('click', function () {
+            ajaxRenderDIV({
+                divToPopulate: 'universeObjectRendererAsyncContainer',
+                pageToRenderURL: '/CelestialSpheres/CelestialSphereDetails?id=3'
+            });
+            
+
+            renderSpherePage({
+                sphereID: element.getAttribute('data-sphereID'),
+                sphereRendererContainerID: 'universeObjectRendererAsyncContainer'
+            });
+        })
+    });
+
+    document.querySelectorAll('tr').forEach(element => {
+        element.addEventListener('mouseenter', function () {
+            this.style.background = '#880000';
+            this.style.color = "#FF0000";
+        });
+        element.addEventListener('mouseleave', function () {
+            this.style.background = 'transparent';
+            this.style.color = "#FF0000";
+        });
+
+    })
+
+
+    async function renderPageAsync({
+        url,
+        containerElementId
+    }) {
+        var renderContainer =
+            document.getElementById(containerElementId);
+
+        if (renderContainer != undefined) {
+            await fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    renderContainer.innerHTML = html;
+                });
+
+        } else {
+            
+            return null;
+        }
+    }
+
+    document.querySelectorAll('tr').forEach(element => {
+
+        element.addEventListener('click', function () {
+            var pageToRenderString =
+                '/CelestialSpheres/CelestialSphereDetails?id=3';
+
+            ajaxRenderDIV({
+                divToPopulate: 'uni',
+                pageToRenderURL: '/Home/AutoCRUD'
+            });
+
+            renderPageAsync({ url: pageToRenderString, renderContainer:  })
+    //        fetch(pageToRenderString)
+    //            .then(response => response.text())
+    //            .then(html => {
+    //                document.getElementById('renderingElement')
+    //                    .innerHTML = html;
+    //            });
+    //        });
+    //    });
+
+
+</script>

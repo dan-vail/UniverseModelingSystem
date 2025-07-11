@@ -1,0 +1,266 @@
+﻿@model System.Web.Mvc.JsonResult
+
+@{
+    //Layout = "~/Views/Shared/_UniverseObjectRendererLayout.cshtml";
+    Layout = null;
+}
+
+@{
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    serializer.MaxJsonLength = Int32.MaxValue;
+    var jsonModel = serializer.Serialize(Model);
+}
+<script src="~/Scripts/jquery-3.7.1.js"></script>
+
+<link href="~/DataTables/datatables.css" rel="stylesheet" />
+<script src="~/DataTables/datatables.js"></script>
+<link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+<script src="~/Scripts/vailware.master.library.beta.js"></script>
+
+<script>
+
+    var webServerString = @Html.Raw(jsonModel);
+
+    window.jsObjGeneralData;
+    window.JSONGeneralData;
+
+
+    var jsObjGeneralData = JSON.stringify(webServerString);
+    var JSONGeneralData = {};
+
+    webServerString.forEach(item => {
+        JSONGeneralData[webServerString.universeObjectId] = item;
+    });
+
+    window.jsObjGeneralData = jsObjGeneralData;
+    window.JSONGeneralData = JSONGeneralData;
+
+</script>
+
+<style>
+    body {
+        font-family: audiowide;
+        background: linear-gradient(221deg,rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
+    }
+
+    .dataGrid {
+        width: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+
+    .dataGridHeader {
+        color: #00ffff;
+    }
+
+    .dataGridRow {
+        width: 100%;
+    }
+
+    .dataGridColumnContainer {
+        color: #00ffff;
+        box-shadow: 23px 16px 50px 12px rgba(255,255,255,0.5);
+        -webkit-box-shadow: 23px 16px 50px 12px rgba(255,255,255,0.5);
+        -moz-box-shadow: 23px 16px 50px 12px rgba(255,255,255,0.5);
+    }
+
+    .generalDataColumnEditor {
+        background: rgba(0, 0, 32, .5);
+        color: #00ffff;
+    }
+</style>
+
+<body>
+    <script>
+
+        function createGrid({
+            gridID,
+            jsObject
+        }) {
+
+            if (jsObject == undefined) {
+                return null;
+            }
+            generateGridContainer({ containerID: 'body' });
+
+            generateDataGrid({
+                gridID: gridID,
+                gridContainerID: 'generalDataContainer'
+            });
+
+            generateHeaderRow({
+                gridID: gridID,
+                jsObject: window.jsObjGeneralData
+            });
+
+            populateRows({
+                gridID: gridID,
+                jsObject: window.jsObjGeneralData
+            });
+        }
+
+        function generateGridContainer({
+            containerID
+        }) {
+            var generalDataContainer = document.createElement('div');
+            generalDataContainer.setAttribute('id', 'generalDataContainer');
+            generalDataContainer.classList.add('themedUI');
+            document.body.append(generalDataContainer);
+        }
+
+        function generateDataGrid({
+            gridID,
+            gridContainerID
+        }) {
+            if (gridID == undefined) {
+                return null;
+            }
+
+            if (gridContainerID == null) {
+                return null
+            }
+
+            var dataGrid = document.createElement('table');
+            dataGrid.setAttribute('id', gridID);
+            dataGrid.classList.add('themedUI');
+            dataGrid.style.width = '100%';
+            document.getElementById(gridContainerID).append(dataGrid);
+        }
+
+        function generateHeaderRow({
+            gridID, jsObject }) {
+            var dataGrid = document.getElementById(gridID);
+
+            return false;
+            if (dataGrid == undefined) {
+                return null;
+            }
+
+            var generalDataColumnHeaderContainer =
+                document.createElement('thead');
+            dataGrid.append(generalDataColumnHeader);
+
+            var objectIndex = 0;
+            for (const name in jsObject[0]) {
+                var generalDataColumnHeader = document.createElement('th');
+                generalDataColumnHeader.innerHTML = name.toString();
+                generalDataColumnHeader.classList.add('themedUIHighlight');
+                generalDataColumnHeader.classList.add('themedUIBackground');
+
+                generalDataColumnHeaderContainer.append(generalDataColumnHeader);
+                objectIndex++;
+            }
+            dataGrid.append(generalDataColumnHeaderContainer);
+        }
+
+        function populateRows({
+            gridID, jsObject }) {
+            var dataGrid = document.getElementById(gridID);
+            dataGrid.classList.add('dataGrid');
+            if (dataGrid == undefined) {
+                return null;
+            }
+
+            var rowIndex = 0;
+            jsObject.forEach(object => {
+                var generalDataRow = document.createElement('tr');
+                generalDataRow.setAttribute('id', rowIndex);
+                //generalDataRow.classList.add('dataGridRow');
+
+                var columnIndex = 0;
+                for (const name in object) {
+                    var generalDataColumnContainer = document.createElement('td');
+                    //generalDataColumnContainer.classList.add('dataGridColumnContainer');
+                    //var generalDataColumnEditor = document.createElement('input');
+                    //generalDataColumnEditor.classList.add('generalDataColumnEditor');
+                    //generalDataColumnEditor.setAttribute('id', name.toString() + columnIndex);
+                    //generalDataColumnEditor.value = object[name];
+                    //generalDataColumnData.innerText = object[name];
+
+                    var generalDataColumnData = document.createTextNode(object[name]);
+
+                    generalDataColumnContainer.append(generalDataColumnData);
+                    generalDataRow.append(generalDataColumnContainer);
+                    columnIndex++;
+                }
+                var saveButton = document.createElement('button');
+                saveButton.innerHTML = "SAVE DATA";
+                saveButton.setAttribute('id', 'save' + columnIndex);
+                saveButton.classList.add('buttons');
+                saveButton.classList.add('themedUIHighlight');
+                saveButton.classList.add('themedUIBackground');
+                saveButton.addEventListener('click', function () {
+                    asyncSaveRowData({
+                        generalDataRow: generalDataRow,
+                        jsSaveObject: jsObject[rowIndex]
+                    });
+                });
+                //generalDataRow.append(saveButton);
+                dataGrid.append(generalDataRow);
+                columnIndex = 0;
+                rowIndex++;
+            });
+        }
+
+        function createGridRowEditor({ gridID, rowID }) {
+            jsObject.forEach(object => {
+                var generalDataRow = document.createElement('div');
+                generalDataRow.setAttribute('id', objectIndex);
+                for (const name in object) {
+                    var generalDataColumnContainer = document.createElement('div');
+                    var generalDataColumnName = document.createElement('label');
+                    var generalDataColumnEditor = document.createElement('input');
+                    generalDataColumnEditor.style.background = "rgba(8, 8, 8, .8)";
+                    generalDataColumnEditor.style.color = "rgba(0, 255, 255, .99)";
+
+                    generalDataColumnName.innerHTML = name.toString();
+                    generalDataColumnEditor.value = object[name];
+                }
+            });
+        }
+
+        function createFormEditor({
+            javascriptObject,
+            javascriptObjectPrimaryKeyColumnName,
+            javascriptObjectPrimaryKeyValue
+        }) {
+            var generalDataContainer = document.createElement('div');
+            generalDataContainer.setAttribute('id', 'generalDataContainer');
+            document.body.append(generalDataContainer);
+
+            var objectIndex = 0;
+
+            jsObjGeneralData.forEach(object => {
+                var generalDataRow = document.createElement('div');
+                generalDataRow.setAttribute('id', objectIndex);
+                for (const name in object) {
+                    var generalDataColumnContainer = document.createElement('div');
+                    var generalDataColumnName = document.createElement('label');
+                    var generalDataColumnEditor = document.createElement('input');
+                    generalDataColumnEditor.style.background = "rgba(8, 8, 8, .8)";
+                    generalDataColumnEditor.style.color = "rgba(0, 255, 255, .99)";
+
+                    generalDataColumnName.innerHTML = name.toString();
+                    generalDataColumnEditor.value = object[name];
+
+                    generalDataRow.append(generalDataColumnContainer);
+                    generalDataColumnContainer.append(generalDataColumnName);
+                    generalDataColumnContainer.append(generalDataColumnEditor);
+                }
+                generalDataContainer.append(generalDataRow);
+                objectIndex++;
+            });
+
+        }
+
+        createGrid({ gridID: 'genericGrid', jsObject: window.jsObjGeneralData });
+
+        window.addEventListener("load", (event) => {
+            var table = new DataTable('#genericGrid', {
+                pag
+            });
+        });
+
+    </script>
+</body>

@@ -1,0 +1,1437 @@
+﻿@model UniverseObjects.Models.CelestialSphere
+
+
+@{
+    //Layout = "~/Views/Shared/_UniverseObjectRendererLayout.cshtml";
+    Layout = null;
+}
+
+@{
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    serializer.MaxJsonLength = Int32.MaxValue;
+    var jsonModel = serializer.Serialize(Model);
+}
+<link href="~/Content/vailware.stylesheet.master.css" rel="stylesheet" />
+<script src="~/Scripts/vailware.universeModeling.library.js"></script>
+<script src="~/Scripts/vailware.filemanagement.functions.library.js"></script>
+<script src="~/Scripts/vailware.master.library.beta.js"></script>
+<script>
+    window.celestialSpheres = [];
+    window.spheres = [];
+    window.objects = [];
+    window.celestialSphere = @Html.Raw(jsonModel);
+    window.celestialSpheres.push(celestialSphere);
+    var orbitCameraTime = .72;
+    var spaceStationOrbitCameraTime = .72;
+</script>
+
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+<script src="~/Scripts/bootstrap.bundle.js"></script>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #000000;
+        font-family: Audiowide;
+        transition: all 5s;
+    }
+
+    .formCustomProperties {
+        background-color: rgba(0,0,32,.5);
+        color: #00ffff;
+        font-size: clamp(12px, 1.0vh, 36px);
+        font-family: Audiowide;
+        max-width: 100%;
+        columns: 27;
+    }
+
+    .labelCustomProperties {
+        color: #00ff00;
+        font-size: clamp(14px, 1.2vh, 36px);
+        font-family: Audiowide;
+        width: 18vw;
+    }
+
+    #formSide {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 20vw;
+        height: 100vh;
+        overflow: auto;
+        background-color: transparent;
+        transition: all 5s;
+        visibility: hidden;
+    }
+
+    #sphereEditMenu {
+        position: absolute;
+        top: 100px;
+        left: 0px;
+        width: 20vw;
+        height: 90vh;
+        background-color: transparent;
+        color: #00ff00;
+        transition: all 5s;
+    }
+
+    .tabPage {
+        position: absolute;
+        left: 50vw;
+        width: 100%;
+        height: 100%;
+        transition: all 5s;
+    }
+
+    #editMenuHeader {
+        position: absolute;
+        top: 12vh;
+        color: #ff0000;
+        font-size: clamp(14px, 1vh, 72px);
+        font-family: Audiowide;
+        z-index: 999;
+        width: 100vw;
+        background-color: rgba(0,0,16,.5);
+        transition: all 5s;
+    }
+
+        #editMenuHeader a {
+            color: #00ff00;
+        }
+
+            #editMenuHeader a:hover {
+                color: #00ffff;
+            }
+
+    .editPages {
+        top: 0px;
+        left: 0px;
+        width: 100%;
+    }
+</style>
+
+<style>
+    #webGL {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    #editMenu {
+        position: relative;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+        margin-top: 32px;
+        color: #00ff00;
+        z-index: 10;
+        font-size: clamp(14px, 1vh, 72px);
+        text-align: center;
+        transition: all 5s;
+    }
+
+    .selectDropDowns {
+        background-color: rgba(0,0,32,.5);
+        color: #ffffff;
+        font-size: clamp(12px, 1vh, 72px);
+        width: 10vw;
+    }
+
+    .specificationPageTitle {
+        font-size: clamp(14px, 1vh, 84px);
+        color: #00ffff;
+    }
+
+    .whiteBoxShadow {
+        box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.6), 0 6px 20px 0 rgba(255, 255, 255, 0.32);
+    }
+
+    #settingsMenu {
+        position: absolute;
+        right: 1px;
+        transition: all 5s;
+        visibility: visible;
+    }
+
+    #settingsToggler {
+        position: absolute;
+        top: 2px;
+        right: 68px;
+        z-index: 99999;
+    }
+
+    .menuTitleItem {
+        color: #ff0000;
+        background-color: rgba(200, 0, 0, .16);
+        font-size: clamp(12px, 1.1vh, 72px);
+    }
+
+    .menuTitleSubItem {
+        color: rgba(0, 255, 0, .9);
+        font-size: clamp(11px, 1vh, 64px);
+    }
+</style>
+
+<body>
+
+    <div style="position: absolute;
+                top: 0px;
+                z-index: 99;
+                background: rgba(8, 8, 8, .8);">
+        @{Html.RenderAction("CelestialSphereDetailsMenu", "CelestialSpheres");}
+    </div>
+    <div id="webGL"></div>
+
+    <script>
+
+        function hidePages() {
+            $(".tabPage").css("left", "50vw");
+            $(".tabPage").css("top", "10vh");
+            $(".tabPage").css("opacity", "0");
+        }
+
+        function showPage(pageID) {
+            hidePages();
+            var pageToShow = document.getElementById(pageID);
+            pageToShow.style.top = "10vh";
+            pageToShow.style.left = "10px";
+            pageToShow.style.opacity = "1";
+        }
+
+    </script>
+
+</body>
+
+
+<script src="/threejs/three.js.oldbuild/three.js"></script>
+<script src="/threejs/three.js.oldbuild/tween.js"></script>
+<script src="/threejs/three.js.oldbuild/OrbitControls.js"></script>
+<script src="/threejs/three.js.oldbuild/GLTFLoader.js"></script>
+
+<script>
+
+    var camera,
+        scene,
+        controls,
+        orbitDistance,
+        orbitalVelocity,
+        solarSystemDirectionalLight,
+        ambientLight,
+        webGLRenderer,
+        css3DRenderer,
+        videoCubePlayerZero,
+        videoCubeZero,
+        currentFocusObject,
+        tweenStatus = false,
+        spaceStation,
+        sphereLoadComplete = false,
+        material,
+        atmosphereMaterial,
+        imaginaryObject;
+
+    function loadEnvironment(equirectangular) {
+        try {
+            var loader = new THREE.TextureLoader();
+            var equirectangularTexture = loader.load(equirectangular);
+            equirectangularTexture.mapping = THREE.EquirectangularReflectionMapping;
+            return equirectangularTexture;
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    initializeScene({ sceneName: "universeRenderer" });
+    setupCamera({ cameraName: undefined });
+    var camera = window.camera;
+
+    window.rendererElementId = "webGL";
+
+    setupRenderer({
+        rendererElementId: "webGL",
+        rendererId: "universeRenderer"
+    });
+    var renderer = window.renderer;
+
+    setupControls({
+        cameraName: "universeRenderer",
+        rendererName: "universeRenderer"
+    });
+
+    function renderVideoSphere() {
+
+        videoSpherePlayer = document.createElement('video');
+        document.body.appendChild(videoSpherePlayer);
+        videoSpherePlayer.id = "videoSpherePlayer";
+        videoSpherePlayer.src = "/videos/theSun2X1.mp4";
+        videoSpherePlayer.crossOrigin = 'anonymous';
+        videoSpherePlayer.width = "100";
+        videoSpherePlayer.height = "100";
+        videoSpherePlayer.muted = true;
+        videoSpherePlayer.loop = true;
+        videoSpherePlayer.controls = false;
+
+        //videoSphereSource = document.createElement('source');
+        //videoSphereSource.id = "videoSphereSource";
+        //videoSphereSource.setAttribute('src', '/videos/theFuckingSun.mp4');
+        //videoSphereSource.setAttribute('type', 'video/mp4');
+        //videoSphereSource.appendChild(videoSpherePlayer);
+
+        //videoSpherePlayer.load();
+        videoSpherePlayer.play();
+
+        videoSphereTexture = new THREE.VideoTexture(videoSpherePlayer);
+        videoSpherePlayer.format = THREE.RGBAFormat;
+        videoSphereTexture.transparent = false;
+
+        videoSphereTexture.wrapS = THREE.MirroredRepeatWrapping;
+        videoSphereTexture.wrapT = THREE.MirroredRepeatWrapping;
+        videoSphereTexture.offset.set(0, 0);
+        videoSphereTexture.repeat.set(1, 1);
+
+        var geometry = new THREE.SphereGeometry(
+            696340,
+            128,
+            128);
+
+        var material = new THREE.MeshPhongMaterial({
+            color: 0xffffff,
+            map: videoSphereTexture,
+            transparent: false,
+
+        });
+
+
+        //material.side = THREE.DoubleSide;
+        videoSphere = new THREE.Mesh(geometry, material);
+
+        //var countU = .5;
+        //var countV = .5;
+        //material.texture.repeat.set(countU, countV)
+
+        theSun = new THREE.Mesh(geometry, material);
+        theSun.position.x = 0;
+        theSun.position.y = 0;
+        theSun.position.z = 0;
+
+        scene.add(theSun);
+
+    }
+    //renderVideoSphere();
+    function renderSphere({ celestialSphereName }) {
+
+        if (celestialSphereName == undefined) {
+            celestialSphereName = "Earth";
+        }
+
+
+        var celestialSphere = window.celestialSpheres[0];
+
+
+        // load the geometry and the textures
+        var loader = new THREE.TextureLoader();
+
+        var geometry = new THREE.SphereBufferGeometry(
+            celestialSphere.Radius,
+            celestialSphere.GeometryXSegments,
+            celestialSphere.GeometryYSegments);
+
+        material = new THREE.MeshPhysicalMaterial();
+
+        if (celestialSphere.TextureMapPath == null) {
+        } else {
+            material.map = loader.load(celestialSphere.TextureMapPath, function (texture) {
+                sphereLoadComplete = true;
+                tweenToSphere({
+                    sphereName: celestialSphere.Name,
+                    duration: 1000,
+                    sphereRadius: celestialSphere.Radius
+                });
+            });
+        }
+
+        //if (celestialSphere.Transparent == null) {
+        //} else {
+        //    material.transparent = celestialSphere.Transparent;
+        //}
+
+        //if (celestialSphere.Opacity == null) {
+        //} else {
+        //    material.opacity = celestialSphere.Opacity;
+        //}
+
+        //if (celestialSphere.Specular == null) {
+        //} else {
+        //    material.specular = celestialSphere.Specular;
+        //}
+
+        //if (celestialSphere.DepthTest == null) {
+        //} else {
+        //    material.depthTest = celestialSphere.DepthTest;
+        //}
+
+        //if (celestialSphere.BlendingMode == null) {
+        //} else {
+        //    material.blending = celestialSphere.BlendingMode;
+        //}
+
+        //if (celestialSphere.EnvironmentMap == null) {
+        //} else {
+        //    material.envMap = celestialSphere.EnvironmentMap;
+        //}
+
+        //if (celestialSphere.MaterialColor == null) {
+        //} else {
+        //    material.color = celestialSphere.MaterialColor;
+        //}
+
+        //if (celestialSphere.AlphaTest == null) {
+        //} else {
+        //    material.alphaTest = celestialSphere.AlphaTest;
+        //}
+
+        if (celestialSphere.DisplacementMapPath == null) {
+        } else {
+            material.displacementMap = loader.load(celestialSphere.DisplacementMapPath);
+            material.displacementScale = celestialSphere.DisplacementScale;
+        }
+
+        if (celestialSphere.BumpMapPath == null) {
+        } else {
+            material.bumpMap = loader.load(celestialSphere.BumpMapPath);
+            material.bumpScale = celestialSphere.BumpScale;
+        }
+
+        if (celestialSphere.NormalsMapPath == null) {
+        } else {
+            material.normalMap = loader.load(celestialSphere.NormalsMapPath);
+        }
+
+        var sphere = new THREE.Mesh(geometry, material);
+
+        sphere.position.x = celestialSphere.XCoord;
+        sphere.position.y = celestialSphere.YCoord;
+        sphere.position.z = celestialSphere.ZCoord;
+
+        sphere.rotation.x = 0;
+        sphere.rotation.y = 0;
+        sphere.rotation.z = 0;
+
+        sphere.recieveShadow = false;
+
+        sphere.Name = celestialSphereName;
+        scene.add(sphere);
+
+        var renderedSphere =
+            window.scene.children[
+            window.scene.children.findIndex
+                (o => o.Name == celestialSphereName)];
+
+        window.spheres.push(renderedSphere);
+
+        if (celestialSphere.HasAtmosphere) {
+
+            var atmosphereGeometry =
+                new THREE.SphereGeometry(
+                    celestialSphere.AtmosphereRadius,
+                    celestialSphere.GeometryXSegments,
+                    celestialSphere.GeometryYSegments);
+
+            atmosphereMaterial =
+                new THREE.MeshPhysicalMaterial({
+                    map: loader.load(celestialSphere.AtmosphereTexturePath),
+                    displacementMap: loader.load(celestialSphere.AtmosphereDisplacementTexturePath),
+                    transparent: true,
+                    opacity: .9
+                });
+
+
+            atmosphereMaterial.side = THREE.DoubleSide;
+
+            if (celestialSphere.AtmosphereDisplacementMapPath == null) {
+            } else {
+                atmosphereMaterial.displacementMap =
+                    loader.load(celestialSphere.AtmosphereDisplacementMapPath);
+
+
+                //atmosphereMaterial.displacementScale = 99;
+
+                //    atmosphereMaterial.displacementScale =
+                //        celestialSphere.AtmosphereDisplacementScale;
+            }
+
+            sphereAtmosphere = new THREE.Mesh(
+                atmosphereGeometry, atmosphereMaterial);
+
+            sphereAtmosphere.position.x = sphere.XCoord;
+            sphereAtmosphere.position.y = sphere.YCoord;
+            sphereAtmosphere.position.z = sphere.ZCoord;
+
+            sphereAtmosphere.Name =
+                celestialSphere.Name + "Atmosphere";
+
+            sphereAtmosphere.recieveShadow = false;
+
+
+            scene.add(sphereAtmosphere);
+            atmosphereGeometry.computeVertexNormals();
+
+
+            var renderedSphereAtmosphere =
+                window.scene.children[
+                window.scene.children.findIndex
+                    (o => o.Name == sphereAtmosphere.Name)];
+
+        }
+    }
+
+
+    renderSphere({
+        celestialSphereName: "Earth"
+    });
+
+    function setLightingToRealistic() {
+        window.ambientLight.intensity = 0;
+        window.solarLight.intensity = 1;
+    }
+
+    function setLightingToSolarView() {
+        window.ambientLight.intensity = 1;
+        window.solarLight.intensity = 0;
+    }
+
+    var celestialSphereRadius = celestialSphere.Radius;
+
+    function returnSphereIndex({
+        sphereName,
+        sphereType
+    }) {
+
+        if (sphereName == undefined) {
+            sphereName = "Earth";
+        }
+
+        if (sphereType == undefined) {
+            sphereType = "sphere";
+        }
+
+        switch (sphereType) {
+            case "sphere":
+                var index =
+                    window.spheres.findIndex
+                        (o => o.Name == sphereName);
+
+            case "celestialSphere":
+                var index =
+                    window.celestialSpheres.findIndex
+                        (o => o.Name == sphereName);
+
+        }
+
+        return index;
+    }
+
+    function renderSpaceStation() {
+        return false;
+        try {
+
+            //var sphereMeshIndex = returnSphereIndex({
+            //    sphereName: "Earth",
+            //    sphereType: "sphere"
+            //});
+
+            //var celestialSphereIndex = returnSphereIndex({
+            //    sphereName: "Earth",
+            //    sphereType: "celestialSphere"
+            //});
+
+            loadObject({
+                objectToLoad: "MexicoLogo.glb",
+                scalar: 1 / 1000,
+                vectorX: 0,
+                vectorY: 0,
+                vectorZ: (window.spheres[0].position.z -
+                    window.celestialSpheres[0].Radius) - 400,
+                rotationVectorX: 0,
+                rotationVectorY: 0,
+                rotationVectorZ: 0,
+                objectAlias: "spaceStation",
+                directory: "/GLBObjects/"
+            });
+            window.spaceStation = window.objects[0];
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function tweenControls(target) {
+
+        if (target != undefined) {
+            var targetVector = new THREE.Vector3(
+                target.position.x,
+                target.position.y,
+                target.position.z);
+
+        } else {
+
+            var targetVector = new THREE.Vector3(
+                window.spheres[0].position.x,
+                window.spheres[0].position.y,
+                window.spheres[0].position.z
+            );
+
+        }
+
+        var targetTween = new
+            TWEEN.Tween(controls.target)
+            .to(targetVector, 1000)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(function () {
+                //window.camera.lookAt(window.controls.target);
+            })
+            .onComplete(function () {
+                //window.camera.lookAt(window.controls.target);
+            })
+            .start();
+
+        controls.enabled = true;
+        controls.update();
+    }
+
+    function tweenToSphere({
+        sphereName,
+        duration,
+        sphereRadius,
+        navigateToSpaceStation
+    }) {
+
+        if (duration == undefined) {
+            duration = 10000;
+        }
+
+        if (navigateToSpaceStation == undefined) {
+            navigateToSpaceStation = false;
+        }
+
+        if (sphereName == undefined) {
+            sphereName = "Earth";
+        }
+
+        var destinationSphere =
+            window.spheres[window.spheres.findIndex
+                (o => o.Name == sphereName)];
+
+        var destinationCelestialSphere =
+            window.celestialSpheres[window.celestialSpheres.findIndex
+                (o => o.Name == sphereName)];
+
+        var targetVector = new THREE.Vector3(
+            window.spheres[0].position.x,
+            window.spheres[0].position.y,
+            window.spheres[0].position.z +
+            window.celestialSphere.Radius * 2.16);
+
+        //alterObjectQuaternion({
+        //    observerObject: window.camera,
+        //    observedObject: destinationSphere,
+        //    duration: 2000
+        //});
+
+        var position = new THREE.Vector3().copy(camera.position);
+
+        tweenControls(window.spheres[0]);
+
+        var tween = new TWEEN.Tween(position)
+            .to(targetVector, duration)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(function () {
+                camera.position.copy(position);
+            })
+            .onComplete(function () {
+                if (navigateToSpaceStation == true) {
+                    navigateToSpaceStation({ duration });
+                }
+                camera.position.copy(targetVector);
+            }).start();
+
+        controls.update();
+    }
+
+
+    function navigateToSpaceStation({
+        duration
+    }) {
+
+        if (duration == undefined) {
+            duration = 5000
+        }
+
+        var spaceStation = window.spaceStation;
+        if (spaceStation == undefined) {
+            spaceStation = window.objects[0];
+        }
+
+        spaceStation.rotation.y = 0;
+
+        try {
+            camera.near = .001;
+        } catch (error) {
+            console.log(error);
+        }
+
+        var targetVector = new THREE.Vector3(
+            spaceStation.position.x,
+            spaceStation.position.y,
+            spaceStation.position.z - .12);
+
+        controlsTarget = new THREE.Vector3(
+            spaceStation.position.x,
+            spaceStation.position.y,
+            spaceStation.position.z);
+
+        var position = new THREE.Vector3().copy(camera.position);
+
+        tweenControls(spaceStation);
+
+        var tween = new TWEEN.Tween(position)
+            .to(targetVector, duration)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(function () {
+                camera.position.copy(position);
+            })
+            .onComplete(function () {
+                camera.position.x = targetVector.x;
+                camera.position.y = targetVector.y;
+                camera.position.z = targetVector.z;
+            })
+            .start();
+
+        controls.enabled = true;
+        controls.update();
+    }
+
+    function tweenToSpaceStation({
+        duration
+    }) {
+        //if (duration == undefined) {
+        duration = 30000;
+        //}
+
+        function navigateToSphere() {
+            var sphereData = window.celestialSphere;
+            var sphereRadius = sphereData.Radius;
+            var sphereName = sphereData.Name;
+
+            tweenToSphere({
+                sphereName: sphereName,
+                sphereRadius: sphereRadius,
+                duration: duration / 2,
+                tweenToSpaceStation: true
+            });
+        }
+
+    }
+
+    function navigateAwayFromCurrentVector({
+        scalar,
+        nextVector,
+        duration
+    }) {
+
+        return false;
+
+        if (duration == undefined) {
+            duration = 5000;
+        }
+
+        if (scalar == undefined) {
+            scalar = 1;
+        }
+
+        if (nextVector == undefined) {
+            nextVector =
+                new THREE.Vector3(
+                    window.spheres[0].position.x,
+                    window.spheres[0].position.y,
+                    window.spheres[0].position.z
+                );
+        }
+
+
+        var quaternion =
+            new THREE.Quaternion().copy(camera.quaternion);
+
+        var cameraQuaternionX = quaternion.x * -1;
+        var cameraQuaternionY = quaternion.y * -1;
+        var cameraQuaternionZ = quaternion.z * -1;
+        var cameraQuaternionW = quaternion.w * -1;
+
+        var destinationQuaternion =
+            new THREE.Quaternion(
+                cameraQuaternionX,
+                cameraQuaternionY,
+                cameraQuaternionZ,
+                cameraQuaternionW);
+
+        var destinationVector = new THREE.Vector3();
+        var destinationVectorX = nextVector.x;
+        var destinationVectorY = nextVector.y;
+        var destinationVectorZ = nextVector.z;
+
+        var imaginaryObject = new THREE.Object3D();
+        imaginaryObject.position.x = destinationVectorX;
+        imaginaryObject.position.y = destinationVectorY;
+        imaginaryObject.position.z = destinationVectorZ;
+
+        var tween = new TWEEN.Tween(quaternion)
+            .to(destinationQuaternion, 10000)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(function () {
+                camera.applyQuaternion(quaternion);
+            })
+            .onComplete(function () {
+                var currentSphereData = window.celestialSpheres[0];
+                var dimensionRadius = currentSphereData.Radius;
+
+                var currentSphereMesh = window.spheres[0];
+
+                var randomObject3D = new THREE.Object3D();
+                randomObject3D.position.x =
+                    ((window.camera.position.x - nextVector.x) / 2) * scalar;
+
+                randomObject3D.position.y =
+                    randomObject3D.position.y =
+                    .4 * ((window.camera.position.y - nextVector.y) / 2) * scalar;
+
+                randomObject3D.position.z =
+                    randomObject3D.position.z =
+                    -.8 * ((window.camera.position.z - nextVector.z) / 2) * scalar;
+
+
+                window.scene.add(randomObject3D);
+
+                var observedObject =
+                    window.scene.children[
+                    window.scene.children.length - 1]
+
+                window.randomObjects3D.push(observedObject);
+
+                observedObject.Name =
+                    "intermidiateFocusObject" +
+                    window.randomObjects3D.length - 1;
+
+
+                alterObjectQuaternion({
+                    observerObject: window.camera,
+                    observedObject: observedObject,
+                    duration: 2500
+                });
+
+                tweenToVector({
+                    vectorX: currentSphereMesh.position.x +
+                        (dimensionRadius * scalar * 32),
+                    vectorY: currentSphereMesh.position.y +
+                        (dimensionRadius * scalar * 16),
+                    vectorZ: currentSphereMesh.position.z +
+                        (dimensionRadius * scalar * 48),
+                    controlsTargetVectorX: observedObject.position.x,
+                    controlsTargetVectorY: observedObject.position.y,
+                    controlsTargetVectorZ: observedObject.position.z,
+                    duration: 8000
+                });
+
+            })
+            .start();
+    }
+
+    function tweenToObject({
+        objectName,
+        duration
+    }) {
+        if (duration == undefined) {
+            duration = 2500;
+        }
+
+        var destinationObject =
+            window.objects[window.objects.findIndex
+                (o => o.Name == objectName)];
+
+        if (destinationObject == undefined) {
+            destinationObject = window.objects[0];
+        }
+
+        var position =
+            new THREE.Vector3().copy(destinationObject.position);
+
+        var tween = new TWEEN.Tween(position)
+            .to(targetVector, duration)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(function () {
+                camera.position.copy(position);
+            })
+            .onComplete(function () {
+            })
+            .start();
+    }
+
+    function tweenToActiveSphere({
+        sphereName,
+        sphereRadius,
+        duration }) {
+
+        sphereData = window.celestialSphere;
+        sphereRadius = sphereData.Radius;
+
+
+        tweenToSphere({
+            sphereName: sphereName,
+            sphereRadius: sphereRadius,
+            duration: duration
+        });
+        return false;
+
+        try {
+            var initDuration = 1000;
+            var duration = 1000;
+
+            var planetRadius =
+                celestialSphere.Radius;
+
+            var currentPlanet = this[celestialSphere.Name];
+
+            var initTargetVector = new THREE.Vector3(
+                camera.position.x + celestialSphere.Radius * 6,
+                camera.position.y + celestialSphere.Radius * 6,
+                camera.position.z +
+                celestialSphere.Radius * 64);
+
+            var targetVector = new THREE.Vector3(
+                currentPlanet.position.x +
+                celestialSphere.Radius / 2,
+                currentPlanet.position.y,
+                currentPlanet.position.z -
+                celestialSphere.Radius * 2.4);
+
+            controlsTarget = new THREE.Vector3(
+                currentPlanet.position.x,
+                currentPlanet.position.y,
+                currentPlanet.position.z);
+
+            var position = new THREE.Vector3().copy(camera.position);
+
+            var initTween = new TWEEN.Tween(position)
+                .to(initTargetVector, initDuration)
+                .easing(TWEEN.Easing.Quadratic.InOut)
+                .onUpdate(function () {
+                    camera.position.copy(position);
+                })
+                .onComplete(function () {
+                    try {
+                        //window.solarLight.target.position.set(
+                        //    currentPlanet.position.x,
+                        //    currentPlanet.position.y,
+                        //    currentPlanet.position.z);
+
+                    } catch (error) { }
+
+                    tweenControls(currentPlanet);
+
+
+                    var position = new THREE.Vector3().copy(camera.position);
+
+                    var tween = new TWEEN.Tween(position)
+                        .to(targetVector, duration)
+                        .easing(TWEEN.Easing.Quadratic.InOut)
+                        .onUpdate(function () {
+                            camera.position.copy(position);
+                        })
+                        .onComplete(function () {
+                            camera.position.copy(targetVector);
+                            tweenStatus = "complete";
+                            window.currentPlanet = celestialSphere;
+                        })
+                        .start();
+                })
+                .start();
+
+
+            controls.update();
+
+        } catch (error) { }
+        finally {
+        }
+
+    }
+
+    function tweenToSun(duration) {
+
+        if (duration == undefined) {
+            duration = 10000;
+        }
+
+        try {
+            var targetVector = new THREE.Vector3(
+                (0,
+                    0,
+                    (696340 * 2.4)));
+
+
+            //setLightingToSolarView();
+            alterObjectQuaternion({
+                observerObject: window.camera,
+                observedObject: theSun,
+                duration: duration * 1.2
+            });
+
+            var position = new THREE.Vector3().copy(camera.position);
+
+            var tween = new TWEEN.Tween(position)
+                .to(targetVector, duration)
+                .easing(TWEEN.Easing.Quadratic.InOut)
+                .onUpdate(function () {
+                    camera.position.copy(position);
+                })
+                .onComplete(function () {
+                    camera.position.copy(targetVector);
+                    controls.target = new THREE.Vector3(0, 0, 0);
+
+                    tweenStatus = "complete";
+                    currentFocusObject = theSun;
+                }).start();
+
+            controls.update();
+
+        } catch (error) {
+            console.log(error);
+            console.log("unable to tween to the sun.");
+
+        } finally {
+
+        }
+    }
+
+    function tweenObject(targetObject, direction) {
+
+        if (duration == undefined) {
+            var duration = 5000;
+        }
+
+        switch (targetObject) {
+            case "sun":
+                ambientLight.intensity = 1;
+                solarLight.intensity = 0;
+
+                var sunLocation = new THREE.Vector3(0, 0, 0);
+
+                navigateAwayFromCurrentVector({
+                    scalar: 1,
+                    nextVector: sunLocation,
+                    duration: 15000
+                });
+
+                tweenToSun();
+                return true;
+
+            case "sphere":
+                var sphereLocation = new THREE.Vector3(
+                    window.spheres[0].position.x,
+                    window.spheres[0].position.y,
+                    window.spheres[0].position.z);
+
+                navigateAwayFromCurrentVector({
+                    scalar: 1,
+                    nextVector: sphereLocation,
+                    duration: 10000
+                });
+
+                tweenToSphere({
+                    sphereName: window.celestialSphere.Name,
+                    radius: window.celestialSphere.Radius,
+                    duration: 5000
+                });
+                return true;
+
+            case "spaceStation":
+                var sphereLocation = new THREE.Vector3(
+                    window.spheres[0].position.x,
+                    window.spheres[0].position.y,
+                    window.spheres[0].position.z);
+
+                navigateAwayFromCurrentVector({
+                    scalar: 1,
+                    nextVector: sphereLocation
+                });
+
+                tweenToSpaceStation({
+                    duration: 10000
+                });
+                return false;
+
+            case "panorama":
+                navigateAwayFromCurrentVector({
+                    scalar: 10,
+                    nextVector: new THREE.Vector3({
+                        x: this[window.spheres[0].Name].position.x * 4,
+                        y: -1 * (this[window.spheres[0].Name].position.y),
+                        z: -2 * (this[window.spheres[0].Name].position.z)
+                    })
+
+                })
+        }
+    };
+
+    function createLighting() {
+        ambientLight = new THREE.AmbientLight();
+        ambientLight.intensity = 0;
+        scene.add(ambientLight);
+
+
+        solarLight = new THREE.DirectionalLight({
+            color: 0xFFFFFF,
+            intensity: .2,
+            penumbra: .0001
+        });
+
+        //solarLight.castShadow = true;
+        //solarLight.shadow.mapSize.width = 8192;
+        //solarLight.shadow.mapSize.height = 8192;
+        //solarLight.shadow.camera.near = 0;
+        //solarLight.shadow.camera.far = 8192;
+
+        solarLight.position.set(0, 0, -(celestialSphere.Radius * 2));
+        solarLight.angle = 1.05;
+        scene.add(solarLight);
+        window.solarLight = solarLight;
+
+        //solarLight.target.position.set(0, 0, 1);
+        //solarLight.name = "VailwareSolarLight";
+
+    }
+
+    window.camera.position.x =
+        -(window.spheres[0].Radius * 6);
+    window.camera.position.y =
+        (window.spheres[0].Radius * 16);
+    window.camera.position.z =
+        -(window.spheres[0].Radius * 12);
+
+
+    window.camera.rotation.x = 0;
+    window.camera.rotation.y = 0;
+    window.camera.rotation.z = 0;
+
+    window.controls.enableDamping = true;
+    window.controls.damping = .33;
+
+    renderSpaceStation();
+    createLighting();
+
+    var cameraOrbitDistance = (celestialSphere.Radius * 2.2);
+
+    var spaceStationOrbitTime = 0;
+    var spaceStationOrbitTimeIncrement = 0.01;
+    var spaceStationOrbitDistance =
+        (window.spheres[0].Radius + 400);
+
+    var ySpinIncrement = .0002;
+    document.getElementById("orbitDistance").value =
+        cameraOrbitDistance;
+
+    videoOrbitDistance = celestialSphere.Radius * 2;
+    videoOrbitCameraTime = .01;
+
+    var videoRotationTime = .01;
+
+
+    function animate(time) {
+        requestAnimationFrame(animate);
+        TWEEN.update(time);
+
+        var spaceStation = window.objects[0];
+
+        //try {
+        //    if (window.spheres[0] != undefined) {
+        //        imaginaryObject.position.x =
+        //            window.spheres[0].position.x + 100;
+
+        //        imaginaryObject.position.y =
+        //            window.spheres[0].position.y - 100;
+
+        //        imaginaryObject.position.z =
+        //            window.spheres[0].position.z + 100;
+
+        //        solarLight.target = imaginaryObject;
+        //    }
+        //} catch (error) {
+
+        //}
+
+
+        try {
+            theSun.rotation.y -= .001;
+        } catch (error) { }
+
+        if (window.spheres[0] != undefined) {
+            updateHUD({
+                sphere: window.spheres[0]
+            });
+        }
+
+        var currentSphere = window.spheres[0];
+        var currentSphereAtmosphere = window.spheres[1];
+
+        if (currentSphereAtmosphere !== undefined) {
+            currentSphereAtmosphere.position.x =
+                currentSphere.position.x;
+
+            currentSphereAtmosphere.position.y =
+                currentSphere.position.y;
+
+            currentSphereAtmosphere.position.z =
+                currentSphere.position.z;
+        }
+
+        if (document.getElementById("animatePlanet").checked) {
+            try {
+                currentSphere.rotation.y +=
+                    (ySpinIncrement * window.spheroidRotationVelocity) / 100;
+            } catch (error) {
+            };
+        }
+
+        if (document.getElementById("animateAtmosphere").checked) {
+
+            if (currentSphereAtmosphere !== undefined) {
+                try {
+
+                    currentSphereAtmosphere.rotation.x +=
+                        (ySpinIncrement *
+                            window.spheroidRotationVelocity *
+                            document.getElementById("atmosphericDirectionX").value) / 100;
+
+                    currentSphereAtmosphere.rotation.y +=
+                        (ySpinIncrement *
+                            window.spheroidRotationVelocity *
+                            document.getElementById("atmosphericDirectionY").value) / 100;
+
+                    currentSphereAtmosphere.rotation.z +=
+                        (ySpinIncrement *
+                            window.spheroidRotationVelocity *
+                            document.getElementById("atmosphericDirectionZ").value) / 100;
+
+                } catch (error) {
+                }
+            }
+        }
+
+
+        try {
+            var spaceStationOrbitLock =
+                document.getElementById("spaceStationOrbitLock").checked;
+            var spaceStationCameraOrbitDistance =
+                document.getElementById("spaceStationOrbitDistance").value;
+            var spaceStationCameraOrbitVelocity =
+                document.getElementById("spaceStationOrbitVelocity").value;
+
+            if (spaceStationOrbitLock == true) {
+                spaceStationOrbitCameraTime +=
+                    (.0001 * spaceStationCameraOrbitVelocity);
+
+                camera.position.x =
+                    spaceStation.position.x +
+                    (spaceStationCameraOrbitDistance *
+                        Math.sin(spaceStationOrbitCameraTime));
+
+                camera.position.z =
+                    spaceStation.position.z +
+                    (spaceStationCameraOrbitDistance *
+                        Math.cos(spaceStationOrbitCameraTime));
+
+                window.controls.target =
+                    new THREE.Vector3(
+                        spaceStation.position.x,
+                        spaceStation.position.y,
+                        spaceStation.position.z,
+                    );
+
+            }
+        } catch (error) {
+            console.log("Space Station orbit failure.");
+            console.log(error);
+
+        }
+
+
+        try {
+            var orbitLock = document.getElementById("orbitLock").checked;
+            var cameraOrbitDistance = document.getElementById("orbitDistance").value;
+            var cameraOrbitVelocity = document.getElementById("orbitVelocity").value;
+            if (orbitLock == true) {
+                orbitCameraTime += .0001 * cameraOrbitVelocity; //Later increment needs to be based on sphere radius.
+                camera.position.x = window.spheres[0].position.x + (cameraOrbitDistance * Math.sin(orbitCameraTime) + 0);
+                camera.position.z = window.spheres[0].position.z + (cameraOrbitDistance * Math.cos(orbitCameraTime) + 0);
+            }
+        } catch (error) {
+            console.log("sphere orbit animation lock failure");
+        }
+
+        //try {
+        //    var solarVector = new THREE.Vector3(0, 0, 0);
+        //    spaceStation.rotation.y = (degreesToRadians(0));
+        //    spaceStation.rotation.x = (degreesToRadians(60));
+        //    //spaceStation.lookAt(celestialSphere);
+
+        //    spaceStation.position.x = celestialSphere.Radius * .01;
+        //    spaceStation.position.y = celestialSphere.Radius * .02;
+        //    spaceStation.position.z = celestialSphere.position.z - celestialSphere.Radius - 400;
+
+        //} catch (error) {
+
+        //}
+
+        //try {
+        //    //space station orbital calculations here
+        //    if (spaceStation !== undefined) {
+        //        spaceStationOrbitTime += spaceStationOrbitTimeIncrement;
+        //        spaceStation.position.x = this[celestialSphere.Name].position.x + (spaceStationOrbitDistance * Math.sin(spaceStationOrbitTime));
+        //        spaceStation.position.z = this[celestialSphere.Name].position.z - (spaceStationOrbitDistance * Math.cos(spaceStationOrbitTime));
+        //        spaceStation.LookAt(this[celestialSphere.Name]);
+        //    }
+        //} catch (error) {
+        //    console.log("space staion orbit animation failure")
+        //}
+
+        window.controls.update();
+        window.renderer.render(window.scene, window.camera);
+    }
+
+    function render() {
+        animate(performance.now());
+    }
+
+    document.body.onresize = function () {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        window.renderer.setSize(width, height);
+        window.camera.aspect = width / height;
+        window.camera.updateProjectionMatrix();
+    }
+
+    document.body.onresize();
+    render();
+
+</script>
+
+<script>
+
+
+
+    $(document).ready(function () {
+
+        hidePages();
+
+        let cameraFOVHandle = document.getElementById('cameraFOV');
+        cameraFOVHandle.addEventListener('input', function () {
+            changeCameraFOV(cameraFOVHandle.value);
+
+        }, false);
+
+
+        let ambientLightIntensityHandle = document.getElementById('ambientLightIntensity');
+        ambientLightIntensityHandle.addEventListener('input', function () {
+            ambientLight.intensity = ambientLightIntensityHandle.value;
+
+        }, false);
+
+        let solarLightIntensityHandle = document.getElementById('solarLightIntensity');
+        solarLightIntensityHandle.addEventListener('input', function () {
+            solarLight.intensity = solarLightIntensityHandle.value;
+
+        }, false);
+
+        let displacementScaleHandle = document.getElementById('displacementScale');
+        displacementScaleHandle.addEventListener('input', function () {
+            vectorAmplificationFactor = document.getElementById("vectorAmplificationFactor").value;
+
+            var totalDisplacementScale =
+                displacementScaleHandle.value * vectorAmplificationFactor;
+
+            material.displacementScale = totalDisplacementScale;
+
+            var displacementScaleLabel = document.getElementById("displacementScaleLabel");
+            displacementScaleLabel.innerText = totalDisplacementScale;
+
+        }, false);
+
+        document.getElementById('atmosphereDisplacementScale')
+            .addEventListener('input', function () {
+
+                var materialDisplacementScale =
+                    document.getElementById("vectorAmplificationFactor").value *
+                    this.value;
+
+                atmosphereMaterial.displacementScale =
+                    materialDisplacementScale;
+
+                atmosphereGeometry.computeVertexNormals();
+
+
+                document.getElementById("atmosphereDisplacementScaleLabel").innerHTML = materialDisplacementScale;
+
+            });
+
+
+        let atmosphereOpacityScaleHandle = document.getElementById('atmosphereOpacityScale');
+        atmosphereOpacityScaleHandle.addEventListener('input', function () {
+            atmosphereMaterial.opacity =
+                atmosphereOpacityScaleHandle.value;
+        }, false);
+
+        let spheroidRotationVelocityHandle = document.getElementById('spheroidRotationVelocity');
+        spheroidRotationVelocityHandle.addEventListener('input', function () {
+            vectorAmplificationFactor = document.getElementById("vectorAmplificationFactor").value;
+            window.spheroidRotationVelocity =
+                spheroidRotationVelocityHandle.value * vectorAmplificationFactor;
+        }, false);
+
+        let spheroidAtmosphereRotationVelocityHandle = document.getElementById('spheroidAtmosphereRotationVelocity');
+        spheroidAtmosphereRotationVelocityHandle.addEventListener('input', function () {
+            vectorAmplificationFactor = document.getElementById("vectorAmplificationFactor").value;
+            window.spheroidAtmosphereRotationVelocity =
+                spheroidAtmosphereRotationVelocityHandle.value * vectorAmplificationFactor;
+        }, false);
+
+        //document.getElementById("sunRepeatV").addEventListener('input', function (event) {
+        //    videoSphereTexture.repeat.set(
+        //        document.getElementById("sunRepeatV").value,
+        //        document.getElementById("sunRepeatV").value);
+
+        //});
+
+        //document.getElementById("sunRepeatU").addEventListener('input', function (event) {
+        //    videoSphereTexture.repeat.set(
+        //        document.getElementById("sunRepeatU").value,
+        //        document.getElementById("sunRepeatU").value);
+
+        //});
+
+
+        $("#tweenObject").on("change", function () {
+            currentFocusObject = this.value;
+            tweenObject(this.value);
+        });
+
+        addListeners({ type: 'range' })
+    });
+
+
+
+
+
+
+</script>

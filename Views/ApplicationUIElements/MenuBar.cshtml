@@ -1,0 +1,99 @@
+﻿@model  JsonResult
+
+@{
+    ViewBag.Title = "MENUBAR";
+    //Layout = "~/Views/Shared/_DBUI.cshtml";
+    Layout = null; 
+}
+
+@{
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    serializer.MaxJsonLength = Int32.MaxValue;
+    var jsonModel = serializer.Serialize(Model);
+}
+
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
+</script>
+
+
+<script>
+    var rawModel = @Html.Raw(jsonModel);
+    var menuItems = rawModel.Data.Data;
+    window.menuItems = menuItems;
+</script>
+
+<script>
+    function buildMenu() {
+       window.menuItems.forEach(function (item) {
+           var containerDIV =
+               document.getElementById(item.UIElementContainer);
+
+           if (containerDIV == undefined) {
+               var containerDIV =
+                   document.createElement("div");
+
+               containerDIV.setAttribute("id", "containerDIV");
+
+               document.body.append(containerDIV);
+
+               containerDIV =
+                document.getElementById("containerDIV");
+           }
+
+           var menuItem = document.createElement(item.UIElementHTMLType);
+
+            menuItem.innerHTML = item.UIElementInnerHTML;
+
+            menuItem.setAttribute("style", item.UIElementCSSText);
+            menuItem.setAttribute("class", item.UIElementClassList);
+
+           menuItem.addEventListener(item.UIElementFunctionCallEventTrigger, function (event) {
+               eval(item.UIElementFunctionCall);
+           });
+
+           containerDIV.append(menuItem);
+        });
+    }
+    buildMenu();
+    
+
+    //function buildMenuBar() {
+    //    var MenuBarBuilder = new Object();
+    //    MenuBarBuilder.ApplicationPageURL = "/Home/EmptyPage";
+
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/ApplicationUIElements/MenuBar",
+    //        data: JSON.stringify(MenuBarBuilder),
+    //        contentType: "application/json; charset=utf-8",
+    //        dataType: "json",
+    //        success: function (response) {
+    //            alert("that shit posted and here is the response...");
+    //            if (response != null) {
+    //                window.menuItems = response;
+
+    //                window.menuItems.forEach(function (item) {
+    //                    var containerDIV = document.getElementById(item.UIElementContainer);
+
+    //                    var menuItem = document.createElement("button");
+    //                    menuItem.innerHTML = item.UIElementInnerHTML;
+    //                    menuItem.classList = item.UIElementClassList;
+
+    //                    menuItem.setAttribute("style", item.UIElementCSSText);
+
+    //                    menuItem.setAttribute(item.UIElementFunctionCallEventTrigger, item.UIElementFunctionCall);
+    //                    containerDIV.append(menuItem);
+    //                })
+    //            }
+    //        },
+    //        error: function () {
+    //            alert("aw shit.");
+
+    //        }
+    //    });
+    //}
+
+    ////buildMenuBar();
+
+</script>
